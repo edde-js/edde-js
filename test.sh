@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-lerna bootstrap
+lerna bootstrap --ci
 lerna run test
