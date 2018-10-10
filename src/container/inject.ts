@@ -1,5 +1,5 @@
-import {ToString} from "@edde-js/utils";
 import {DependencyObject} from "./types";
+import {ToString} from "../utils";
 
 export function Inject(factory: Function | ToString): (target: any, property: string) => void {
 	return function (target: DependencyObject, property: string) {

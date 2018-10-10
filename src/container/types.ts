@@ -1,4 +1,4 @@
-import {ToString} from "@edde-js/utils";
+import {ToString} from "../utils";
 
 export type DependencyProperty = {
 	property: string;

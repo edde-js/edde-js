@@ -1,6 +1,6 @@
-import {ToString} from "@edde-js/utils";
-import {Collection, HashMap} from "@edde-js/collection";
 import {DependencyProperty} from "./types";
+import {Collection, HashMap} from "../collection";
+import {ToString} from "../utils";
 /**
  * type marking a factory for the container
  */

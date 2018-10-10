@@ -1,5 +1,5 @@
-import {EventBus} from "@edde-js/event";
 import {Factory} from "./container";
+import {EventBus} from "../event";
 
 export class Make {
 	/**

@@ -2,7 +2,7 @@ import test from "ava";
 import {Container} from "./container";
 import {Make} from "./make";
 import {Inject} from "./inject";
-import {ToString} from "@edde-js/utils";
+import {ToString} from "../utils";
 
 class DependencyService {
 	public static toString() {

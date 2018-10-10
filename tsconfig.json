@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"baseUrl": "src/container/src",
+		"baseUrl": "src",
 		"rootDir": "src",
 		"module": "commonjs",
 		"declaration": true,
@@ -23,7 +23,7 @@
 		"emitDecoratorMetadata": false,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "src/container/src",
+		"outDir": "src",
 		"lib": [
 			"dom",
 			"es2017"
