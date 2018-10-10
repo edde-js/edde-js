@@ -1,0 +1,42 @@
+{
+	"name": "@edde-js/crypto",
+	"version": "5.0.65",
+	"homepage": "https://github.com/edde-js/edde-js#readme",
+	"bugs": "https://github.com/edde-js/edde-js/issues",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:edde-js/edde-js.git"
+	},
+	"author": "Marek Hanzal",
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"@edde-js/container": "latest",
+		"ava": "latest",
+		"nyc": "latest",
+		"tslint": "latest",
+		"typescript": "latest"
+	},
+	"main": "src/index",
+	"types": "src/index",
+	"files": [
+		"src"
+	],
+	"nyc": {
+		"exclude": [
+			"src/**/*.spec.js"
+		]
+	},
+	"ava": {
+		"files": [
+			"src/**/*.spec.js"
+		],
+		"concurrency": 24,
+		"failFast": true,
+		"failWithoutAssertions": true
+	},
+	"scripts": {
+		"pretest": "find src -type f -name '*.js' -delete && node_modules/.bin/tsc -p tsconfig.test.json",
+		"test": "node_modules/.bin/nyc node_modules/.bin/ava",
+		"build": "find src -type f -name '*.js' -delete && node_modules/.bin/tsc"
+	}
+}
