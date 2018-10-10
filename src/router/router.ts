@@ -1,8 +1,8 @@
-import {Inject} from "@edde-js/container";
-import {EventBus} from "@edde-js/event";
-import {Collection} from "@edde-js/collection";
 import {AbstractRoute, NoopRoute} from "./routes";
 import {Route404Event, RouteChangeEvent, RouteDoneEvent, RouteRefreshEvent} from "./events";
+import {Inject} from "../container";
+import {EventBus} from "../event";
+import {Collection} from "../collection";
 
 export class Router {
 	@Inject(EventBus)

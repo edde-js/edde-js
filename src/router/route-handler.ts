@@ -1,4 +1,4 @@
-import {HashMap} from "@edde-js/collection";
+import {HashMap} from "../collection";
 
 export abstract class RouteHandler {
 	/**

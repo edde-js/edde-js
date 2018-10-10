@@ -1,5 +1,5 @@
-import {AbstractEvent} from "@edde-js/event";
 import {AbstractRoute} from "./routes";
+import {AbstractEvent} from "../event";
 
 /**
  * When no route has been matched, this event is sent.
@@ -25,6 +25,10 @@ export class Route404Event extends AbstractEvent {
  * When the same route is requested, this event is sent.
  */
 export class RouteRefreshEvent extends AbstractEvent {
+	public constructor() {
+		super();
+	}
+
 	public static toString() {
 		return 'edde-js/router/route-refresh-event';
 	}

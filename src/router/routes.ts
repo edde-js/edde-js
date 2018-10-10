@@ -1,5 +1,5 @@
-import {HashMap} from "@edde-js/collection";
 import {NoopRouteHandler, RouteHandler} from "./route-handler";
+import {HashMap} from "../collection";
 
 export abstract class AbstractRoute {
 	protected routeHandler: RouteHandler;

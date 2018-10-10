@@ -1,11 +1,11 @@
 import test from "ava";
-import {Container, Make} from "@edde-js/container";
-import {EventBus} from "@edde-js/event";
-import {ToString} from "@edde-js/utils";
 import {Router} from "./router";
 import {Route404Event, RouteChangeEvent, RouteDoneEvent, RouteRefreshEvent} from "./events";
 import {PathRoute, Routes} from "./routes";
 import {NoopRouteHandler} from "./route-handler";
+import {Container, Make} from "../container";
+import {EventBus} from "../event";
+import {ToString} from "../utils";
 
 test.beforeEach(test => {
 	const container = new Container();
