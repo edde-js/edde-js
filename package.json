@@ -1,6 +1,6 @@
 {
 	"name": "@edde-js/edde-js",
-	"version": "5.0.64",
+	"version": "5.0.65",
 	"homepage": "https://github.com/edde-js/edde-js#readme",
 	"bugs": "https://github.com/edde-js/edde-js/issues",
 	"repository": {
@@ -8,5 +8,35 @@
 		"url": "git@github.com:edde-js/edde-js.git"
 	},
 	"author": "Marek Hanzal",
-	"license": "Apache-2.0"
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"ava": "latest",
+		"nyc": "latest",
+		"tslint": "latest",
+		"typescript": "latest"
+	},
+	"main": "src/index",
+	"types": "src/index",
+	"files": [
+		"src"
+	],
+	"nyc": {
+		"exclude": [
+			"src/**/*.spec.js"
+		]
+	},
+	"ava": {
+		"files": [
+			"src/**/*.spec.js"
+		],
+		"concurrency": 24,
+		"failFast": true,
+		"failWithoutAssertions": true
+	},
+	"scripts": {
+		"clean": "find src -type f -name '*.js' -delete && find src -type f -name '*.d.ts' -delete",
+		"build": "npm run clean && node_modules/.bin/tsc",
+		"pretest": "npm run clean && node_modules/.bin/tsc -p tsconfig.test.json",
+		"test": "node_modules/.bin/nyc node_modules/.bin/ava"
+	}
 }

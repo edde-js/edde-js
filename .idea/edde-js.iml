@@ -14,6 +14,7 @@
       <sourceFolder url="file://$MODULE_DIR$/packages/runtime/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/ssr/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/utils/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.docker" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/packages/collection/.nyc_output" />

@@ -1,2 +1,5 @@
-**/node_modules
-*.tgz
+.nyc_output
+lib
+node_modules
+src/**/*.js
+src/**/*.d.ts
