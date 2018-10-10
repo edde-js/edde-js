@@ -16,9 +16,18 @@
       <sourceFolder url="file://$MODULE_DIR$/packages/utils/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.docker" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/collection/.nyc_output" />
       <excludeFolder url="file://$MODULE_DIR$/packages/container-utils/.nyc_output" />
       <excludeFolder url="file://$MODULE_DIR$/packages/container/.nyc_output" />
       <excludeFolder url="file://$MODULE_DIR$/packages/control/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/crypto/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dom/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/event/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/history/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/router/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/runtime/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ssr/.nyc_output" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/utils/.nyc_output" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

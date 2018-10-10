@@ -34,4 +34,13 @@ export class Make {
 	public static subscriber<T>(service: any): Factory<T> {
 		return this.listener<T>(() => new service());
 	}
+
+	/**
+	 * return an instance
+	 */
+	public static instance<T>(instance: T): Factory<T> {
+		return function () {
+			return instance;
+		};
+	}
 }

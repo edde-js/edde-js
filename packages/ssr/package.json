@@ -12,8 +12,6 @@
 	"license": "Apache-2.0",
 	"devDependencies": {
 		"@types/node": "latest",
-		"ava": "latest",
-		"nyc": "latest",
 		"tslint": "latest",
 		"typescript": "latest"
 	},
@@ -33,22 +31,8 @@
 	"files": [
 		"src"
 	],
-	"nyc": {
-		"exclude": [
-			"src/**/*.spec.js"
-		]
-	},
-	"ava": {
-		"files": [
-			"src/**/*.spec.js"
-		],
-		"concurrency": 24,
-		"failFast": true,
-		"failWithoutAssertions": true
-	},
 	"scripts": {
-		"pretest": "npm run build",
-		"test": "node_modules/.bin/nyc node_modules/.bin/ava",
+		"test": "echo \"no tests yet :(\"",
 		"build": "find src -type f -name '*.js' -delete && node_modules/.bin/tsc"
 	}
 }
