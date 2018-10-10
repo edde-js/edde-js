@@ -35,7 +35,7 @@
 		"failWithoutAssertions": true
 	},
 	"scripts": {
-		"cleanup": "find src -type f -name '*.js' -delete && rm *.tgz",
+		"cleanup": "find src -type f -name '*.js' -delete",
 		"pretest": "npm run cleanup && node_modules/.bin/tsc -p tsconfig.test.json",
 		"test": "node_modules/.bin/nyc node_modules/.bin/ava",
 		"build": "npm run cleanup && node_modules/.bin/tsc"
