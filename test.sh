@@ -2,5 +2,5 @@
 set -e
 
 npm install
-npm pretest
+npm run pretest
 node_modules/.bin/nyc --reporter=text-summary node_modules/.bin/ava
