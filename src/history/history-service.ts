@@ -1,7 +1,7 @@
-import {Inject} from "@edde-js/container";
-import {Runtime} from "@edde-js/runtime";
-import {ListenTo} from "@edde-js/event";
-import {RouteChangeEvent, Router} from "@edde-js/router";
+import {Inject} from "../container";
+import {Runtime} from "../runtime";
+import {RouteChangeEvent, Router} from "../router";
+import {ListenTo} from "../event";
 
 export class HistoryService {
 	@Inject(Runtime)

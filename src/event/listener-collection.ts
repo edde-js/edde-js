@@ -1,6 +1,6 @@
-import {Collection} from "@edde-js/collection";
 import {EventHandler, EventListener} from "./types";
 import {AbstractEvent} from "./event";
+import {Collection} from "../collection";
 
 /**
  * Collection of listeners for exactly one event type.

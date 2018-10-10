@@ -1,7 +1,7 @@
 export abstract class AbstractEvent {
 	protected cancelled: boolean;
 
-	public constructor() {
+	protected constructor() {
 		this.cancelled = false;
 	}
 

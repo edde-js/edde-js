@@ -1,5 +1,5 @@
-import {ToString} from "@edde-js/utils";
 import {ListenerObject} from "./types";
+import {ToString} from "../utils";
 
 export function ListenTo(event: Function | ToString, weight: number | null = null, context: Object | null = null, cancellable: boolean = true): (target: any, property: string) => void {
 	return function (target: ListenerObject, handler: string) {

@@ -12,7 +12,6 @@
       <sourceFolder url="file://$MODULE_DIR$/packages/history/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/router/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/runtime/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/packages/ssr/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/utils/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.docker" />

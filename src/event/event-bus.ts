@@ -1,8 +1,8 @@
-import {Collection, HashMap} from "@edde-js/collection";
-import {ToString} from "@edde-js/utils";
 import {ListenerCollection} from "./listener-collection";
 import {AbstractEvent} from "./event";
 import {ListenerObject} from "./types";
+import {Collection, HashMap} from "../collection";
+import {ToString} from "../utils";
 
 export class EventBus<T extends AbstractEvent = AbstractEvent> {
 	protected listenerCollections: HashMap<ListenerCollection<T>>;
