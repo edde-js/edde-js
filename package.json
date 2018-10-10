@@ -10,6 +10,9 @@
 	"author": "Marek Hanzal",
 	"license": "Apache-2.0",
 	"devDependencies": {
+		"@types/node": "latest",
+		"@types/jsdom": "latest",
+		"jsdom": "latest",
 		"ava": "latest",
 		"nyc": "latest",
 		"tslint": "latest",

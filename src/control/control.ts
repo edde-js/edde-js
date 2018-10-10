@@ -1,8 +1,8 @@
-import {Inject} from "@edde-js/container";
-import {Runtime} from "@edde-js/runtime";
-import {HashMap} from "@edde-js/collection";
-import {HtmlElement, NativeListener} from "@edde-js/dom";
 import {ParentControl} from "./types";
+import {Inject} from "../container";
+import {Runtime} from "../runtime";
+import {HashMap} from "../collection";
+import {HtmlElement, NativeListener} from "../dom";
 
 export class Control {
 	@Inject(Runtime)

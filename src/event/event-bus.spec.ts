@@ -2,7 +2,7 @@ import test from "ava";
 import {EventBus} from "./event-bus";
 import {AbstractEvent} from "./event";
 import {ListenTo} from "./listen-to";
-import {ToString} from "@edde-js/utils";
+import {ToString} from "../utils";
 
 class FooEvent extends AbstractEvent {
 	public value: any;

@@ -1,5 +1,5 @@
-import {HtmlElement} from "@edde-js/dom";
 import {RuntimeDocument, RuntimeWindow} from "./types";
+import {HtmlElement} from "../dom";
 
 export class Runtime {
 	protected window: RuntimeWindow;

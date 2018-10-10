@@ -1,6 +1,6 @@
 import test from "ava";
-import {ToString} from "@edde-js/utils";
 import {Runtime} from "./runtime";
+import {ToString} from "../utils";
 
 test('Runtime: Common', test => {
 	const runtime = new Runtime(<any>{document: true});

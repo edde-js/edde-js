@@ -1,3 +1,3 @@
-import {EventHandler} from "@edde-js/event";
+import {EventHandler} from "../event";
 
 export type NativeListener = EventHandler<Event>;

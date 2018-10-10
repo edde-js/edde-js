@@ -1,5 +1,5 @@
-import {HashMapCollection} from "@edde-js/collection";
 import {NativeListener} from "./types";
+import {HashMapCollection} from "../collection";
 
 export class HtmlElement {
 	protected element: HTMLElement;

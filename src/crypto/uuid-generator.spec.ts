@@ -1,6 +1,6 @@
 import test from "ava";
-import {Container, Make} from "@edde-js/container";
 import {UuidGenerator} from "./uuid-generator";
+import {Container, Make} from "../container";
 
 test('UuidGenerator: Uuid v4', test => {
 	const uuidGenerator = new UuidGenerator();
