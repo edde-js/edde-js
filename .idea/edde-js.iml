@@ -7,6 +7,13 @@
       <sourceFolder url="file://$MODULE_DIR$/packages/container-utils/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/control/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/crypto/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/event/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/dom/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/history/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/router/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/runtime/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/ssr/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/utils/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.docker" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/packages/container/.nyc_output" />
