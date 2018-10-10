@@ -7,7 +7,7 @@ variables:
 stages:
     - test
     - github
-    - npm
+#    - npm
 
 test:
     stage: test
@@ -31,14 +31,14 @@ github:
     only:
         - master
         - tags
-
-npm:
-    stage: npm
-    script:
-        - docker build --pull -t ${IMAGE} -f ./.docker/Dockerfile . >/dev/null 2>&1
-        - docker-compose -f .docker/docker.test.yml up -d
-        - docker exec ${CONTAINER} ./publish.sh
-    after_script:
-        - docker-compose -f .docker/docker.test.yml down --volumes >/dev/null 2>&1
-    only:
-        - tags
+#
+#npm:
+#    stage: npm
+#    script:
+#        - docker build --pull -t ${IMAGE} -f ./.docker/Dockerfile . >/dev/null 2>&1
+#        - docker-compose -f .docker/docker.test.yml up -d
+#        - docker exec ${CONTAINER} ./publish.sh
+#    after_script:
+#        - docker-compose -f .docker/docker.test.yml down --volumes >/dev/null 2>&1
+#    only:
+#        - tags
