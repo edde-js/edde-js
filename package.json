@@ -1,0 +1,12 @@
+{
+	"name": "@edde-js/edde-js",
+	"version": "5.0.64",
+	"homepage": "https://github.com/edde-js/edde-js#readme",
+	"bugs": "https://github.com/edde-js/edde-js/issues",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:edde-js/edde-js.git"
+	},
+	"author": "Marek Hanzal",
+	"license": "Apache-2.0"
+}

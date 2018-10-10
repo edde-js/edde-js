@@ -1,0 +1,13 @@
+version: '2'
+services:
+    edde-js:
+        container_name: edde-js
+        hostname: edde-js-local
+        image: edde-js:local
+        environment:
+            - CI_COMMIT_REF_NAME=1.0.0
+            - CI_PROJECT_PATH=edde-js/local
+            - NODE_ENV=development
+            - NPM_TOKEN=${NPM_TOKEN}
+        volumes:
+            - ../:/edde-js
