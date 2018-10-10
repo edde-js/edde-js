@@ -1,15 +1,7 @@
+import {EventBus} from "@edde-js/event";
 import {Factory} from "./container";
 
 export class Make {
-	/**
-	 * bind the given instance
-	 */
-	public static instance<T>(instance: T): Factory<T> {
-		return function () {
-			return instance;
-		}
-	}
-
 	/**
 	 * creates a factory for singleton service
 	 */
@@ -18,9 +10,15 @@ export class Make {
 		 * cannot be converted to array function because the function holds some "state"
 		 */
 		return function (container) {
-			//noinspection JSPotentiallyInvalidUsageOfClassThis
 			return this.instance || (container.autowire(this.instance = factory(container)));
 		};
+	}
+
+	/**
+	 * creates a listener singleton factory
+	 */
+	public static listener<T>(factory: Factory<T>): Factory<T> {
+		return this.singleton(container => container.create<EventBus>(EventBus).subscribe(factory(container)));
 	}
 
 	/**
@@ -28,5 +26,12 @@ export class Make {
 	 */
 	public static service<T>(service: any): Factory<T> {
 		return this.singleton<T>(() => new service());
+	}
+
+	/**
+	 * creates singleton factory, subscribed to event bus
+	 */
+	public static subscriber<T>(service: any): Factory<T> {
+		return this.listener<T>(() => new service());
 	}
 }
