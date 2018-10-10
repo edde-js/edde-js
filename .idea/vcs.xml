@@ -2,17 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/collection" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/container" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/container-utils" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/control" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/crypto" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/dom" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/event" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/history" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/router" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/runtime" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/ssr" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/utils" vcs="Git" />
   </component>
 </project>
