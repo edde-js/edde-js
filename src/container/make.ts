@@ -1,5 +1,5 @@
-import {Factory} from "./container";
 import {EventBus} from "../event";
+import {Factory} from "./types";
 
 export class Make {
 	/**

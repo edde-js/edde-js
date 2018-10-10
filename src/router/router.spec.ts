@@ -10,8 +10,8 @@ import {ToString} from "../utils";
 test.beforeEach(test => {
 	const container = new Container();
 	container
-		.factory(EventBus, Make.service(EventBus))
-		.factory(Router, Make.service(Router));
+		.register(EventBus, Make.service(EventBus))
+		.register(Router, Make.service(Router));
 	test.context = container;
 });
 test('Router: Common', test => {

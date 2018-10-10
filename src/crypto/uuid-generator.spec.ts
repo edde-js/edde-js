@@ -9,6 +9,6 @@ test('UuidGenerator: Uuid v4', test => {
 });
 test('UuidGenerator: Container', test => {
 	const container = new Container();
-	container.factory(UuidGenerator, Make.service(UuidGenerator));
+	container.register(UuidGenerator, Make.service(UuidGenerator));
 	test.is(container.create(UuidGenerator), container.create(UuidGenerator));
 });

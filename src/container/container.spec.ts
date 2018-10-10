@@ -50,12 +50,12 @@ class TeTestService extends TestService {
 test('Container: Common', test => {
 	const container = new Container();
 	container
-		.factory(TestService, Make.service(TestService))
-		.factory(DependencyService, Make.service(DependencyService))
-		.factory(AnotherDependencyService, Make.service(AnotherDependencyService))
-		.factory(Another2DependencyService, Make.service(Another2DependencyService))
-		.factory(TeTestService, Make.service(TeTestService))
-		.factory(Container, Make.instance(container));
+		.register(TestService, Make.service(TestService))
+		.register(DependencyService, Make.service(DependencyService))
+		.register(AnotherDependencyService, Make.service(AnotherDependencyService))
+		.register(Another2DependencyService, Make.service(Another2DependencyService))
+		.register(TeTestService, Make.service(TeTestService))
+		.register(Container, Make.instance(container));
 	const service = container.create<TestService>(TestService);
 	test.is(container.create(Container), container);
 	test.deepEqual(container.create(TestService), container.create(TestService));
@@ -76,8 +76,8 @@ test('Container: Missing Service', test => {
 test('Container: Factory Exception', test => {
 	const container = new Container();
 	container
-		.factory(TestService, Make.service(TestService))
-		.factory(DependencyService, () => {
+		.register(TestService, Make.service(TestService))
+		.register(DependencyService, () => {
 			throw new Error('boom')
 		});
 	test.throws(() => container.create<TestService>(TestService).dependency, Error, 'requested dependency did not throw an exception!');

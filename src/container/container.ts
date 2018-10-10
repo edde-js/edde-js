@@ -1,37 +1,25 @@
-import {DependencyProperty} from "./types";
+import {DependencyProperty, Factory} from "./types";
 import {Collection, HashMap} from "../collection";
 import {ToString} from "../utils";
-/**
- * type marking a factory for the container
- */
-export type Factory<T = any> = (container: Container) => T;
+import {IContainer} from "./api";
 
 /**
  * simple DI container implementation
  */
-export class Container {
+export class Container implements IContainer {
 	protected factories: HashMap<Factory>;
 
 	public constructor() {
 		this.factories = new HashMap();
 	}
 
-	/**
-	 * register a factory for the given identifier
-	 *
-	 * @param name
-	 * @param factory
-	 */
-	public factory(name: ToString, factory: Factory): Container {
+	/** @inheritDoc */
+	public register(name: ToString, factory: Factory): Container {
 		this.factories.set(name.toString(), factory);
 		return this;
 	}
 
-	/**
-	 * create dependency; all required dependencies will be lazily autowired
-	 *
-	 * @param name
-	 */
+	/** @inheritDoc */
 	public create<T>(name: ToString): T {
 		const factory = this.factories.require(name.toString(), `Requested unknown factory [${name.toString()}].`);
 		const instance: any = factory.call(factory, this);
@@ -41,11 +29,7 @@ export class Container {
 		return instance;
 	}
 
-	/**
-	 * magic method for lazy autowiring
-	 *
-	 * @param instance
-	 */
+	/** @inheritDoc */
 	public autowire<T>(instance: T): T {
 		new Collection<DependencyProperty>((<any>instance)['::injects'] || []).each(dependencyProperty => {
 			if (Object.getOwnPropertyDescriptor(instance, dependencyProperty.property)) {
