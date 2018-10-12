@@ -37,12 +37,20 @@ export class Runtime {
 		return this.window.location.pathname;
 	}
 
-	public query(selector: string): Html | null {
+	public selector(selector: string): Html | null {
 		const element = this.document.querySelector(selector);
 		if (!element) {
 			return null;
 		}
 		return new Html(<HTMLElement>element);
+	}
+
+	public require(selector: string): Html {
+		const element = this.selector(selector);
+		if (element) {
+			return element;
+		}
+		throw new Error(`Cannot get any element by selector [${selector}] in global context.`);
 	}
 
 	public html(): Html {

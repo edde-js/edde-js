@@ -22,10 +22,7 @@ export class Controller {
 	}
 
 	public link(name: string, selector: string): Html {
-		const element = this.runtime.query(selector);
-		if (!element) {
-			throw new Error(`There is no match by the given selector [${selector}].`);
-		}
+		const element = this.runtime.require(selector);
 		this.elements.set(name, element);
 		return element;
 	}
