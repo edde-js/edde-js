@@ -2,5 +2,5 @@
 set -e
 
 git reset --hard
-npm version from-git --no-git-tag-version
+npm --no-git-tag-version version from-git
 npm publish --access public
