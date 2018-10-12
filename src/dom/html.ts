@@ -54,6 +54,19 @@ export class Html {
 	}
 
 	/**
+	 * executes selector on the given element
+	 *
+	 * @param selector
+	 */
+	public selector(selector: string): Html | null {
+		const element = <HTMLElement>this.element.querySelector(selector);
+		if (element) {
+			return new Html(element);
+		}
+		return null;
+	}
+
+	/**
 	 * cleanup and rejoin the given value with space
 	 */
 	protected className(name: string): string {

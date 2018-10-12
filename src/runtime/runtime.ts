@@ -4,18 +4,17 @@ import {Html} from "../dom";
 export class Runtime {
 	protected window: RuntimeWindow;
 	protected document: RuntimeDocument;
+	protected root: Html;
 
 	public constructor(window: RuntimeWindow, document?: RuntimeDocument) {
 		this.window = window;
 		this.document = document || window.document;
 	}
 
-	/** @inheritDoc */
 	public getWindow(): RuntimeWindow {
 		return this.window;
 	}
 
-	/** @inheritDoc */
 	public getDocument(): RuntimeDocument {
 		return this.document;
 	}
@@ -34,18 +33,20 @@ export class Runtime {
 		return this.window.sessionStorage;
 	}
 
-	/** @inheritDoc */
 	public getPath(): string {
 		return this.window.location.pathname;
 	}
 
-	/** @inheritDoc */
 	public query(selector: string): Html | null {
 		const element = this.document.querySelector(selector);
 		if (!element) {
 			return null;
 		}
 		return new Html(<HTMLElement>element);
+	}
+
+	public html(): Html {
+		return this.root || (this.root = new Html(<HTMLElement>this.document.querySelector('html')));
 	}
 
 	public static toString() {
