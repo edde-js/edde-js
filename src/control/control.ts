@@ -2,13 +2,13 @@ import {ParentControl} from "./types";
 import {Inject} from "../container";
 import {Runtime} from "../runtime";
 import {HashMap} from "../collection";
-import {HtmlElement, NativeListener} from "../dom";
+import {Html, NativeListener} from "../dom";
 
 export class Control {
 	@Inject(Runtime)
 	protected runtime: Runtime;
 	protected parent: ParentControl;
-	protected elements: HashMap<HtmlElement>;
+	protected elements: HashMap<Html>;
 	protected state: number;
 
 	public constructor(parent: ParentControl = null) {
@@ -17,7 +17,7 @@ export class Control {
 		this.state = 0;
 	}
 
-	public link(name: string, selector: string): HtmlElement {
+	public link(name: string, selector: string): Html {
 		const element = this.runtime.query(selector);
 		if (!element) {
 			throw new Error(`There is no match by the given selector [${selector}].`);

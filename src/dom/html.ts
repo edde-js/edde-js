@@ -1,7 +1,11 @@
 import {NativeListener} from "./types";
 import {HashMapCollection} from "../collection";
 
-export class HtmlElement {
+/**
+ * Because all meaningful names are taken, it's quite strange name for
+ * html element wrapper.
+ */
+export class Html {
 	protected element: HTMLElement;
 	protected events: HashMapCollection<NativeListener>;
 
@@ -10,7 +14,7 @@ export class HtmlElement {
 		this.events = new HashMapCollection();
 	}
 
-	public addClass(name: string): HtmlElement {
+	public addClass(name: string): Html {
 		if (this.hasClass(name)) {
 			return this;
 		}
@@ -22,12 +26,12 @@ export class HtmlElement {
 		return this.element.className !== undefined && (' ' + this.element.className + ' ').indexOf(' ' + name + ' ') !== -1;
 	}
 
-	public removeClass(name: string): HtmlElement {
+	public removeClass(name: string): Html {
 		this.element.className = this.className(this.element.className.replace(name, ''));
 		return this;
 	}
 
-	public toggleClass(name: string, toggle?: boolean): HtmlElement {
+	public toggleClass(name: string, toggle?: boolean): Html {
 		let hasClass = this.hasClass(name);
 		if (toggle === true && hasClass === false) {
 			this.addClass(name);
@@ -43,7 +47,7 @@ export class HtmlElement {
 		return this;
 	}
 
-	public native(event: string, nativeListener: NativeListener): HtmlElement {
+	public native(event: string, nativeListener: NativeListener): Html {
 		this.events.add(event, nativeListener);
 		this.element.addEventListener(event, nativeListener, false);
 		return this;

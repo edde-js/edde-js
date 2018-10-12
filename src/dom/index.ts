@@ -1,2 +1,2 @@
 export * from "./types";
-export * from "./html-element";
+export * from "./html";

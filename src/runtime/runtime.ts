@@ -1,5 +1,5 @@
 import {RuntimeDocument, RuntimeWindow} from "./types";
-import {HtmlElement} from "../dom";
+import {Html} from "../dom";
 
 export class Runtime {
 	protected window: RuntimeWindow;
@@ -40,12 +40,12 @@ export class Runtime {
 	}
 
 	/** @inheritDoc */
-	public query(selector: string): HtmlElement | null {
+	public query(selector: string): Html | null {
 		const element = this.document.querySelector(selector);
 		if (!element) {
 			return null;
 		}
-		return new HtmlElement(<HTMLElement>element);
+		return new Html(<HTMLElement>element);
 	}
 
 	public static toString() {
