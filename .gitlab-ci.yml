@@ -40,5 +40,5 @@ npm:
         - docker exec ${CONTAINER} ./publish.sh
     after_script:
         - docker-compose -f .docker/docker.test.yml down --volumes >/dev/null 2>&1
-    only
+    only:
         - tags
