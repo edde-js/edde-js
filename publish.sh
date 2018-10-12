@@ -3,4 +3,4 @@ set -e
 
 git reset --hard
 npm --no-git-tag-version version from-git
-npm publish --access public
+npm --no-git-tag-version publish --access public
