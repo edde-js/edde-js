@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-npm version minor --from-git
+npm version from-git --force
 npm publish --access public
