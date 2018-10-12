@@ -1,67 +1,19 @@
+/**
+ * Control is bound to the root html element where it lives. It's controls just
+ * subtree of DOM and it cannot have references outside if it's scope.
+ */
+import {Html} from "../dom";
 import {ParentControl} from "./types";
-import {Inject} from "../container";
-import {Runtime} from "../runtime";
-import {HashMap} from "../collection";
-import {Html, NativeListener} from "../dom";
 
 export class Control {
-	@Inject(Runtime)
-	protected runtime: Runtime;
+	/**
+	 * root html element of this control
+	 */
+	protected root: Html;
 	protected parent: ParentControl;
-	protected elements: HashMap<Html>;
-	protected state: number;
 
-	public constructor(parent: ParentControl = null) {
+	public constructor(root: Html, parent: ParentControl = null) {
+		this.root = root;
 		this.parent = parent;
-		this.elements = new HashMap();
-		this.state = 0;
-	}
-
-	public link(name: string, selector: string): Html {
-		const element = this.runtime.query(selector);
-		if (!element) {
-			throw new Error(`There is no match by the given selector [${selector}].`);
-		}
-		this.elements.set(name, element);
-		return element;
-	}
-
-	public native(name: string, event: string, nativeListener: NativeListener): Control {
-		this.elements.require(name).native(event, nativeListener);
-		return this;
-	}
-
-	/**
-	 * called whatever control should be rendered; if it's already rendered, nothing happend
-	 */
-	public render(): Control {
-		if (this.state === 0) {
-			this.onRender();
-		}
-		this.state++;
-		return this;
-	}
-
-	/**
-	 * release the component if it's no longer needed (but the same instance should be re-renderable)
-	 */
-	public release(): Control {
-		if (this.state > 0) {
-			this.onRelease();
-			this.state = 0;
-		}
-		return this;
-	}
-
-	/**
-	 * actual render handler
-	 */
-	public onRender(): void {
-	}
-
-	/**
-	 * actual release handler
-	 */
-	public onRelease(): void {
 	}
 }

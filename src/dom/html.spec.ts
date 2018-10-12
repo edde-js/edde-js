@@ -2,7 +2,7 @@ import test from "ava";
 import {Html} from "./html";
 import {JSDOM} from "jsdom";
 
-test('HtmlElement: Common', test => {
+test('Html: Common', test => {
 	const native = <HTMLElement>new JSDOM('<div class="bar">').window.document.querySelector('.bar');
 	test.truthy(native);
 	const element = new Html(native);
