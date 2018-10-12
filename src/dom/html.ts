@@ -67,6 +67,19 @@ export class Html {
 	}
 
 	/**
+	 * require an element requested by the given selector
+	 *
+	 * @param selector
+	 */
+	public require(selector: string): Html {
+		const element = this.selector(selector);
+		if (element) {
+			return element;
+		}
+		throw new Error(`Cannot get any element by selector [${selector}].`);
+	}
+
+	/**
 	 * cleanup and rejoin the given value with space
 	 */
 	protected className(name: string): string {
