@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-npm version from-git --force
+git reset --hard
+npm version from-git
 npm publish --access public
