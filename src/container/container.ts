@@ -63,7 +63,7 @@ export class Container {
 		return instance;
 	}
 
-	public toString() {
+	public static toString() {
 		return 'edde-js/container/container';
 	}
 }

@@ -32,8 +32,8 @@ test('Router: Events', test => {
 	const container = <Container>test.context;
 	const eventBus = <EventBus>container.create(EventBus);
 	const router = <Router>container.create(Router);
-	router.route(Routes.path('/bar', new NoopRouteHandler()));
-	router.route(Routes.path('/foo-bar', new NoopRouteHandler()));
+	router.register(Routes.path('/bar', new NoopRouteHandler()));
+	router.register(Routes.path('/foo-bar', new NoopRouteHandler()));
 	router.setup();
 	const array: any[] = [];
 	const expect = [

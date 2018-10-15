@@ -3,6 +3,7 @@ import {Make} from "./make";
 import {EventBus} from "../event";
 import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
+import {Router} from "../router";
 
 /**
  * Creates container with common services used in edde-js.
@@ -30,6 +31,7 @@ export class ContainerFactory {
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))
+			.register(Router, Make.service(Router))
 			.register(HistoryService, Make.subscriber(HistoryService));
 	}
 }

@@ -24,7 +24,7 @@ export class Application {
 	protected onSetup(): void {
 	}
 
-	public toString() {
+	public static toString() {
 		return 'edde-js/application/application';
 	}
 }

@@ -20,7 +20,7 @@ export class Router {
 	 *
 	 * @param route
 	 */
-	public route(route: AbstractRoute): Router {
+	public register(route: AbstractRoute): Router {
 		this.routes.add(route);
 		return this;
 	}
