@@ -5,6 +5,7 @@ import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
 import {Router} from "../router";
 import {ViewManager} from "../view/view-manager";
+import {Mount} from "../application/Mount";
 
 /**
  * Creates container with common services used in edde-js.
@@ -32,6 +33,7 @@ export class ContainerFactory {
 			.register(Router, Make.service(Router))
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
+			.register(Mount, Make.service(Mount))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))

@@ -67,6 +67,7 @@ export class ViewManager {
 	 * @param attrs
 	 */
 	public mount(name: ToString, attrs: HashMap<any>): IView {
+		attrs.ensure('target', () => this.target);
 		const view = this.create(name).mount(attrs);
 		this.views.set(name.toString(), view);
 		return view;
