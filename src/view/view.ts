@@ -1,8 +1,10 @@
 import {IView} from "./types";
-import {HashMap} from "../collection";
+import {Html} from "../dom";
 
 export abstract class AbstractView implements IView {
-	public abstract mount(attrs: HashMap<any>): IView;
+	public abstract bind(html: Html): IView;
+
+	public abstract mount(): IView;
 
 	public abstract umount(): IView;
 }

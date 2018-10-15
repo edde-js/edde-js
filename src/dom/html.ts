@@ -89,6 +89,28 @@ export class Html {
 	}
 
 	/**
+	 * return attribute with the given name or default value
+	 *
+	 * @param name
+	 * @param value
+	 */
+	public attr(name: string, value: any = null): any {
+		return this.element.hasAttribute(name) ? this.element.getAttribute(name) : value;
+	}
+
+	/**
+	 * return required attribute; if it's not present, error is thrown
+	 *
+	 * @param name
+	 */
+	public rattr(name: string): any {
+		if (this.element.hasAttribute(name)) {
+			return this.element.getAttribute(name);
+		}
+		throw new Error(`Requested unknown attribute [${name}] on element [${this.element.nodeName}].`);
+	}
+
+	/**
 	 * return attribute hashmap
 	 */
 	public attrs(): HashMap<any> {

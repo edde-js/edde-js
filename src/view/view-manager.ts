@@ -1,7 +1,6 @@
-import {HashMap} from "../collection";
 import {IView} from "./types";
 import {ToString} from "../utils";
-import {Container, Factory, Inject} from "../container";
+import {Container, Inject} from "../container";
 import {Runtime} from "../runtime";
 
 export class ViewManager {
@@ -9,44 +8,13 @@ export class ViewManager {
 	protected container: Container;
 	@Inject(Runtime)
 	protected runtime: Runtime;
-	protected target: string;
-	protected views: HashMap<IView | null>;
-
-	public constructor(target: string = 'main') {
-		this.target = target;
-	}
 
 	/**
-	 * register new view factory; internally it's proxied into container
-	 *
-	 * @param name
-	 * @param factory
-	 */
-	public register(name: ToString, factory: Factory<IView>): ViewManager {
-		this.views.set(name.toString(), null);
-		this.container.register(name, factory);
-		return this;
-	}
-
-	/**
-	 * check if a view with the given name exists
-	 *
-	 * @param name
-	 */
-	public check(name: ToString): boolean {
-		if (this.views.has(name.toString())) {
-			throw new Error(`Requested unknown view [${name.toString()}]; view must be registered into ViewManager.`);
-		}
-		return true;
-	}
-
-	/**
-	 * create a view
+	 * create a view (just typehint)
 	 *
 	 * @param name
 	 */
 	public create(name: ToString): IView {
-		this.check(name);
 		return this.container.create<IView>(name);
 	}
 
@@ -54,28 +22,18 @@ export class ViewManager {
 	 * mount a view
 	 *
 	 * @param name
-	 * @param attrs
 	 */
-	public mount(name: ToString, attrs: HashMap<any>): IView {
-		attrs.ensure('target', () => this.target);
-		const view = this.create(name).mount(attrs);
-		this.views.set(name.toString(), view);
-		return view;
+	public mount(name: ToString): IView {
+		return this.create(name).mount();
 	}
 
 	/**
-	 * uount already mounted view or die
+	 * umount already mounted view or die
 	 *
 	 * @param name
 	 */
 	public umount(name: ToString): IView {
-		this.check(name);
-		const view = this.views.require(name.toString());
-		if (view) {
-			this.views.set(name.toString(), null);
-			return view.umount();
-		}
-		throw new Error(`Cannot umount view [${name.toString()}] not mounted.`);
+		return this.create(name).umount();
 	}
 
 	public static toString() {

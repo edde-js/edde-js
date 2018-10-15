@@ -15,11 +15,8 @@ export class Mount {
 	 * @param from
 	 */
 	public views(from: Html): Mount {
-		from.selectorCollection('edde-view').each(html => {
-//			this.viewManager.register()
-//			const attrs = html.attrs();
-//			to.register(container.create(attrs.require('view')));
-		});
+		from.selectorCollection('edde-view').each(html => this.viewManager.create(html.rattr('view')).bind(html));
+		return this;
 	}
 
 	public static toString() {

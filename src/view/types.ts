@@ -1,12 +1,17 @@
-import {HashMap} from "../collection";
+import {Html} from "../dom";
 
 export interface IView {
 	/**
-	 * mount a view
+	 * bind a view to the given html config node
 	 *
-	 * @param attrs
+	 * @param html
 	 */
-	mount(attrs: HashMap<any>): IView;
+	bind(html: Html): IView;
+
+	/**
+	 * mount a view (view should be already bound)
+	 */
+	mount(): IView;
 
 	/**
 	 * umount (deactivate) view
