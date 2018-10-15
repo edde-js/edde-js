@@ -1,5 +1,5 @@
 import {NativeListener} from "./types";
-import {Collection, HashMapCollection} from "../collection";
+import {Collection, HashMap, HashMapCollection} from "../collection";
 
 /**
  * Because all meaningful names are taken, it's quite strange name for
@@ -86,6 +86,18 @@ export class Html {
 			return element;
 		}
 		throw new Error(`Cannot get any element by selector [${selector}].`);
+	}
+
+	/**
+	 * return attribute hashmap
+	 */
+	public attrs(): HashMap<any> {
+		const attrs = this.element.attributes;
+		const map: any = {};
+		for (let i = 0; i < attrs.length; i++) {
+			map[attrs[i].name] = attrs[i].value;
+		}
+		return new HashMap(map);
 	}
 
 	/**

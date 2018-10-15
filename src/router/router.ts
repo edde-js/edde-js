@@ -1,9 +1,8 @@
-import {AbstractRoute, NoopRoute} from "./routes";
 import {Route404Event, RouteChangeEvent, RouteDoneEvent, RouteRefreshEvent} from "./events";
 import {Inject} from "../container";
 import {EventBus} from "../event";
 import {Collection} from "../collection";
-import {IRoute} from "./types";
+import {INoopRoute, IRoute} from "./types";
 
 export class Router {
 	@Inject(EventBus)
@@ -13,7 +12,7 @@ export class Router {
 
 	public constructor() {
 		this.routes = new Collection();
-		this.current = new NoopRoute();
+		this.current = INoopRoute;
 	}
 
 	/**
@@ -55,7 +54,7 @@ export class Router {
 			return false;
 		});
 		if (loopContext.cancelled) {
-			this.eventBus.event(new RouteDoneEvent(path, <AbstractRoute>loopContext.value));
+			this.eventBus.event(new RouteDoneEvent(path, <IRoute>loopContext.value));
 			return this;
 		}
 		/**
