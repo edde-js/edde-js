@@ -1,42 +1,12 @@
-import {NoopRouteHandler, RouteHandler} from "./route-handler";
-import {HashMap} from "../collection";
+import {IHandler, IRoute} from "./types";
 
-export abstract class AbstractRoute {
-	protected routeHandler: RouteHandler;
-
-	protected constructor(routeHandler: RouteHandler) {
-		this.routeHandler = routeHandler;
-		return this;
-	}
-
-	/**
-	 * match the router against the given path
-	 *
-	 * @param path
-	 */
+export abstract class AbstractRoute implements IRoute {
 	public abstract match(path: string): boolean;
 
-	/**
-	 * handle the route; if there is an error, it should throw an exception; handle also should
-	 * setup handler
-	 *
-	 * @param path
-	 */
-	public abstract handle(path: string): AbstractRoute;
-
-	/**
-	 * return current route handler
-	 */
-	public handler(): RouteHandler {
-		return this.routeHandler;
-	}
+	public abstract handle(path: string): IRoute;
 }
 
 export class NoopRoute extends AbstractRoute {
-	public constructor() {
-		super(new NoopRouteHandler());
-	}
-
 	public match(path: string): boolean {
 		return false;
 	}
@@ -46,32 +16,13 @@ export class NoopRoute extends AbstractRoute {
 	}
 }
 
-export class PathRoute extends AbstractRoute {
-	protected path: string;
-
-	public constructor(path: string, routeHandler: RouteHandler) {
-		super(routeHandler);
-		this.path = path;
-	}
-
-	/** @inheritDoc */
-	public match(path: string): boolean {
-		return this.path === path;
-	}
-
-	/** @inheritDoc */
-	public handle(path: string): AbstractRoute {
-		this.routeHandler.handle(path, new HashMap());
-		return this;
-	}
-}
-
 export class Routes {
-	public static noop(): AbstractRoute {
-		return new NoopRoute();
-	}
-
-	public static path(path: string, routeHandler: RouteHandler): AbstractRoute {
-		return new PathRoute(path, routeHandler);
+	public static path(path: string, handler: IHandler): IRoute {
+		return {
+			match: (match: string) => {
+				return match === path;
+			},
+			handle: handler
+		}
 	}
 }

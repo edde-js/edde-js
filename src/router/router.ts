@@ -3,12 +3,13 @@ import {Route404Event, RouteChangeEvent, RouteDoneEvent, RouteRefreshEvent} from
 import {Inject} from "../container";
 import {EventBus} from "../event";
 import {Collection} from "../collection";
+import {IRoute} from "./types";
 
 export class Router {
 	@Inject(EventBus)
 	protected eventBus: EventBus;
-	protected routes: Collection<AbstractRoute>;
-	protected current: AbstractRoute;
+	protected routes: Collection<IRoute>;
+	protected current: IRoute;
 
 	public constructor() {
 		this.routes = new Collection();
@@ -20,20 +21,8 @@ export class Router {
 	 *
 	 * @param route
 	 */
-	public register(route: AbstractRoute): Router {
+	public register(route: IRoute): Router {
 		this.routes.add(route);
-		return this;
-	}
-
-	public setup(): Router {
-		this.routes.each(route => route.handler().setup());
-		/**
-		 * simple hack to call dummy setup method when
-		 * setup is done
-		 */
-		this.setup = () => {
-			throw new Error('Router is already ready! Do not call setup() method multiple times. It is not nice from you!')
-		};
 		return this;
 	}
 

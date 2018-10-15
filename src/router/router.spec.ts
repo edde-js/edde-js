@@ -1,11 +1,10 @@
 import test from "ava";
 import {Router} from "./router";
 import {Route404Event, RouteChangeEvent, RouteDoneEvent, RouteRefreshEvent} from "./events";
-import {PathRoute, Routes} from "./routes";
-import {NoopRouteHandler} from "./route-handler";
 import {Container, Make} from "../container";
 import {EventBus} from "../event";
 import {ToString} from "../utils";
+import {Routes} from "./routes";
 
 test.beforeEach(test => {
 	const container = new Container();
@@ -22,19 +21,14 @@ test('Router: Common', test => {
 	eventBus.listener(Route404Event).add(() => test.true(true));
 	router.run('nope');
 });
-test('Router: Setup setup error', test => {
-	const container = <Container>test.context;
-	const router = <Router>container.create(Router);
-	router.setup();
-	test.throws(() => router.setup(), Error, 'Router is already ready! Do not call setup() method multiple times. It is not nice from you!');
-});
 test('Router: Events', test => {
 	const container = <Container>test.context;
 	const eventBus = <EventBus>container.create(EventBus);
 	const router = <Router>container.create(Router);
-	router.register(Routes.path('/bar', new NoopRouteHandler()));
-	router.register(Routes.path('/foo-bar', new NoopRouteHandler()));
-	router.setup();
+	router.register(Routes.path('/bar', () => {
+	}));
+	router.register(Routes.path('/foo-bar', () => {
+	}));
 	const array: any[] = [];
 	const expect = [
 		'edde-js/router/route-change-event',
@@ -47,12 +41,12 @@ test('Router: Events', test => {
 	eventBus.listener(RouteChangeEvent).add((event: RouteChangeEvent) => {
 		array.push(ToString(event));
 		test.is(event.getPath(), '/foo-bar');
-		test.true(event.getRoute() instanceof PathRoute);
+		test.truthy(event.getRoute());
 	});
 	eventBus.listener(RouteDoneEvent).add((event: RouteDoneEvent) => {
 		array.push(ToString(event));
 		test.is(event.getPath(), '/foo-bar');
-		test.true(event.getRoute() instanceof PathRoute);
+		test.truthy(event.getRoute());
 	});
 	eventBus.listener(Route404Event).add((event: Route404Event) => {
 		array.push(ToString(event));

@@ -1,5 +1,5 @@
-import {AbstractRoute} from "./routes";
 import {AbstractEvent} from "../event";
+import {IRoute} from "./types";
 
 /**
  * When no route has been matched, this event is sent.
@@ -39,9 +39,9 @@ export class RouteRefreshEvent extends AbstractEvent {
  */
 export class RouteChangeEvent extends AbstractEvent {
 	protected path: string;
-	protected route: AbstractRoute;
+	protected route: IRoute;
 
-	public constructor(path: string, route: AbstractRoute) {
+	public constructor(path: string, route: IRoute) {
 		super();
 		this.path = path;
 		this.route = route;
@@ -51,7 +51,7 @@ export class RouteChangeEvent extends AbstractEvent {
 		return this.path;
 	}
 
-	public getRoute(): AbstractRoute {
+	public getRoute(): IRoute {
 		return this.route;
 	}
 
@@ -65,9 +65,9 @@ export class RouteChangeEvent extends AbstractEvent {
  */
 export class RouteDoneEvent extends AbstractEvent {
 	protected path: string;
-	protected route: AbstractRoute;
+	protected route: IRoute;
 
-	public constructor(path: string, route: AbstractRoute) {
+	public constructor(path: string, route: IRoute) {
 		super();
 		this.path = path;
 		this.route = route;
@@ -77,7 +77,7 @@ export class RouteDoneEvent extends AbstractEvent {
 		return this.path;
 	}
 
-	public getRoute(): AbstractRoute {
+	public getRoute(): IRoute {
 		return this.route;
 	}
 
