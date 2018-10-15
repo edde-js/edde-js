@@ -1,8 +1,9 @@
 import {IView} from "./types";
 import {ToString} from "../utils";
 import {Container, Inject} from "../container";
+import {IRoute} from "../router";
 
-export class ViewManager {
+export class ViewManager implements IRoute {
 	@Inject(Container)
 	protected container: Container;
 
@@ -35,5 +36,12 @@ export class ViewManager {
 
 	public static toString() {
 		return 'edde-js/view/view-manager';
+	}
+
+	public handle(path: string): void {
+	}
+
+	public match(path: string): boolean {
+		return false;
 	}
 }
