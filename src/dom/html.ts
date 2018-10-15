@@ -1,5 +1,5 @@
 import {NativeListener} from "./types";
-import {HashMapCollection} from "../collection";
+import {Collection, HashMapCollection} from "../collection";
 
 /**
  * Because all meaningful names are taken, it's quite strange name for
@@ -64,6 +64,15 @@ export class Html {
 			return new Html(element);
 		}
 		return null;
+	}
+
+	/**
+	 * return collection of HTML elements
+	 *
+	 * @param selector
+	 */
+	public selectorCollection(selector: string): Collection<Html> {
+		return new Collection([].slice.call(this.element.querySelectorAll(selector)));
 	}
 
 	/**
