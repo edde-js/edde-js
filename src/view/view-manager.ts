@@ -17,16 +17,6 @@ export class ViewManager {
 	}
 
 	/**
-	 * set default target when explicit target on view is not set
-	 *
-	 * @param target
-	 */
-	public setTarget(target: string): ViewManager {
-		this.target = target;
-		return this;
-	}
-
-	/**
 	 * register new view factory; internally it's proxied into container
 	 *
 	 * @param name
