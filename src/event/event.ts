@@ -3,7 +3,7 @@ import {IEvent} from "./types";
 export abstract class AbstractEvent implements IEvent {
 	protected cancelled: boolean;
 
-	protected constructor() {
+	public constructor() {
 		this.cancelled = false;
 	}
 

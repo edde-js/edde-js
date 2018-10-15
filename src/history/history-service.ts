@@ -1,6 +1,8 @@
 import {Inject} from "../container";
 import {Runtime} from "../runtime";
 import {ViewManager} from "../view/view-manager";
+import {ListenTo} from "../event";
+import {MountViewEvent} from "../view";
 
 export class HistoryService {
 	@Inject(Runtime)
@@ -16,10 +18,11 @@ export class HistoryService {
 		};
 	}
 
-//	@ListenTo(RouteChangeEvent)
-//	public handleRouteChangeEvent(event: RouteChangeEvent) {
-//		this.runtime.getWindow().history.pushState({path: this.runtime.getPath()}, '', event.getPath());
-//	}
+	@ListenTo(MountViewEvent)
+	public handleRouteChangeEvent(event: MountViewEvent) {
+		this.runtime.getWindow().history.pushState({path: this.runtime.getPath()}, '', event.getPath());
+	}
+
 	public static toString() {
 		return 'edde-js/history/history-service';
 	}

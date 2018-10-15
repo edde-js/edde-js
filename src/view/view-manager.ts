@@ -3,7 +3,7 @@ import {ToString} from "../utils";
 import {Container, Inject} from "../container";
 import {HashMap} from "../collection";
 import {EventBus} from "../event";
-import {DeadRouteEvent} from "./events";
+import {DeadRouteEvent, MountViewEvent, RefreshViewEvent, UmountViewEvent} from "./events";
 
 export class ViewManager {
 	@Inject(Container)
@@ -51,11 +51,23 @@ export class ViewManager {
 	 * switch to exact view; life-cycle is executed
 	 *
 	 * @param name
+	 * @param path
 	 */
-	public switchTo(name: ToString): IView {
+	public switchTo(name: ToString, path: string): IView {
+		const view = this.create(name);
+		if (this.current === view) {
+			this.eventBus.event(new RefreshViewEvent(this.current, path));
+			return this.current;
+		}
+		const event = new UmountViewEvent(this.current, path);
+		this.eventBus.event(event);
+		if (event.isCancelled()) {
+			return this.current;
+		}
 		this.current.umount();
-		this.current = this.create(name);
+		this.current = view;
 		this.current.mount();
+		this.eventBus.event(new MountViewEvent(this.current, path));
 		return this.current;
 	}
 
@@ -65,7 +77,7 @@ export class ViewManager {
 	 * @param path
 	 */
 	public routeTo(path: string): IView | null {
-		const context = this.views.each((name, view) => view.canHandle(path) ? this.switchTo(name) && false : true);
+		const context = this.views.each((name, view) => view.canHandle(path) ? this.switchTo(name, path) && false : true);
 		if (context.cancelled) {
 			return context.value;
 		}
