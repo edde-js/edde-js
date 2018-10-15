@@ -1,13 +1,10 @@
 import {IView} from "./types";
 import {ToString} from "../utils";
 import {Container, Inject} from "../container";
-import {Runtime} from "../runtime";
 
 export class ViewManager {
 	@Inject(Container)
 	protected container: Container;
-	@Inject(Runtime)
-	protected runtime: Runtime;
 
 	/**
 	 * create a view (just typehint)
