@@ -16,11 +16,11 @@ export class Application {
 	@Inject(Mount)
 	protected mount: Mount;
 
-	public setup(): void {
-		this.onSetup();
+	public startup(): void {
+		this.onStartup();
 		this.router.run(this.runtime.getPath());
-		this.setup = () => {
-			throw new Error('Do not call application setup multiple times')
+		this.startup = () => {
+			throw new Error('Do not call application startup multiple times')
 		};
 	}
 
@@ -28,7 +28,7 @@ export class Application {
 	 * common stuff setup; if method is overridden and not called, a lot of stuff
 	 * has to be done manually (or using Mount class)
 	 */
-	protected onSetup(): void {
+	protected onStartup(): void {
 		this.mount.views(this.runtime.html());
 	}
 
