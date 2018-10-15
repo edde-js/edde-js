@@ -1,7 +1,17 @@
 import {AbstractEvent} from "../event";
 
-export class NoViewEvent extends AbstractEvent {
-	public constructor() {
+/**
+ * Sent when there is no view to get the current path.
+ */
+export class DeadRouteEvent extends AbstractEvent {
+	protected path: string;
+
+	public constructor(path: string) {
 		super();
+		this.path = path;
+	}
+
+	public getPath(): string {
+		return this.path;
 	}
 }

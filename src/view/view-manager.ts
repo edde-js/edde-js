@@ -3,7 +3,7 @@ import {ToString} from "../utils";
 import {Container, Inject} from "../container";
 import {HashMap} from "../collection";
 import {EventBus} from "../event";
-import {NoViewEvent} from "./events";
+import {DeadRouteEvent} from "./events";
 
 export class ViewManager {
 	@Inject(Container)
@@ -69,7 +69,7 @@ export class ViewManager {
 		if (context.cancelled) {
 			return context.value;
 		}
-		this.eventBus.event(new NoViewEvent());
+		this.eventBus.event(new DeadRouteEvent(path));
 		return null;
 	}
 
