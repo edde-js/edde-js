@@ -1,7 +1,7 @@
 import {Inject} from "../container";
-import {Router} from "../router";
 import {Runtime} from "../runtime";
 import {Mount} from "./mount";
+import {ViewManager} from "../view/view-manager";
 
 /**
  * Covers basic stuff related to an application.
@@ -9,8 +9,8 @@ import {Mount} from "./mount";
  * An application must be created by a container.
  */
 export class Application {
-	@Inject(Router)
-	protected router: Router;
+	@Inject(ViewManager)
+	protected viewManager: ViewManager;
 	@Inject(Runtime)
 	protected runtime: Runtime;
 	@Inject(Mount)
@@ -18,7 +18,7 @@ export class Application {
 
 	public startup(): void {
 		this.onStartup();
-		this.router.run(this.runtime.getPath());
+		this.viewManager.routeTo(this.runtime.getPath());
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

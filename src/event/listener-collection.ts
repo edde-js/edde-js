@@ -1,11 +1,10 @@
-import {EventHandler, EventListener} from "./types";
-import {AbstractEvent} from "./event";
+import {EventHandler, EventListener, IEvent} from "./types";
 import {Collection} from "../collection";
 
 /**
  * Collection of listeners for exactly one event type.
  */
-export class ListenerCollection<T extends AbstractEvent> {
+export class ListenerCollection<T extends IEvent> {
 	/**
 	 * collection of listeners
 	 */

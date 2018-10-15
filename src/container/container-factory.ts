@@ -3,7 +3,6 @@ import {Make} from "./make";
 import {EventBus} from "../event";
 import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
-import {Router} from "../router";
 import {ViewManager} from "../view/view-manager";
 import {Mount} from "../application";
 
@@ -18,17 +17,11 @@ export class ContainerFactory {
 	public static create(): Container {
 		const container = this.registerServices(new Container());
 		this.setupHistoryService(container);
-		this.setupRouter(container);
 		return container;
 	}
 
 	public static setupHistoryService(container: Container): void {
 		container.create(HistoryService);
-	}
-
-	public static setupRouter(container: Container): void {
-		const router = container.create<Router>(Router);
-		router.register(container.create<ViewManager>(ViewManager));
 	}
 
 	/**
@@ -40,7 +33,6 @@ export class ContainerFactory {
 		return container
 			.register(Container, Make.instance(Container))
 			.register(EventBus, Make.service(EventBus))
-			.register(Router, Make.service(Router))
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
 			.register(Mount, Make.service(Mount))

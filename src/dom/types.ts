@@ -1,3 +1,1 @@
-import {EventHandler} from "../event";
-
-export type NativeListener = EventHandler<Event>;
+export type NativeListener<T extends Event = Event> = (event: T) => void;

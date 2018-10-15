@@ -1,10 +1,9 @@
 import {ListenerCollection} from "./listener-collection";
-import {AbstractEvent} from "./event";
-import {ListenerObject} from "./types";
+import {IEvent, ListenerObject} from "./types";
 import {Collection, HashMap} from "../collection";
 import {ToString} from "../utils";
 
-export class EventBus<T extends AbstractEvent = AbstractEvent> {
+export class EventBus<T extends IEvent = IEvent> {
 	protected listenerCollections: HashMap<ListenerCollection<T>>;
 
 	public constructor() {
