@@ -57,6 +57,7 @@ test('Container: Common', test => {
 		.register(TeTestService, Make.service(TeTestService))
 		.register(Container, Make.instance(container));
 	const service = container.create<TestService>(TestService);
+	test.is(Container.toString(), 'edde-js/container/container');
 	test.is(container.create(Container), container);
 	test.deepEqual(container.create(TestService), container.create(TestService));
 	test.deepEqual(container.create(TeTestService), container.create(TeTestService));

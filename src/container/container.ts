@@ -62,4 +62,8 @@ export class Container {
 		});
 		return instance;
 	}
+
+	public toString() {
+		return 'edde-js/container/container';
+	}
 }
