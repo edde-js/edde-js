@@ -24,13 +24,9 @@ export class EventBus<T extends IEvent = IEvent> {
 	 *
 	 * @param event
 	 */
-	public event(event: T): EventBus<T> {
-		/**
-		 * event.constructor is necessary as toString is static method accessed
-		 * from an instance
-		 */
-		this.listener(event.constructor).event(event);
-		return this;
+	public emit(event: T): T {
+		this.listener(ToString(event)).emit(event);
+		return event;
 	}
 
 	/**

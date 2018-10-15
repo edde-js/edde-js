@@ -48,7 +48,7 @@ export class ListenerCollection<T extends IEvent> {
 	 *
 	 * @param event
 	 */
-	public event(event: T): ListenerCollection<T> {
+	public emit(event: T): ListenerCollection<T> {
 		this.listeners.each(listener => {
 			if ((listener.cancellable && event.isCancelled()) !== true) {
 				listener.handler.call(listener.context || listener.handler, event);

@@ -130,8 +130,8 @@ test('EventBus: Common', test => {
 	});
 	test.is(ToString(new FooEvent('nope')), 'foo-event');
 	test.is(ToString(new BarEvent('nope')), 'bar-event');
-	eventBus.event(new BarEvent('blah-blah'));
-	eventBus.event(new FooEvent('some-data'));
+	eventBus.emit(new BarEvent('blah-blah'));
+	eventBus.emit(new FooEvent('some-data'));
 	test.is(array.length, 2, 'events has not been captured!');
 	test.deepEqual(array, expect, 'events are not same!');
 });
@@ -150,11 +150,11 @@ test('EventBus: Subscribe', test => {
 	test.is(eventBus.listener(FooBarEvent).getCount(), 4);
 	test.is(eventBus.listener(FooBarBarEvent).getCount(), 1);
 	test.is(eventBus.listener(PooEvent).getCount(), 2);
-	eventBus.event(new FooEvent('foo'));
-	eventBus.event(new BarEvent('bar'));
-	eventBus.event(new FooBarEvent('foo-bar'));
-	eventBus.event(new PooEvent('poo-bar'));
-	eventBus.event(new FooBarBarEvent('foo-bar-bar'));
+	eventBus.emit(new FooEvent('foo'));
+	eventBus.emit(new BarEvent('bar'));
+	eventBus.emit(new FooBarEvent('foo-bar'));
+	eventBus.emit(new PooEvent('poo-bar'));
+	eventBus.emit(new FooBarBarEvent('foo-bar-bar'));
 	test.is(classB.events.length, 2, 'class has caught wrong amount of events!');
 	test.deepEqual(classB.events, [
 		'foo-event',

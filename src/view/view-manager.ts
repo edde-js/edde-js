@@ -56,18 +56,16 @@ export class ViewManager {
 	public switchTo(name: ToString, path: string): IView {
 		const view = this.create(name);
 		if (this.current === view) {
-			this.eventBus.event(new RefreshViewEvent(this.current, path));
+			this.eventBus.emit(new RefreshViewEvent(this.current, path));
 			return this.current;
 		}
-		const event = new UmountViewEvent(this.current, path);
-		this.eventBus.event(event);
-		if (event.isCancelled()) {
+		if (this.eventBus.emit(new UmountViewEvent(this.current, path)).isCancelled()) {
 			return this.current;
 		}
 		this.current.umount();
 		this.current = view;
 		this.current.mount();
-		this.eventBus.event(new MountViewEvent(this.current, path));
+		this.eventBus.emit(new MountViewEvent(this.current, path));
 		return this.current;
 	}
 
@@ -77,11 +75,15 @@ export class ViewManager {
 	 * @param path
 	 */
 	public routeTo(path: string): IView | null {
-		const context = this.views.each((name, view) => view.canHandle(path) ? this.switchTo(name, path) && false : true);
+		const context = this.views.each((name, view) => {
+			if (view.canHandle(path)) {
+				return this.switchTo(name, path) && false;
+			}
+		});
 		if (context.cancelled) {
 			return context.value;
 		}
-		this.eventBus.event(new DeadRouteEvent(path));
+		this.eventBus.emit(new DeadRouteEvent(path));
 		return null;
 	}
 

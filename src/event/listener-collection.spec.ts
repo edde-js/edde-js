@@ -32,7 +32,7 @@ test('ListenerCollection: Listener Order', test => {
 		.add(() => {
 			array.push(3);
 		}, 3);
-	listenerCollection.event(new TestEvent(0));
+	listenerCollection.emit(new TestEvent(0));
 	test.is(array.length, 3, 'not all events has been captured');
 	test.deepEqual(array, expect, 'order of event is not right ' + JSON.stringify(array));
 });
@@ -51,7 +51,7 @@ test('ListenerCollection: Listener cancel', test => {
 		.add(() => {
 			array.push(3);
 		}, 3);
-	listenerCollection.event(new TestEvent(0));
+	listenerCollection.emit(new TestEvent(0));
 	test.is(array.length, 2, 'incorrect number of events has been captured');
 	test.deepEqual(array, expect, 'order of event is not right ' + JSON.stringify(array));
 });
@@ -70,7 +70,7 @@ test('ListenerCollection: Listener non-cancellable', test => {
 		.add(() => {
 			array.push(3);
 		}, 3);
-	listenerCollection.event(new TestEvent(0));
+	listenerCollection.emit(new TestEvent(0));
 	test.is(array.length, 3, 'incorrect number of events has been captured');
 	test.deepEqual(array, expect, 'order of event is not right ' + JSON.stringify(array));
 });
@@ -89,7 +89,7 @@ test('ListenerCollection: Listener context', test => {
 		.add(function () {
 			array.push(this);
 		}, 3, context);
-	listenerCollection.event(new TestEvent(0));
+	listenerCollection.emit(new TestEvent(0));
 	test.is(array.length, 3, 'incorrect number of events has been captured');
 	test.deepEqual(array, expect, 'context is not working properly');
 });
