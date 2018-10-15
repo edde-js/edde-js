@@ -90,6 +90,17 @@ export class Collection<T> {
 	}
 
 	/**
+	 * run callback on each item and return an array
+	 *
+	 * @param callback
+	 */
+	public collect<U>(callback: (item: T) => U = (item) => <U><unknown>item): Collection<U> {
+		const collection = new Collection<U>();
+		this.each(item => collection.add(callback(item)));
+		return collection;
+	}
+
+	/**
 	 * slice current collection and return a new one
 	 *
 	 * @param start

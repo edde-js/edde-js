@@ -72,7 +72,11 @@ export class Html {
 	 * @param selector
 	 */
 	public selectorCollection(selector: string): Collection<Html> {
-		return new Collection([].slice.call(this.element.querySelectorAll(selector)));
+		return new Collection(
+			[].slice.call(
+				this.element.querySelectorAll(selector)
+			)).collect((element: HTMLElement) => new Html(element)
+		);
 	}
 
 	/**
