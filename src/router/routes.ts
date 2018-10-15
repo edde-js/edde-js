@@ -19,9 +19,7 @@ export class NoopRoute extends AbstractRoute {
 export class Routes {
 	public static path(path: string, handler: IHandler): IRoute {
 		return {
-			match: (match: string) => {
-				return match === path;
-			},
+			match: match => match === path,
 			handle: handler
 		}
 	}
