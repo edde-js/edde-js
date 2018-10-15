@@ -41,6 +41,8 @@ class TeTestService extends TestService {
 	public anotherDependency: AnotherDependencyService;
 	@Inject(Another2DependencyService)
 	public another2Dependency: Another2DependencyService;
+	@Inject(Container)
+	public container: Container;
 
 	public static toString() {
 		return 'te-test-service';
@@ -61,6 +63,7 @@ test('Container: Common', test => {
 	test.is(container.create(Container), container);
 	test.deepEqual(container.create(TestService), container.create(TestService));
 	test.deepEqual(container.create(TeTestService), container.create(TeTestService));
+	test.deepEqual(container.create<TeTestService>(TeTestService).container, container);
 	test.true(service.foo);
 	test.deepEqual(ToString(service.dependency), 'dependency-service');
 	test.deepEqual(ToString(container.create<TeTestService>(TeTestService).anotherDependency), 'another-dependency-service');

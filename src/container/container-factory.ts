@@ -31,7 +31,7 @@ export class ContainerFactory {
 	 */
 	public static registerServices(container: Container): Container {
 		return container
-			.register(Container, Make.instance(Container))
+			.register(Container, Make.instance(container))
 			.register(Application, Make.service(Application))
 			.register(EventBus, Make.service(EventBus))
 			.register(HistoryService, Make.subscriber(HistoryService))
