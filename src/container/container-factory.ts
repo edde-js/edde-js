@@ -5,7 +5,7 @@ import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
 import {Router} from "../router";
 import {ViewManager} from "../view/view-manager";
-import {Mount} from "../application/Mount";
+import {Mount} from "../application";
 
 /**
  * Creates container with common services used in edde-js.

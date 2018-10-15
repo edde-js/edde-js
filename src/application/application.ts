@@ -1,6 +1,7 @@
 import {Inject} from "../container";
 import {Router} from "../router";
 import {Runtime} from "../runtime";
+import {Mount} from "./mount";
 
 /**
  * Covers basic stuff related to an application.
@@ -12,6 +13,8 @@ export class Application {
 	protected router: Router;
 	@Inject(Runtime)
 	protected runtime: Runtime;
+	@Inject(Mount)
+	protected mount: Mount;
 
 	public setup(): void {
 		this.onSetup();
@@ -21,7 +24,12 @@ export class Application {
 		};
 	}
 
+	/**
+	 * common stuff setup; if method is overridden and not called, a lot of stuff
+	 * has to be done manually (or using Mount class)
+	 */
 	protected onSetup(): void {
+		this.mount.views(this.runtime.html());
 	}
 
 	public static toString() {
