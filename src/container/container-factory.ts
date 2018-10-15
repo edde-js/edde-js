@@ -17,15 +17,18 @@ export class ContainerFactory {
 	 */
 	public static create(): Container {
 		const container = this.registerServices(new Container());
-		/**
-		 * create and register HistoryService as it's by default listening for events
-		 */
-		container.create(HistoryService);
-		/**
-		 * setup router (register ViewManager as a default route)
-		 */
-		container.create<Router>(Router).register(container.create<ViewManager>(ViewManager));
+		this.setupHistoryService(container);
+		this.setupRouter(container);
 		return container;
+	}
+
+	public static setupHistoryService(container: Container): void {
+		container.create(HistoryService);
+	}
+
+	public static setupRouter(container: Container): void {
+		const router = container.create<Router>(Router);
+		router.register(container.create<ViewManager>(ViewManager));
 	}
 
 	/**
