@@ -16,7 +16,7 @@ test('Html: Common', test => {
 	test.false(element.toggleClass('foo', false).hasClass('foo'));
 	test.false(element.toggleClass('foo', false).hasClass('foo'));
 	let click = false;
-	element.native('click', () => {
+	element.listenTo('click', () => {
 		click = true;
 	});
 	native.click();

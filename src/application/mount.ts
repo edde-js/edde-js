@@ -15,7 +15,7 @@ export class Mount {
 	 * @param from
 	 */
 	public views(from: Html): Mount {
-		from.selectorCollection('edde-view').each(html => this.viewManager.create(html.rattr('view')).bind(html));
+		from.selectorCollection('template.view').each(html => this.viewManager.create(html.rattr('view')).bind(html));
 		return this;
 	}
 

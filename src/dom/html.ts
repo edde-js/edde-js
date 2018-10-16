@@ -6,10 +6,10 @@ import {Collection, HashMap, HashMapCollection} from "../collection";
  * html element wrapper.
  */
 export class Html {
-	protected element: HTMLElement;
+	protected element: Element;
 	protected events: HashMapCollection<NativeListener>;
 
-	public constructor(element: HTMLElement) {
+	public constructor(element: Element) {
 		this.element = element;
 		this.events = new HashMapCollection();
 	}
@@ -47,7 +47,7 @@ export class Html {
 		return this;
 	}
 
-	public native(event: string, nativeListener: NativeListener): Html {
+	public listenTo(event: string, nativeListener: NativeListener): Html {
 		this.events.add(event, nativeListener);
 		this.element.addEventListener(event, nativeListener, false);
 		return this;
@@ -59,7 +59,7 @@ export class Html {
 	 * @param selector
 	 */
 	public selector(selector: string): Html | null {
-		const element = <HTMLElement>this.element.querySelector(selector);
+		const element = <Element>this.element.querySelector(selector);
 		if (element) {
 			return new Html(element);
 		}
@@ -127,9 +127,9 @@ export class Html {
 	}
 
 	/**
-	 * return internal html element; this method should be used with caution!
+	 * return internal element; this method should be used with caution!
 	 */
-	public getElement(): HTMLElement {
+	public getElement(): Element {
 		return this.element;
 	}
 
@@ -143,8 +143,14 @@ export class Html {
 		return this;
 	}
 
-	public appendChild(html: Node) {
+	/**
+	 * return $this
+	 *
+	 * @param html
+	 */
+	public appendChild(html: Node): Html {
 		this.element.appendChild(html);
+		return this;
 	}
 
 	public replaceBy(html: Html): Html {
@@ -153,14 +159,10 @@ export class Html {
 		return this;
 	}
 
-	public getNodes(): NodeListOf<ChildNode> {
-		return this.element.childNodes;
-	}
-
 	/**
 	 * simply clones current node
 	 */
 	public clone(deep: boolean = true): Html {
-		return new Html(<HTMLElement>this.element.cloneNode(deep));
+		return new Html(<Element>this.element.cloneNode(deep));
 	}
 }
