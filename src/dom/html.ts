@@ -163,4 +163,12 @@ export class Html {
 	public clone(deep: boolean = true): Html {
 		return new Html(<Element>this.element.cloneNode(deep));
 	}
+
+	/**
+	 * remove $this element
+	 */
+	public remove(): Html {
+		this.element.remove();
+		return this;
+	}
 }
