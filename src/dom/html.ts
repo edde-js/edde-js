@@ -143,6 +143,12 @@ export class Html {
 		return this;
 	}
 
+	public replaceBy(html: Html): Html {
+		(<Node>this.element.parentNode).replaceChild(html.element, this.element);
+		this.element = html.element;
+		return this;
+	}
+
 	/**
 	 * simply clones current node
 	 */
