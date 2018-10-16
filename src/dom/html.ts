@@ -8,6 +8,7 @@ import {Collection, HashMap, HashMapCollection} from "../collection";
 export class Html {
 	protected element: Element;
 	protected events: HashMapCollection<NativeListener>;
+	protected parent: Html;
 
 	public constructor(element: Element) {
 		this.element = element;
@@ -138,6 +139,10 @@ export class Html {
 	 */
 	public getElement(): Element {
 		return this.element;
+	}
+
+	public getParent(): Html {
+		return this.parent || (this.parent = new Html(<Element>this.element.parentElement));
 	}
 
 	/**
