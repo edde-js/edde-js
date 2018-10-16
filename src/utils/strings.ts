@@ -9,6 +9,6 @@ export class Strings {
 	}
 
 	public static fromKebabCase(string: string): string {
-		return string.replace(/_\w/g, _ => _[1].toUpperCase());
+		return string.replace(/-\w/g, _ => _[1].toUpperCase());
 	}
 }
