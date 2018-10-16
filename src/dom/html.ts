@@ -134,23 +134,21 @@ export class Html {
 	}
 
 	/**
-	 * append the given node to $this one
+	 * append the given node to $this one; returns appended child
 	 *
 	 * @param html
 	 */
 	public append(html: Html): Html {
-		this.appendChild(html.element);
-		return this;
+		return this.appendChild(html.element);
 	}
 
 	/**
-	 * return $this
+	 * returns appended child
 	 *
 	 * @param html
 	 */
 	public appendChild(html: Node): Html {
-		this.element.appendChild(html);
-		return this;
+		return new Html(<Element>this.element.appendChild(html));
 	}
 
 	public replaceBy(html: Html): Html {
