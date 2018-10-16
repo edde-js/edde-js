@@ -18,16 +18,16 @@ export class Html {
 		if (this.hasClass(name)) {
 			return this;
 		}
-		this.element.className = this.className(this.element.className + ' ' + name);
+		this.element.classList.add(name);
 		return this;
 	}
 
 	public hasClass(name: string): boolean {
-		return this.element.className !== undefined && (' ' + this.element.className + ' ').indexOf(' ' + name + ' ') !== -1;
+		return this.element.classList.contains(name);
 	}
 
 	public removeClass(name: string): Html {
-		this.element.className = this.className(this.element.className.replace(name, ''));
+		this.element.classList.remove(name);
 		return this;
 	}
 
@@ -127,9 +127,26 @@ export class Html {
 	}
 
 	/**
-	 * cleanup and rejoin the given value with space
+	 * return internal html element; this method should be used with caution!
 	 */
-	protected className(name: string): string {
-		return (name.match(/[^\x20\t\r\n\f]+/g) || []).join(' ');
+	public getElement(): HTMLElement {
+		return this.element;
+	}
+
+	/**
+	 * append the given node to $this one
+	 *
+	 * @param html
+	 */
+	public append(html: Html): Html {
+		this.element.appendChild(html.element);
+		return this;
+	}
+
+	/**
+	 * simply clones current node
+	 */
+	public clone(): Html {
+		return new Html(<HTMLElement>this.element.cloneNode(true));
 	}
 }

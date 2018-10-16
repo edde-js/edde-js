@@ -2,11 +2,11 @@ import {Html} from "../dom";
 
 export interface IView {
 	/**
-	 * bind a view to the given html config node
+	 * bind a view to the given root html node (should contain view configuration)
 	 *
-	 * @param html
+	 * @param root
 	 */
-	bind(html: Html): IView;
+	bind(root: Html): IView;
 
 	/**
 	 * can view handle the given path?
