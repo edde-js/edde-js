@@ -14,6 +14,13 @@ export class Html {
 		this.events = new HashMapCollection();
 	}
 
+	/**
+	 * returns lowercase tag name
+	 */
+	public getName(): string {
+		return this.element.tagName.toLowerCase();
+	}
+
 	public addClass(name: string): Html {
 		if (this.hasClass(name)) {
 			return this;
