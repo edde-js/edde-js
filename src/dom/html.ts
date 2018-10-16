@@ -146,7 +146,7 @@ export class Html {
 	/**
 	 * simply clones current node
 	 */
-	public clone(): Html {
-		return new Html(<HTMLElement>this.element.cloneNode(true));
+	public clone(deep: boolean = true): Html {
+		return new Html(<HTMLElement>this.element.cloneNode(deep));
 	}
 }
