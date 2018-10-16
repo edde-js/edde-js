@@ -1,4 +1,4 @@
-import {RuntimeDocument, RuntimeWindow} from "./types";
+import {RuntimeDocument, RuntimeDocumentFragment, RuntimeWindow} from "./types";
 import {Html} from "../dom";
 
 export class Runtime {
@@ -17,6 +17,10 @@ export class Runtime {
 
 	public getDocument(): RuntimeDocument {
 		return this.document;
+	}
+
+	public createDocumentFragment(): RuntimeDocumentFragment {
+		return this.getDocument().createDocumentFragment();
 	}
 
 	/**
