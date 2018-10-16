@@ -2,6 +2,14 @@ import {EventBus} from "../event";
 import {Factory} from "./types";
 
 export class Make {
+	public static classOf<T>(service: any): Factory<T> {
+		return this.class(() => new service());
+	}
+
+	public static class<T>(factory: Factory<T>): Factory<T> {
+		return container => container.autowire(factory(container));
+	}
+
 	/**
 	 * creates a factory for singleton service
 	 */

@@ -161,6 +161,7 @@ export class Html {
 	public replaceBy(html: Html): Html {
 		(<Node>this.element.parentNode).replaceChild(html.element, this.element);
 		this.element = html.element;
+		this.events.clear();
 		return this;
 	}
 
