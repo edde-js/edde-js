@@ -29,7 +29,8 @@ export class Application {
 	 * has to be done manually (or using Mount class)
 	 */
 	protected onStartup(): void {
-		this.mount.views(this.runtime.html());
+//		this.mount.views(this.runtime.html());
+		this.mount.controls(this.runtime.html());
 	}
 
 	public static toString() {

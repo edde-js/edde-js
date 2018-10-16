@@ -1,11 +1,14 @@
 import {Html} from "../dom";
-import {Inject} from "../container";
+import {Container, Inject} from "../container";
 import {ViewManager} from "../view/view-manager";
+import {IControl} from "../control";
 
 /**
  * General tool used to do some common stuff like mounting routes from html document.
  */
 export class Mount {
+	@Inject(Container)
+	protected container: Container;
 	@Inject(ViewManager)
 	protected viewManager: ViewManager;
 
@@ -13,9 +16,21 @@ export class Mount {
 	 * mount view from the given html subtree
 	 *
 	 * @param from
+	 * @param selector
 	 */
-	public views(from: Html): Mount {
-		from.selectorCollection('template.view').each(html => this.viewManager.create(html.rattr('data-view')).bind(html));
+	public views(from: Html, selector = 'template[data-view]'): Mount {
+		from.selectorCollection(selector).each(html => this.viewManager.create(html.rattr('data-view')).bind(html));
+		return this;
+	}
+
+	/**
+	 * bind views from the given html subtree
+	 *
+	 * @param from
+	 * @param selector
+	 */
+	public controls(from: Html, selector: string = '.control[data-control]'): Mount {
+		from.selectorCollection(selector).each(html => this.container.create<IControl>(html.attr('data-control')).bind(html).mount());
 		return this;
 	}
 
