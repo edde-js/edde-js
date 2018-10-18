@@ -1,12 +1,6 @@
 import {IView} from "./types";
-import {Html} from "../dom";
+import {AbstractControl} from "../control";
 
-export abstract class AbstractView implements IView {
-	public abstract bind(root: Html): IView;
-
+export abstract class AbstractView extends AbstractControl implements IView {
 	public abstract canHandle(path: string): boolean;
-
-	public abstract mount(): IView;
-
-	public abstract umount(): IView;
 }

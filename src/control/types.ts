@@ -1,5 +1,4 @@
 import {Html} from "../dom";
-import {HashMap} from "../collection";
 
 export interface IControl {
 	/**
@@ -10,12 +9,19 @@ export interface IControl {
 	bind(root: Html): IControl;
 
 	/**
-	 * return rendered DOM tree of this control
-	 */
-	render(attrs: HashMap<any> | null): Html;
-
-	/**
 	 * basically renders and mount a control to DOM
 	 */
 	mount(): IControl;
+
+	/**
+	 * combination of bind & mount
+	 *
+	 * @param root
+	 */
+	mountTo(root: Html): IControl;
+
+	/**
+	 * removes control
+	 */
+	umount(): IControl;
 }
