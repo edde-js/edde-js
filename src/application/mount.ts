@@ -30,7 +30,7 @@ export class Mount {
 	 * @param selector
 	 */
 	public controls(from: Html, selector: string = '*[data-control]'): Mount {
-		from.selectorCollection(selector).each(html => this.container.create<IControl>(html.attr('data-control')).bind(html).mount());
+//		from.selectorCollection(selector).each(html => this.container.create<IControl>(html.attr('data-control')).bind(html).mount());
 		return this;
 	}
 
