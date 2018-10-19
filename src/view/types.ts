@@ -11,6 +11,7 @@ export interface IView extends IControl {
 
 export const IView: IView = {
 	bind: () => this,
+	link: () => this,
 	canHandle: () => false,
 	mount: () => this,
 	mountTo: () => this,
