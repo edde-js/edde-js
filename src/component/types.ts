@@ -1,12 +1,16 @@
 import {Html} from "../dom";
+import {ToString} from "../utils";
 
 export interface IComponent {
+	bind(root: Html): IComponent;
+
 	/**
 	 * bind control and all it's dependants (but doesn't change DOM) into eventual properties
 	 *
 	 * this method should also create and bind all dependant controls
 	 *
 	 * @param root
+	 * @param selector
 	 */
 	bind(root: Html, selector: string): IComponent;
 
@@ -34,3 +38,5 @@ export interface IComponent {
 	 */
 	umount(): IComponent;
 }
+
+export type IRenderer = (root: Html, component: ToString, source: Html) => void;

@@ -1,7 +1,8 @@
 import {IComponent} from "./types";
 import {Html} from "../dom";
-import {Container, Inject} from "container";
-import {Collection} from "collection";
+import {Container, Inject} from "../container";
+import {Collection} from "../collection";
+import {Strings} from "../utils";
 
 export abstract class Component implements IComponent {
 	@Inject(Container)
@@ -13,10 +14,16 @@ export abstract class Component implements IComponent {
 		this.controls = new Collection();
 	}
 
-	public bind(root: Html, selector: string = '[data-control]'): IComponent {
+	public bind(root: Html, selector: string = '[data-component]'): IComponent {
+		let current: IComponent = this;
 		(this.root = root).selectorCollection(selector).each(html => {
+			const render = html.attr('data-render');
+			if (render) {
+				(<any>current)[Strings.fromKebabCase(render)](html.rattr('data-component'), html);
+				return;
+			}
 			const component = this.container.create<IComponent>(html.rattr('data-component'));
-			this.controls.add(component.link(html));
+			this.controls.add(current = component.link(html));
 		});
 		return this;
 	}
