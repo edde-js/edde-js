@@ -25,9 +25,9 @@ export abstract class Component implements IComponent {
 			this.cloneTo = this.runtime.require(root.attr('data-clone-to'));
 		}
 		(this.root = root).selectorCollection(selector).each(html => {
-			const render = html.attr('data-render');
-			if (render) {
-				(<IRenderer>(<any>current)[Strings.fromKebabCase(render)])(root, html.rattr('data-component'), html);
+			const template = html.attr('data-template');
+			if (template) {
+				(<IRenderer>(<any>current)[Strings.fromKebabCase(template)])(root, html.detach().rattr('data-component'), html);
 				return;
 			}
 			const component = this.container.create<IComponent>(html.rattr('data-component'));

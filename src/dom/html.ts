@@ -187,6 +187,17 @@ export class Html {
 	}
 
 	/**
+	 * detach node from parent
+	 */
+	public detach(): Html {
+		if (!this.element.parentNode) {
+			throw new Error('Element has no parent!');
+		}
+		this.element.parentNode.removeChild(this.element);
+		return this;
+	}
+
+	/**
 	 * remove $this element
 	 */
 	public remove(): Html {
