@@ -204,4 +204,13 @@ export class Html {
 		this.element.remove();
 		return this;
 	}
+
+	/**
+	 * compares internal elements; === true, if they're same
+	 *
+	 * @param html
+	 */
+	public equals(html: Html): boolean {
+		return this.element === html.getElement();
+	}
 }

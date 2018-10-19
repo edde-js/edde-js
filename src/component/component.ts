@@ -12,13 +12,14 @@ export abstract class Component implements IComponent {
 	protected runtime: Runtime;
 	protected components: Collection<IComponent>;
 	protected root: Html;
-	protected target: Html | null;
+	protected target: Html;
 
 	public constructor() {
 		this.components = new Collection();
 	}
 
 	public bind(root: Html, selector: string = '[data-component]'): IComponent {
+		this.target = root.getParent();
 		let current: IComponent = this;
 		if (root.hasAttr('data-clone-to')) {
 			root = root.clone();
@@ -38,7 +39,7 @@ export abstract class Component implements IComponent {
 	}
 
 	public mount(): IComponent {
-		if (this.target) {
+		if (this.root.getParent().equals(this.target) === false) {
 			this.target.append(this.root);
 		}
 		this.components.each(component => component.mount());
