@@ -1,6 +1,6 @@
 import {IView} from "./types";
-import {AbstractControl} from "../control";
+import {Component} from "../component";
 
-export abstract class AbstractView extends AbstractControl implements IView {
+export abstract class AbstractView extends Component implements IView {
 	public abstract canHandle(path: string): boolean;
 }

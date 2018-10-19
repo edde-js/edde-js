@@ -1,6 +1,6 @@
-import {IControl} from "../control";
+import {IComponent} from "../component";
 
-export interface IView extends IControl {
+export interface IView extends IComponent {
 	/**
 	 * can view handle the given path?
 	 *

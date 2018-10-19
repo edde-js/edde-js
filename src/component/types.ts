@@ -1,6 +1,6 @@
 import {Html} from "../dom";
 
-export interface IControl {
+export interface IComponent {
 	/**
 	 * bind control and all it's dependants (but doesn't change DOM) into eventual properties
 	 *
@@ -8,29 +8,29 @@ export interface IControl {
 	 *
 	 * @param root
 	 */
-	bind(root: Html, selector: string): IControl;
+	bind(root: Html, selector: string): IComponent;
 
 	/**
 	 * just link a control to the given html element
 	 *
 	 * @param root
 	 */
-	link(root: Html): IControl;
+	link(root: Html): IComponent;
 
 	/**
 	 * basically renders and mount a control to DOM
 	 */
-	mount(): IControl;
+	mount(): IComponent;
 
 	/**
 	 * combination of bind & mount
 	 *
 	 * @param root
 	 */
-	mountTo(root: Html): IControl;
+	mountTo(root: Html): IComponent;
 
 	/**
 	 * removes control
 	 */
-	umount(): IControl;
+	umount(): IComponent;
 }
