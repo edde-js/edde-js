@@ -107,7 +107,16 @@ export class Html {
 	 * @param value
 	 */
 	public attr(name: string, value: any = null): any {
-		return this.element.hasAttribute(name) ? this.element.getAttribute(name) : value;
+		return this.hasAttr(name) ? this.element.getAttribute(name) : value;
+	}
+
+	/**
+	 * has an element the given attribute?
+	 *
+	 * @param name
+	 */
+	public hasAttr(name: string): boolean {
+		return this.element.hasAttribute(name);
 	}
 
 	/**
