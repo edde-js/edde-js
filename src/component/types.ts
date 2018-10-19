@@ -37,6 +37,13 @@ export interface IComponent {
 	 * removes control
 	 */
 	umount(): IComponent;
+
+	/**
+	 * create a new component and register it to current one
+	 *
+	 * @param name
+	 */
+	component<T extends IComponent>(name: ToString): T;
 }
 
-export type IRenderer = (root: Html, component: ToString, source: Html) => void;
+export type IRenderer = (component: ToString, source: Html) => void;

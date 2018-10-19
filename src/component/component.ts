@@ -2,7 +2,7 @@ import {IComponent, IRenderer} from "./types";
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {Collection} from "../collection";
-import {Strings} from "../utils";
+import {Strings, ToString} from "../utils";
 import {Runtime} from "../runtime";
 
 export abstract class Component implements IComponent {
@@ -10,28 +10,24 @@ export abstract class Component implements IComponent {
 	protected container: Container;
 	@Inject(Runtime)
 	protected runtime: Runtime;
-	protected controls: Collection<IComponent>;
+	protected components: Collection<IComponent>;
 	protected root: Html;
-	protected cloneTo: Html | null;
+	protected target: Html | null;
 
 	public constructor() {
-		this.controls = new Collection();
+		this.components = new Collection();
 	}
 
 	public bind(root: Html, selector: string = '[data-component]'): IComponent {
 		let current: IComponent = this;
 		if (root.hasAttr('data-clone-to')) {
 			root = root.clone();
-			this.cloneTo = this.runtime.require(root.attr('data-clone-to'));
+			this.target = this.runtime.require(root.attr('data-clone-to'));
 		}
 		(this.root = root).selectorCollection(selector).each(html => {
-			const template = html.attr('data-template');
-			if (template) {
-				(<IRenderer>(<any>current)[Strings.fromKebabCase(template)])(root, html.detach().rattr('data-component'), html);
-				return;
-			}
-			const component = this.container.create<IComponent>(html.rattr('data-component'));
-			this.controls.add(current = component.link(html));
+			html.hasAttr('data-template') ?
+				(<IRenderer>(<any>current)[Strings.fromKebabCase(html.attr('data-template'))])(html.detach().rattr('data-component'), html) :
+				(current = this.component(html.rattr('data-component')).link(html));
 		});
 		return this;
 	}
@@ -42,9 +38,10 @@ export abstract class Component implements IComponent {
 	}
 
 	public mount(): IComponent {
-		if (this.cloneTo) {
-			this.cloneTo.append(this.root);
+		if (this.target) {
+			this.target.append(this.root);
 		}
+		this.components.each(component => component.mount());
 		return this;
 	}
 
@@ -54,5 +51,11 @@ export abstract class Component implements IComponent {
 
 	public umount(): IComponent {
 		return this;
+	}
+
+	public component<T extends IComponent>(name: ToString): T {
+		const component = this.container.create<T>(name);
+		this.components.add(component);
+		return component;
 	}
 }
