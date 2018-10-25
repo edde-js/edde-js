@@ -15,5 +15,8 @@ export const IView: IView = {
 	canHandle: () => false,
 	mount: () => this,
 	mountTo: () => this,
-	umount: () => this
+	umount: () => this,
+	component: () => {
+		throw new Error('IView cannot create a component.')
+	},
 };

@@ -35,7 +35,7 @@ export class ViewManager {
 	 * @param name
 	 */
 	public mount(name: ToString): IView {
-		return this.create(name).mount();
+		return <IView>this.create(name).mount();
 	}
 
 	/**
@@ -44,7 +44,7 @@ export class ViewManager {
 	 * @param name
 	 */
 	public umount(name: ToString): IView {
-		return this.create(name).umount();
+		return <IView>this.create(name).umount();
 	}
 
 	/**
