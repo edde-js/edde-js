@@ -4,7 +4,8 @@ import {EventBus} from "../event";
 import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
-import {Application, Mount} from "../application";
+import {Application} from "../application";
+import {TemplateManager} from "../template";
 
 /**
  * Creates container with common services used in edde-js.
@@ -36,7 +37,7 @@ export class ContainerFactory {
 			.register(EventBus, Make.service(EventBus))
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
-			.register(Mount, Make.service(Mount))
+			.register(TemplateManager, Make.service(TemplateManager))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))

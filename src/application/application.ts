@@ -1,6 +1,5 @@
 import {Inject} from "../container";
 import {Runtime} from "../runtime";
-import {Mount} from "./mount";
 import {ViewManager} from "../view/view-manager";
 
 /**
@@ -13,8 +12,6 @@ export class Application {
 	protected viewManager: ViewManager;
 	@Inject(Runtime)
 	protected runtime: Runtime;
-	@Inject(Mount)
-	protected mount: Mount;
 
 	public startup(): void {
 		this.onStartup();
@@ -29,8 +26,6 @@ export class Application {
 	 * has to be done manually (or using Mount class)
 	 */
 	protected onStartup(): void {
-		this.mount.views(this.runtime.html());
-		this.mount.controls(this.runtime.html());
 	}
 
 	public static toString() {

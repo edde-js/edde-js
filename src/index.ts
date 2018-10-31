@@ -7,5 +7,6 @@ export * from "./dom";
 export * from "./event";
 export * from "./history";
 export * from "./runtime";
+export * from "./template";
 export * from "./utils";
 export * from "./view";
