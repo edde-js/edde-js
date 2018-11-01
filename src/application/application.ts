@@ -1,6 +1,7 @@
 import {Inject} from "../container";
 import {Runtime} from "../runtime";
 import {ViewManager} from "../view/view-manager";
+import {TemplateManager} from "../template";
 
 /**
  * Covers basic stuff related to an application.
@@ -8,6 +9,8 @@ import {ViewManager} from "../view/view-manager";
  * An application must be created by a container.
  */
 export class Application {
+	@Inject(TemplateManager)
+	protected templateManager: TemplateManager;
 	@Inject(ViewManager)
 	protected viewManager: ViewManager;
 	@Inject(Runtime)
@@ -15,6 +18,7 @@ export class Application {
 
 	public startup(): void {
 		this.onStartup();
+		this.templateManager.mountTo(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
