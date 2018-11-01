@@ -1,6 +1,7 @@
 import {IView} from "./types";
+import {Component} from "../component";
 
-export abstract class AbstractView implements IView {
+export abstract class AbstractView extends Component implements IView {
 	public mount(): IView {
 		return this;
 	}
