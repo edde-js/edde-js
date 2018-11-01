@@ -21,7 +21,7 @@ export class Component {
 	 * @param target
 	 */
 	public mountTo(target: Html): Component {
-		target.append(this.root);
+		target.append(this.render());
 		return this;
 	}
 }

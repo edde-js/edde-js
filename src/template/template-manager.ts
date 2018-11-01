@@ -2,6 +2,7 @@ import {Html} from "../dom";
 import {HashMap} from "../collection";
 import {Template} from "./template";
 import {Container, Inject} from "../container";
+import {Component} from "../component";
 
 export class TemplateManager {
 	@Inject(Container)
@@ -33,6 +34,16 @@ export class TemplateManager {
 			this.register(attr[0], this.container.autowire(new Template(html.detach(), attr[1])));
 		});
 		return this;
+	}
+
+	/**
+	 * render given template and attach it to the given html root
+	 *
+	 * @param template
+	 * @param target
+	 */
+	public renderTo(template: string, target: Html): Component {
+		return this.templates.require(template, `Requested unknown template [${template}].`).renderTo(target)
 	}
 
 	public split(attr: string): string[] {
