@@ -3,6 +3,7 @@ import {HashMap} from "../collection";
 import {Template} from "./template";
 import {Container, Inject} from "../container";
 import {Component} from "../component";
+import {ToString} from "../utils";
 
 export class TemplateManager {
 	@Inject(Container)
@@ -42,8 +43,8 @@ export class TemplateManager {
 	 * @param template
 	 * @param target
 	 */
-	public renderTo(template: string, target: Html): Component {
-		return this.templates.require(template, `Requested unknown template [${template}].`).renderTo(target)
+	public renderTo(template: ToString, target: Html): Component {
+		return this.templates.require(template.toString(), `Requested unknown template [${template.toString()}].`).renderTo(target)
 	}
 
 	public split(attr: string): string[] {
