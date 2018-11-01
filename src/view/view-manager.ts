@@ -30,24 +30,6 @@ export class ViewManager {
 	}
 
 	/**
-	 * mount a view
-	 *
-	 * @param name
-	 */
-	public mount(name: ToString): IView {
-		return <IView>this.create(name).mount();
-	}
-
-	/**
-	 * umount already mounted view or die
-	 *
-	 * @param name
-	 */
-	public umount(name: ToString): IView {
-		return <IView>this.create(name).umount();
-	}
-
-	/**
 	 * switch to exact view; life-cycle is executed
 	 *
 	 * @param name
