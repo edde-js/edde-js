@@ -3,8 +3,14 @@ import {Html} from "../dom";
 export class Component {
 	protected root: Html;
 
-	public constructor(root: Html) {
+	/**
+	 * bind this component to the given html root (it should do basically no further actions)
+	 *
+	 * @param root
+	 */
+	public bind(root: Html): Component {
 		this.root = root;
+		return this;
 	}
 
 	/**

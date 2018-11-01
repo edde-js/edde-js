@@ -25,6 +25,7 @@ export class Template {
 	 */
 	public render(): Component {
 		const component = this.container.create<Component>(this.component);
+		component.bind(this.html);
 		component.render();
 		return component;
 	}
