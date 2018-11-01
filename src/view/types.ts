@@ -1,6 +1,4 @@
-import {IComponent} from "../component";
-
-export interface IView extends IComponent {
+export interface IView {
 	/**
 	 * can view handle the given path?
 	 *
@@ -10,13 +8,5 @@ export interface IView extends IComponent {
 }
 
 export const IView: IView = {
-	bind: () => this,
-	link: () => this,
 	canHandle: () => false,
-	mount: () => this,
-	mountTo: () => this,
-	umount: () => this,
-	component: () => {
-		throw new Error('IView cannot create a component.')
-	},
 };

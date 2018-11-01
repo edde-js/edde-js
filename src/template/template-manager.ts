@@ -1,8 +1,11 @@
 import {Html} from "../dom";
 import {HashMap} from "../collection";
 import {Template} from "./template";
+import {Container, Inject} from "../container";
 
 export class TemplateManager {
+	@Inject(Container)
+	protected container: Container;
 	protected templates: HashMap<Template>;
 
 	public constructor() {
@@ -25,7 +28,21 @@ export class TemplateManager {
 	 * will be registered
 	 */
 	public mountTo(root: Html): TemplateManager {
+		root.selectorCollection('[data-template]').each(html => {
+			const attr = this.split(html.rattr('data-template'));
+			this.register(attr[0], this.container.autowire(new Template(html.detach(), attr[1])));
+		});
 		return this;
+	}
+
+	public split(attr: string): string[] {
+		if (attr.indexOf(':') !== -1) {
+			return attr.split(':', 2);
+		}
+		return [
+			attr,
+			attr,
+		];
 	}
 
 	public static toString() {
