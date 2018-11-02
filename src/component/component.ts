@@ -1,6 +1,9 @@
 import {Html} from "../dom";
+import {Container, Inject} from "../container";
 
 export class Component {
+	@Inject(Container)
+	protected container: Container;
 	protected root: Html;
 
 	/**
@@ -18,6 +21,7 @@ export class Component {
 	 * state of $this component
 	 */
 	public render(): Html {
+		this.renderComponents();
 		return this.root;
 	}
 
@@ -28,6 +32,13 @@ export class Component {
 	 */
 	public mountTo(target: Html): Component {
 		target.append(this.render());
+		return this;
+	}
+
+	protected renderComponents(): Component {
+//		this.root.selectorCollection('[data-component]').each(html => {
+//			this.container.create<Component>(html.rattr('data-component')).bind(html).render();
+//		});
 		return this;
 	}
 }
