@@ -2,8 +2,6 @@ import {Html} from "../dom";
 import {HashMap} from "../collection";
 import {Template} from "./template";
 import {Container, Inject} from "../container";
-import {Component} from "../component";
-import {ToString} from "../utils";
 
 export class TemplateManager {
 	@Inject(Container)
@@ -26,35 +24,11 @@ export class TemplateManager {
 	}
 
 	/**
-	 * mount template manager on the given root; all templates from the given DOM tree
-	 * will be registered
+	 * register templates from the given DOM subtree
 	 */
-	public mountTo(root: Html): TemplateManager {
-		root.selectorCollection('[data-template]').each(html => {
-			const attr = this.split(html.rattr('data-template'));
-			this.register(attr[0], this.container.autowire(new Template(html.detach(), attr[1])));
-		});
+	public bind(root: Html, selector: string = '[data-template]', attribute: string = 'data-template'): TemplateManager {
+		root.selectorCollection(selector).each(html => this.register(html.rattr(attribute), new Template(html.detach())));
 		return this;
-	}
-
-	/**
-	 * render given template and attach it to the given html root
-	 *
-	 * @param template
-	 * @param target
-	 */
-	public renderTo(template: ToString, target: Html): Component {
-		return this.templates.require(template.toString(), `Requested unknown template [${template.toString()}].`).renderTo(target)
-	}
-
-	public split(attr: string): string[] {
-		if (attr.indexOf(':') !== -1) {
-			return attr.split(':', 2);
-		}
-		return [
-			attr,
-			attr,
-		];
 	}
 
 	public static toString() {
