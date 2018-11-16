@@ -11,23 +11,40 @@ export class Component {
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
 	protected root: Html;
+	protected state: State;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
 	public constructor() {
+		this.state = new State();
 		this.binds = new HashMap();
 		this.mounts = new HashMap();
 	}
 
 	public render(state: State = new State()): Html {
+		this.state = state;
 		this.root = this.templateManager.render(ToString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
-		return this.root = this.onRender(state);
+		return this.root = this.onRender();
 	}
 
+	/**
+	 * push a new state to this component
+	 *
+	 * @param state
+	 */
+	public push(state: State): Component {
+		this.state = state;
+		return this;
+	}
+
+	/**
+	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
+	 * components are not directly created as a component instance is used per rendered template
+	 */
 	protected resolveBinds(): void {
 		this.root.selectorCollection('[data-bind]').each(html => {
 			this.binds.set(
@@ -38,21 +55,30 @@ export class Component {
 		});
 	}
 
+	/**
+	 * mounts are pieces of DOM elements mounted to this component; that means mounted elements could be accessed through "mounts" hashmap
+	 */
 	protected resolveMounts(): void {
 		this.root.selectorCollection('[data-mount]').each(html => this.mounts.set(html.rattr('data-mount'), html));
 	}
 
+	/**
+	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
+	 */
 	protected resolveLinks(): void {
 		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.fromKebabCase(html.rattr('data-link'))] = html);
 	}
 
+	/**
+	 * the magic of component tree - this method creates other components (and triggers render method on them)
+	 */
 	protected resolveComponents(): void {
 		this.root.selectorCollection('[data-component]').each(html => {
 			html.replaceBy(this.container.create<Component>(html.rattr('data-component')).render());
 		});
 	}
 
-	protected onRender(state: State): Html {
+	protected onRender(): Html {
 		return this.root;
 	}
 
