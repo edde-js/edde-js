@@ -214,4 +214,32 @@ export class Html {
 	public equals(html: Html): boolean {
 		return this.element === html.getElement();
 	}
+
+	/**
+	 * set inner html of this element
+	 *
+	 * @param html
+	 */
+	public html(html: string): Html {
+		this.element.innerHTML = html;
+		return this;
+	}
+
+	/**
+	 * update text of this element
+	 *
+	 * @param text
+	 */
+	public text(text: string): Html {
+		this.element.textContent = text;
+		return this;
+	}
+
+	/**
+	 * clear content of this element
+	 */
+	public clear(): Html {
+		this.html('');
+		return this;
+	}
 }
