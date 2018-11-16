@@ -1,7 +1,7 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {ToString} from "../utils";
+import {Strings, ToString} from "../utils";
 import {HashMap} from "../collection";
 import {State} from "./state";
 
@@ -10,6 +10,7 @@ export class Component {
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
+	protected root: Html;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
@@ -18,16 +19,17 @@ export class Component {
 		this.mounts = new HashMap();
 	}
 
-	public render(state?: State): Html {
-		const template = this.templateManager.render(ToString(this));
-		this.resolveBinds(template);
-		this.resolveMounts(template);
-		this.resolveComponents(template);
-		return this.onRender(template, state);
+	public render(state: State = new State()): Html {
+		this.root = this.templateManager.render(ToString(this));
+		this.resolveBinds();
+		this.resolveMounts();
+		this.resolveLinks();
+		this.resolveComponents();
+		return this.root = this.onRender(state);
 	}
 
-	protected resolveBinds(root: Html): void {
-		root.selectorCollection('[data-bind]').each(html => {
+	protected resolveBinds(): void {
+		this.root.selectorCollection('[data-bind]').each(html => {
 			this.binds.set(
 				html.rattr('data-bind'),
 				html.rattr('data-component', 'Missing required attribute [data-component]; use it to declare component name to be used for binding.')
@@ -36,18 +38,22 @@ export class Component {
 		});
 	}
 
-	protected resolveMounts(root: Html): void {
-		root.selectorCollection('[data-mount]').each(html => this.mounts.set(html.rattr('data-mount'), html));
+	protected resolveMounts(): void {
+		this.root.selectorCollection('[data-mount]').each(html => this.mounts.set(html.rattr('data-mount'), html));
 	}
 
-	protected resolveComponents(root: Html): void {
-		root.selectorCollection('[data-component]').each(html => {
+	protected resolveLinks(): void {
+		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.fromKebabCase(html.rattr('data-link'))] = html);
+	}
+
+	protected resolveComponents(): void {
+		this.root.selectorCollection('[data-component]').each(html => {
 			html.replaceBy(this.container.create<Component>(html.rattr('data-component')).render());
 		});
 	}
 
-	protected onRender(template: Html, state?: State): Html {
-		return template;
+	protected onRender(state: State): Html {
+		return this.root;
 	}
 
 	public component<U extends Component>(bind: string): U {
