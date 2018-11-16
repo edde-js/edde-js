@@ -123,12 +123,13 @@ export class Html {
 	 * return required attribute; if it's not present, error is thrown
 	 *
 	 * @param name
+	 * @param error
 	 */
-	public rattr(name: string): any {
+	public rattr(name: string, error?: string): any {
 		if (this.element.hasAttribute(name)) {
 			return this.element.getAttribute(name);
 		}
-		throw new Error(`Requested unknown attribute [${name}] on element [${this.element.nodeName}].`);
+		throw new Error(error || `Requested unknown attribute [${name}] on element [${this.element.nodeName}].`);
 	}
 
 	/**
