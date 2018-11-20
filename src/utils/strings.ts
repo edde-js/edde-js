@@ -11,4 +11,14 @@ export class Strings {
 	public static fromKebabCase(string: string): string {
 		return string.replace(/-\w/g, _ => _[1].toUpperCase());
 	}
+
+	public static split(string: string, delimiter: string = ':'): string[] {
+		if (string.indexOf(delimiter) !== -1) {
+			return string.split(delimiter, 2);
+		}
+		return [
+			string,
+			string,
+		];
+	}
 }

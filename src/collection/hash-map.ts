@@ -24,6 +24,17 @@ export class HashMap<T> {
 	}
 
 	/**
+	 * set and return the given value
+	 *
+	 * @param name
+	 * @param value
+	 */
+	public seti(name: string | number, value: T): T {
+		this.set(name, value);
+		return value;
+	}
+
+	/**
 	 * is there explicitly defined value with the given name? It could
 	 * be event null/undefined
 	 *

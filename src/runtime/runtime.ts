@@ -23,6 +23,12 @@ export class Runtime {
 		return this.getDocument().createDocumentFragment();
 	}
 
+	public el(html: string): Html {
+		const element = this.getDocument().createElement('div');
+		element.innerHTML = html.trim();
+		return new Html(<HTMLElement>element.firstElementChild);
+	}
+
 	/**
 	 * return window local storage
 	 */

@@ -1,22 +1,24 @@
-import {IComponent} from "../component";
-
-export interface IView extends IComponent {
+export interface IView {
 	/**
 	 * can view handle the given path?
 	 *
 	 * @param path
 	 */
 	canHandle(path: string): boolean;
+
+	/**
+	 * called when a view is about to be activated
+	 */
+	mount(): IView;
+
+	/**
+	 * called when a view is about to be deactivated
+	 */
+	umount(): IView;
 }
 
 export const IView: IView = {
-	bind: () => this,
-	link: () => this,
 	canHandle: () => false,
 	mount: () => this,
-	mountTo: () => this,
 	umount: () => this,
-	component: () => {
-		throw new Error('IView cannot create a component.')
-	},
 };

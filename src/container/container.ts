@@ -55,6 +55,8 @@ export class Container {
 						return this.create(dependencyProperty.factory);
 					} catch (e) {
 						console.error(`Cannot make instance of [${dependencyProperty.factory.toString()}]`);
+						console.error(instance);
+						console.error(dependencyProperty);
 						throw e;
 					}
 				}

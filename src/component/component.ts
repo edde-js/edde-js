@@ -1,62 +1,88 @@
-import {IComponent, IRenderer} from "./types";
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
-import {Collection} from "../collection";
+import {TemplateManager} from "../template";
 import {Strings, ToString} from "../utils";
-import {Runtime} from "../runtime";
+import {HashMap} from "../collection";
+import {State} from "./state";
 
-export abstract class Component implements IComponent {
+export class Component {
 	@Inject(Container)
 	protected container: Container;
-	@Inject(Runtime)
-	protected runtime: Runtime;
-	protected components: Collection<IComponent>;
+	@Inject(TemplateManager)
+	protected templateManager: TemplateManager;
 	protected root: Html;
-	protected target: Html;
+	protected state: State;
+	protected binds: HashMap<string>;
+	protected mounts: HashMap<Html>;
 
 	public constructor() {
-		this.components = new Collection();
+		this.state = new State();
+		this.binds = new HashMap();
+		this.mounts = new HashMap();
 	}
 
-	public bind(root: Html, selector: string = '[data-component]'): IComponent {
-		this.target = root.getParent();
-		let current: IComponent = this;
-		if (root.hasAttr('data-clone-to')) {
-			root = root.clone();
-			this.target = this.runtime.require(root.attr('data-clone-to'));
-		}
-		(this.root = root).selectorCollection(selector).each(html => {
-			html.hasAttr('data-template') ?
-				(<IRenderer>(<any>current)[Strings.fromKebabCase(html.attr('data-template'))])(html.detach().rattr('data-component'), html) :
-				(current = this.component(html.rattr('data-component')).link(html));
+	public render(state: State = new State()): Html {
+		this.state = state;
+		this.root = this.templateManager.render(ToString(this));
+		this.resolveBinds();
+		this.resolveMounts();
+		this.resolveLinks();
+		this.resolveComponents();
+		return this.root = this.onRender();
+	}
+
+	/**
+	 * push a new state to this component
+	 *
+	 * @param state
+	 */
+	public push(state: State): Component {
+		this.state = state;
+		return this;
+	}
+
+	/**
+	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
+	 * components are not directly created as a component instance is used per rendered template
+	 */
+	protected resolveBinds(): void {
+		this.root.selectorCollection('[data-bind]').each(html => {
+			this.binds.set(
+				html.rattr('data-bind'),
+				html.rattr('data-component', 'Missing required attribute [data-component]; use it to declare component name to be used for binding.')
+			);
+			html.remove();
 		});
-		return this;
 	}
 
-	public link(root: Html): IComponent {
-		this.root = root;
-		return this;
+	/**
+	 * mounts are pieces of DOM elements mounted to this component; that means mounted elements could be accessed through "mounts" hashmap
+	 */
+	protected resolveMounts(): void {
+		this.root.selectorCollection('[data-mount]').each(html => this.mounts.set(html.rattr('data-mount'), html));
 	}
 
-	public mount(): IComponent {
-		if (this.root.getParent().equals(this.target) === false) {
-			this.target.append(this.root);
-		}
-		this.components.each(component => component.mount());
-		return this;
+	/**
+	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
+	 */
+	protected resolveLinks(): void {
+		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.fromKebabCase(html.rattr('data-link'))] = html);
 	}
 
-	public mountTo(root: Html): IComponent {
-		return this.bind(root).mount();
+	/**
+	 * the magic of component tree - this method creates other components (and triggers render method on them)
+	 */
+	protected resolveComponents(): void {
+		this.root.selectorCollection('[data-component]').each(html => {
+			html.replaceBy(this.container.create<Component>(html.rattr('data-component')).render());
+		});
 	}
 
-	public umount(): IComponent {
-		return this;
+	protected onRender(): Html {
+		return this.root;
 	}
 
-	public component<T extends IComponent>(name: ToString): T {
-		const component = this.container.create<T>(name);
-		this.components.add(component);
-		return component;
+	public component<U extends Component>(bind: string): U {
+		return this.container.create(this.binds.require(bind, `Requested unknown component bind [${bind}].`));
 	}
 }

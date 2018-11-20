@@ -123,12 +123,13 @@ export class Html {
 	 * return required attribute; if it's not present, error is thrown
 	 *
 	 * @param name
+	 * @param error
 	 */
-	public rattr(name: string): any {
+	public rattr(name: string, error?: string): any {
 		if (this.element.hasAttribute(name)) {
 			return this.element.getAttribute(name);
 		}
-		throw new Error(`Requested unknown attribute [${name}] on element [${this.element.nodeName}].`);
+		throw new Error(error || `Requested unknown attribute [${name}] on element [${this.element.nodeName}].`);
 	}
 
 	/**
@@ -212,5 +213,33 @@ export class Html {
 	 */
 	public equals(html: Html): boolean {
 		return this.element === html.getElement();
+	}
+
+	/**
+	 * set inner html of this element
+	 *
+	 * @param html
+	 */
+	public html(html: string): Html {
+		this.element.innerHTML = html;
+		return this;
+	}
+
+	/**
+	 * update text of this element
+	 *
+	 * @param text
+	 */
+	public text(text: string): Html {
+		this.element.textContent = text;
+		return this;
+	}
+
+	/**
+	 * clear content of this element
+	 */
+	public clear(): Html {
+		this.html('');
+		return this;
 	}
 }

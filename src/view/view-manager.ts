@@ -19,32 +19,12 @@ export class ViewManager {
 	}
 
 	/**
-	 * create a view (just typehint)
+	 * create and register a new view
 	 *
 	 * @param name
 	 */
-	public create(name: ToString): IView {
-		const view = this.container.create<IView>(name);
-		this.views.set(name.toString(), view);
-		return view;
-	}
-
-	/**
-	 * mount a view
-	 *
-	 * @param name
-	 */
-	public mount(name: ToString): IView {
-		return <IView>this.create(name).mount();
-	}
-
-	/**
-	 * umount already mounted view or die
-	 *
-	 * @param name
-	 */
-	public umount(name: ToString): IView {
-		return <IView>this.create(name).umount();
+	public register(name: ToString): IView {
+		return this.views.seti(name.toString(), this.container.create<IView>(name));
 	}
 
 	/**
@@ -54,7 +34,7 @@ export class ViewManager {
 	 * @param path
 	 */
 	public switchTo(name: ToString, path: string): IView {
-		const view = this.create(name);
+		const view = this.register(name);
 		if (this.current === view) {
 			this.eventBus.emit(new RefreshViewEvent(this.current, path));
 			return this.current;
