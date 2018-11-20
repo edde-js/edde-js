@@ -4,11 +4,11 @@ export class Strings {
 	 *
 	 * @param string
 	 */
-	public static unspace(string: string): string {
+	public static unispace(string: string): string {
 		return (string.match(/[^\x20\t\r\n\f]+/g) || []).join(' ');
 	}
 
-	public static fromKebabCase(string: string): string {
+	public static toKebabCase(string: string): string {
 		return string.replace(/-\w/g, _ => _[1].toUpperCase());
 	}
 

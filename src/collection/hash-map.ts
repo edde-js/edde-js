@@ -114,7 +114,7 @@ export class HashMap<T> {
 	 * @param name
 	 */
 	public remove(name: string): HashMap<T> {
-		this.hashMap[name] = <any>null;
+		this.set(name, <any>null);
 		delete this.hashMap[name];
 		return this;
 	}

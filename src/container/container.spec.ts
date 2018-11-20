@@ -75,7 +75,7 @@ test('Container: Common', test => {
 });
 test('Container: Missing Service', test => {
 	const container = new Container();
-	test.throws(() => container.create(TestService), Error, 'requested service did not throw an exception');
+	test.throws(() => container.create(TestService), error => error.message === 'Requested unknown factory [test-service].');
 });
 test('Container: Factory Exception', test => {
 	const container = new Container();
@@ -84,5 +84,5 @@ test('Container: Factory Exception', test => {
 		.register(DependencyService, () => {
 			throw new Error('boom')
 		});
-	test.throws(() => container.create<TestService>(TestService).dependency, Error, 'requested dependency did not throw an exception!');
+	test.throws(() => container.create<TestService>(TestService).dependency, error => error.message === 'boom', 'requested dependency did not throw an exception!');
 });
