@@ -1,7 +1,22 @@
 import test from "ava";
 import {State} from "./state";
 
-test('State: Common', test => {
+test('State: Subscribe', test => {
+	const state = new State();
+	let counter = 0;
+	state.subscribe('foo', () => {
+		counter++;
+	});
+	state.subscribe('foo', () => {
+		counter++;
+	});
+	state.subscribe('bar', () => {
+		counter++;
+	});
+	state.set('foo', 3);
+	test.is(counter, 2, 'subscribe has not been called!');
+});
+test('State: Subscribe/restore', test => {
 	const state = new State();
 	let counter = 0;
 	let restore = false;
