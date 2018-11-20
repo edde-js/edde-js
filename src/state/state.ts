@@ -33,7 +33,9 @@ export class State extends HashMap<any> {
 	 */
 	public restore(name: ToString, subscriber: Subscriber): State {
 		this.subscribe(name, subscriber);
-		this.call(subscriber, this.get(name.toString()));
+		if (this.has(name.toString())) {
+			this.call(subscriber, this.get(name.toString()));
+		}
 		return this;
 	}
 
