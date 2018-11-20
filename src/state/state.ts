@@ -25,20 +25,6 @@ export class State extends HashMap<any> {
 		return this;
 	}
 
-	/**
-	 * subscribe a handler and call it with current state value
-	 *
-	 * @param name
-	 * @param subscriber
-	 */
-	public restore(name: ToString, subscriber: Subscriber): State {
-		this.subscribe(name, subscriber);
-		if (this.has(name.toString())) {
-			this.call(subscriber, this.get(name.toString()));
-		}
-		return this;
-	}
-
 	public set(name: string | number, value: any): HashMap<any> {
 		super.set(name, value);
 		this.subscribers.ensure(<string>name, () => new Collection()).each(subscriber => this.call(subscriber, value));
