@@ -1,5 +1,6 @@
-import {HashMap} from "../collection";
+import {Collection, HashMap} from "../collection";
 import {State} from "./state";
+import {PushState} from "./types";
 
 export class StateManager {
 	protected states: HashMap<State>;
@@ -25,6 +26,11 @@ export class StateManager {
 	 */
 	public require(name: string): State {
 		return this.states.require(name, `Requested unknown state [${name}].`);
+	}
+
+	public push(states: PushState[]): StateManager {
+		new Collection(states).each(pushState => this.state(pushState.name).push(pushState.state));
+		return this;
 	}
 
 	public static toString() {

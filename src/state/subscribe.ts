@@ -1,7 +1,7 @@
 import {ToString} from "../utils";
 import {SubscribeObject} from "./types";
 
-export function Subscribe(state: ToString, name: string): (target: any, property: string) => void {
+export function Subscribe(name: string, state: ToString | null = null): (target: any, property: string) => void {
 	return function (target: SubscribeObject, handler: string) {
 		if (!Object.getOwnPropertyDescriptor(target, '::subscribers')) {
 			Object.defineProperty(target, '::subscribers', {
@@ -9,7 +9,7 @@ export function Subscribe(state: ToString, name: string): (target: any, property
 			});
 		}
 		target['::subscribers'].push({
-			state,
+			state: state || ToString(target),
 			name,
 			handler,
 		});

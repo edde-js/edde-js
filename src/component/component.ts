@@ -35,7 +35,7 @@ export class Component {
 	 */
 	public subscribe(): Component {
 		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state.toString()).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler]);
+			this.stateManager.state(subscribeProperty.state.toString()).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 		return this;
 	}
