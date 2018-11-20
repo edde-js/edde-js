@@ -66,7 +66,7 @@ export class Component {
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveLinks(): void {
-		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.fromKebabCase(html.rattr('data-link'))] = html);
+		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.toKebabCase(html.rattr('data-link'))] = html);
 	}
 
 	/**
