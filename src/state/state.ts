@@ -43,6 +43,17 @@ export class State extends HashMap<any> {
 		return this;
 	}
 
+	/**
+	 * push a new state object
+	 *
+	 * @param state
+	 */
+	public push(state: Object): State {
+		this.clear();
+		this.copy(new HashMap(state));
+		return this;
+	}
+
 	protected call(subscriber: Subscriber, value: any): State {
 		subscriber(value);
 		return this;

@@ -56,7 +56,7 @@ test('HashMap: Replace', test => {
 	const hashMap = new HashMap<string>();
 	hashMap.set('foo', 'FOO');
 	hashMap.set('bar', 'BAR');
-	hashMap.replace(new HashMap<string>({
+	hashMap.clear().copy(new HashMap<string>({
 		'FOO': 'foo',
 		'BAR': 'bar',
 	}));

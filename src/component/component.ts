@@ -2,27 +2,26 @@ import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {Strings, ToString} from "../utils";
-import {HashMap} from "../collection";
-import {State} from "../state/state";
+import {Collection, HashMap} from "../collection";
+import {StateManager, SubscribeObject} from "../state";
 
 export class Component {
 	@Inject(Container)
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
+	@Inject(StateManager)
+	protected stateManager: StateManager;
 	protected root: Html;
-	protected state: State;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
 	public constructor() {
-		this.state = new State();
 		this.binds = new HashMap();
 		this.mounts = new HashMap();
 	}
 
-	public render(state: State = new State()): Html {
-		this.state = state;
+	public render(): Html {
 		this.root = this.templateManager.render(ToString(this));
 		this.resolveBinds();
 		this.resolveMounts();
@@ -32,12 +31,12 @@ export class Component {
 	}
 
 	/**
-	 * push a new state to this component
-	 *
-	 * @param state
+	 * subscribe this component to states
 	 */
-	public push(state: State): Component {
-		this.state = state;
+	public subscribe(): Component {
+		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
+			this.stateManager.state(subscribeProperty.state.toString()).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler]);
+		});
 		return this;
 	}
 

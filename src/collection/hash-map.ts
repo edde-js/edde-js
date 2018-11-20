@@ -99,7 +99,7 @@ export class HashMap<T> {
 	}
 
 	/**
-	 * copy input hash map into current one
+	 * copy (append) input hash map into current one
 	 *
 	 * @param copy
 	 */
@@ -171,15 +171,5 @@ export class HashMap<T> {
 	 */
 	public toObject(): { [index: string]: T } {
 		return this.hashMap;
-	}
-
-	/**
-	 * replace internal object by the one from the given hash map
-	 *
-	 * @param replace
-	 */
-	public replace(replace: HashMap<T>): HashMap<T> {
-		this.hashMap = replace.toObject();
-		return this;
 	}
 }

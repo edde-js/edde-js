@@ -16,6 +16,24 @@ test('State: Subscribe', test => {
 	state.set('foo', 3);
 	test.is(counter, 2, 'subscribe has not been called!');
 });
+test('State: Subscribe', test => {
+	const state = new State();
+	let counter = 0;
+	state.subscribe('foo', () => {
+		counter++;
+	});
+	state.subscribe('foo', () => {
+		counter++;
+	});
+	state.subscribe('bar', () => {
+		counter++;
+	});
+	state.push({
+		'foo': 1,
+		'bar': 2,
+	});
+	test.is(counter, 3, 'subscribe has not been called!');
+});
 test('State: Subscribe/restore', test => {
 	const state = new State();
 	let counter = 0;
