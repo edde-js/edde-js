@@ -6,6 +6,7 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
+import {StateManager} from "../state";
 
 /**
  * Creates container with common services used in edde-js.
@@ -38,6 +39,7 @@ export class ContainerFactory {
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
 			.register(TemplateManager, Make.service(TemplateManager))
+			.register(StateManager, Make.service(StateManager))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))

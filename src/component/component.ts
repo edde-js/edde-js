@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {Strings, ToString} from "../utils";
 import {HashMap} from "../collection";
-import {State} from "./state";
+import {State} from "../state/state";
 
 export class Component {
 	@Inject(Container)
