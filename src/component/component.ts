@@ -30,6 +30,10 @@ export class Component {
 		return this.root = this.onRender();
 	}
 
+	public isRendered(): boolean {
+		return !!this.root;
+	}
+
 	/**
 	 * subscribe this component to states
 	 */
@@ -60,7 +64,7 @@ export class Component {
 	/**
 	 * this method is called when a component is created (by a Container)
 	 */
-	public init() {
+	protected init() {
 		this.subscribe();
 	}
 
