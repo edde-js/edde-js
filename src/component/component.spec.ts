@@ -3,6 +3,7 @@ import {ContainerFactory} from "../container";
 import {StateManager, Subscribe} from "../state";
 import {Component} from "./component";
 import {ToString} from "../utils";
+import {Bind} from "../state/bind";
 
 @ToString('some-component')
 class SomeComponent extends Component {
@@ -14,7 +15,7 @@ class SomeComponent extends Component {
 		this.status = value;
 	}
 
-	@Subscribe('foo')
+	@Bind('foo')
 	public stateFoo(value: string) {
 		this.foo = value;
 	}

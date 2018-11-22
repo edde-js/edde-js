@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {State, StateManager, SubscribeObject} from "../state";
+import {BindObject, State, StateManager, SubscribeObject} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -40,10 +40,7 @@ export class Component {
 	 */
 	public subscribe(): Component {
 		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			if (!subscribeProperty.state) {
-				return;
-			}
-			this.stateManager.state(subscribeProperty.state.toString()).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 		return this;
 	}
@@ -55,11 +52,8 @@ export class Component {
 	 */
 	public bind(state: State): Component {
 		this.state = state;
-		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			if (subscribeProperty.state) {
-				return;
-			}
-			state.subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+		new Collection((<BindObject><any>this)['::binds'] || []).each(bindProperty => {
+			state.subscribe(bindProperty.name, (<any>this)[bindProperty.handler].bind(this));
 		});
 		return this;
 	}
