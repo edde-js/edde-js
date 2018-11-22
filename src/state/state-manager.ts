@@ -33,6 +33,11 @@ export class StateManager {
 		return this;
 	}
 
+	public refresh(): StateManager {
+		this.states.each((_, state) => state.refresh());
+		return this;
+	}
+
 	public static toString() {
 		return 'edde-js/state/state-manager';
 	}

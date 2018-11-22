@@ -26,7 +26,10 @@ test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
 	const stateManager = container.create<StateManager>(StateManager);
 	const component = container.autowire(new SomeComponent());
-	component.init();
+	/**
+	 * because init() is protected, this hack "unlocks" visibility
+	 */
+	(<any>component).init();
 	const state = stateManager.require('foo');
 	state.push({
 		'foo-value': 'prdel',
