@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {BindObject, State, StateManager, SubscribeObject} from "../state";
+import {BindObject, PushState, State, StateManager, SubscribeObject} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -22,13 +22,17 @@ export class Component {
 		this.mounts = new HashMap();
 	}
 
-	public render(): Html {
+	public render(state?: PushState): Html {
 		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
-		return this.root = this.onRender();
+		this.root = this.onRender();
+		if (state) {
+			this.bind(this.stateManager.state(state.name).push(state.state));
+		}
+		return this.root;
 	}
 
 	public isRendered(): boolean {
@@ -46,15 +50,15 @@ export class Component {
 	}
 
 	/**
-	 * bind state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
+	 * bind and refresh state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
 	 *
 	 * @param state
 	 */
 	public bind(state: State): Component {
-		this.state = state;
 		new Collection((<BindObject><any>this)['::binds'] || []).each(bindProperty => {
 			state.subscribe(bindProperty.name, (<any>this)[bindProperty.handler].bind(this));
 		});
+		(this.state = state).refresh();
 		return this;
 	}
 
