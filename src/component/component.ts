@@ -58,6 +58,13 @@ export class Component {
 	}
 
 	/**
+	 * this method is called when a component is created (by a Container)
+	 */
+	public init() {
+		this.subscribe();
+	}
+
+	/**
 	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
 	 * components are not directly created as a component instance is used per rendered template
 	 */

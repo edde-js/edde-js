@@ -26,7 +26,7 @@ test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
 	const stateManager = container.create<StateManager>(StateManager);
 	const component = container.autowire(new SomeComponent());
-	component.subscribe();
+	component.init();
 	const state = stateManager.require('foo');
 	state.push({
 		'foo-value': 'prdel',
