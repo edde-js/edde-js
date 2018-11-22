@@ -2,8 +2,8 @@ import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
-import {Collection, HashMap} from "../collection";
-import {BindObject, PushState, State, StateManager, SubscribeObject} from "../state";
+import {HashMap} from "../collection";
+import {BindsName, PushState, State, StateManager, SubscribesName} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -43,9 +43,12 @@ export class Component {
 	 * subscribe this component to states
 	 */
 	public subscribe(): Component {
-		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
-		});
+		this.stateManager.remember(this);
+		return this;
+	}
+
+	public unsubscribe(state: State, property: string = SubscribesName): Component {
+		state.forget(<any>this, property);
 		return this;
 	}
 
@@ -55,10 +58,11 @@ export class Component {
 	 * @param state
 	 */
 	public bind(state: State): Component {
-		new Collection((<BindObject><any>this)['::binds'] || []).each(bindProperty => {
-			state.subscribe(bindProperty.name, (<any>this)[bindProperty.handler].bind(this));
-		});
-		(this.state = state).refresh();
+		if (this.state) {
+			this.unsubscribe(state, BindsName);
+		}
+		this.stateManager.remember(this, BindsName);
+		(this.state = state).update();
 		return this;
 	}
 

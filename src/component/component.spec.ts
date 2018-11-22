@@ -1,9 +1,8 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {StateManager, Subscribe} from "../state";
+import {Bind, State, StateManager, Subscribe} from "../state";
 import {Component} from "./component";
 import {ToString} from "../utils";
-import {Bind} from "../state/bind";
 
 @ToString('some-component')
 class SomeComponent extends Component {
@@ -46,5 +45,8 @@ test('Component: Subscribe', test => {
 	test.is(component.foo, 'whepee!');
 	component.foo = 'nope';
 	component.push({'foo': 'yahoo!'});
+	test.is(component.foo, 'yahoo!');
+	component.bind(new State());
+	component.push({'foo': 'foo!'});
 	test.is(component.foo, 'yahoo!');
 });
