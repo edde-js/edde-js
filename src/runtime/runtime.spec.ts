@@ -1,11 +1,11 @@
 import test from "ava";
 import {Runtime} from "./runtime";
-import {ToString} from "../utils";
+import {GetString} from "../utils";
 import {JSDOM} from "jsdom";
 
 test('Runtime: Common', test => {
 	const runtime = new Runtime(<any>{document: true});
-	test.is(ToString(runtime), 'edde-js/runtime/runtime');
+	test.is(GetString(runtime), 'edde-js/runtime/runtime');
 	test.true(runtime.getDocument());
 });
 test('Runtime: Require', test => {

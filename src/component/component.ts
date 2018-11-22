@@ -1,7 +1,7 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {Strings, ToString} from "../utils";
+import {Strings, GetString} from "../utils";
 import {Collection, HashMap} from "../collection";
 import {State, StateManager, SubscribeObject} from "../state";
 
@@ -22,7 +22,7 @@ export class Component {
 	}
 
 	public render(): Html {
-		this.root = this.templateManager.render(ToString(this));
+		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
@@ -39,7 +39,7 @@ export class Component {
 	 */
 	public subscribe(): Component {
 		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : ToString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 		return this;
 	}
@@ -58,7 +58,7 @@ export class Component {
 	 * softly return state for this component
 	 */
 	public getState(): State {
-		return this.stateManager.state(ToString(this));
+		return this.stateManager.state(GetString(this));
 	}
 
 	/**

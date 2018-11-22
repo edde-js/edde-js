@@ -2,7 +2,9 @@ import test from "ava";
 import {ContainerFactory} from "../container";
 import {StateManager, Subscribe} from "../state";
 import {Component} from "./component";
+import {ToString} from "../utils";
 
+@ToString('some-component')
 class SomeComponent extends Component {
 	public status: string;
 	public foo: string;
@@ -15,10 +17,6 @@ class SomeComponent extends Component {
 	@Subscribe('foo')
 	public stateFoo(value: string) {
 		this.foo = value;
-	}
-
-	public static toString() {
-		return 'some-component';
 	}
 }
 

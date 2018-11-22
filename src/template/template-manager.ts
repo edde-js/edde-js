@@ -5,6 +5,7 @@ import {Container, Inject} from "../container";
 import {Runtime} from "../runtime";
 import {ToString} from "../utils";
 
+@ToString('edde-js/template/template-manager')
 export class TemplateManager {
 	@Inject(Container)
 	protected container: Container;
@@ -37,9 +38,5 @@ export class TemplateManager {
 
 	public render(template: ToString): Html {
 		return this.templates.require(template.toString(), `Requested unknown template [${template.toString()}].`).render();
-	}
-
-	public static toString() {
-		return 'edde-js/template/template-manager';
 	}
 }

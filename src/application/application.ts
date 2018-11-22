@@ -3,7 +3,7 @@ import {Runtime} from "../runtime";
 import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
-import {ToString} from "../utils";
+import {ToString, GetString} from "../utils";
 import {PushState, StateManager} from "../state";
 
 /**
@@ -11,6 +11,7 @@ import {PushState, StateManager} from "../state";
  *
  * An application must be created by a container.
  */
+@ToString('edde-js/application/application')
 export class Application {
 	@Inject(Container)
 	protected container: Container;
@@ -56,9 +57,5 @@ export class Application {
 	 * has to be done manually (or using Mount class)
 	 */
 	protected onStartup(): void {
-	}
-
-	public static toString() {
-		return 'edde-js/application/application';
 	}
 }

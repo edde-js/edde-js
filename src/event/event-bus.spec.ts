@@ -2,7 +2,7 @@ import test from "ava";
 import {EventBus} from "./event-bus";
 import {AbstractEvent} from "./event";
 import {ListenTo} from "./listen-to";
-import {ToString} from "../utils";
+import {GetString} from "../utils";
 
 class FooEvent extends AbstractEvent {
 	public value: any;
@@ -74,43 +74,43 @@ class Class_A {
 
 	@ListenTo(FooBarEvent)
 	public handleAFooBarEvent(event: FooBarEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 }
 
 class Class_B extends Class_A {
 	@ListenTo(FooEvent)
 	public handleBFooEvent(event: FooEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 }
 
 class Class_C extends Class_A {
 	@ListenTo(BarEvent)
 	public handleCBarEvent(event: BarEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 }
 
 class Class_D extends Class_C {
 	@ListenTo(FooBarBarEvent)
 	public handleDFooBarBarEvent(event: FooBarBarEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 
 	@ListenTo(FooBarEvent)
 	public handleDFooBar2Event(event: FooBarEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 
 	@ListenTo(PooEvent)
 	public handleDPooEvent(event: PooEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 
 	@ListenTo(PooEvent)
 	public handleDPoo2Event(event: PooEvent) {
-		this.events.push(ToString(event));
+		this.events.push(GetString(event));
 	}
 }
 
@@ -121,15 +121,15 @@ test('EventBus: Common', test => {
 	const eventBus = new EventBus();
 	const array: any[] = [];
 	const expect = ['bar-event', 'foo-event'];
-	test.is(ToString(eventBus), 'edde-js/event/event-bus');
+	test.is(GetString(eventBus), 'edde-js/event/event-bus');
 	eventBus.listener(FooEvent).add(event => {
-		array.push(ToString(event));
+		array.push(GetString(event));
 	});
 	eventBus.listener(BarEvent).add(event => {
-		array.push(ToString(event));
+		array.push(GetString(event));
 	});
-	test.is(ToString(new FooEvent('nope')), 'foo-event');
-	test.is(ToString(new BarEvent('nope')), 'bar-event');
+	test.is(GetString(new FooEvent('nope')), 'foo-event');
+	test.is(GetString(new BarEvent('nope')), 'bar-event');
 	eventBus.emit(new BarEvent('blah-blah'));
 	eventBus.emit(new FooEvent('some-data'));
 	test.is(array.length, 2, 'events has not been captured!');

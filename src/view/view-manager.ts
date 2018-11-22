@@ -5,6 +5,7 @@ import {HashMap} from "../collection";
 import {EventBus} from "../event";
 import {DeadRouteEvent, MountViewEvent, RefreshViewEvent, UmountViewEvent} from "./events";
 
+@ToString('edde-js/view/view-manager')
 export class ViewManager {
 	@Inject(Container)
 	protected container: Container;
@@ -65,9 +66,5 @@ export class ViewManager {
 		}
 		this.eventBus.emit(new DeadRouteEvent(path));
 		return null;
-	}
-
-	public static toString() {
-		return 'edde-js/view/view-manager';
 	}
 }

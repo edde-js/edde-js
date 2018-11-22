@@ -1,7 +1,9 @@
 import {Collection, HashMap} from "../collection";
 import {State} from "./state";
 import {PushState} from "./types";
+import {ToString} from "../utils";
 
+@ToString('edde-js/state/state-manager')
 export class StateManager {
 	protected states: HashMap<State>;
 
@@ -36,9 +38,5 @@ export class StateManager {
 	public refresh(): StateManager {
 		this.states.each((_, state) => state.refresh());
 		return this;
-	}
-
-	public static toString() {
-		return 'edde-js/state/state-manager';
 	}
 }

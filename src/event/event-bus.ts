@@ -1,8 +1,9 @@
 import {ListenerCollection} from "./listener-collection";
 import {IEvent, ListenerObject} from "./types";
 import {Collection, HashMap} from "../collection";
-import {ToString} from "../utils";
+import {GetString, ToString} from "../utils";
 
+@ToString('edde-js/event/event-bus')
 export class EventBus<T extends IEvent = IEvent> {
 	protected listenerCollections: HashMap<ListenerCollection<T>>;
 
@@ -25,7 +26,7 @@ export class EventBus<T extends IEvent = IEvent> {
 	 * @param event
 	 */
 	public emit(event: T): T {
-		this.listener(ToString(event)).emit(event);
+		this.listener(GetString(event)).emit(event);
 		return event;
 	}
 
@@ -45,9 +46,5 @@ export class EventBus<T extends IEvent = IEvent> {
 			);
 		});
 		return instance;
-	}
-
-	public static toString() {
-		return 'edde-js/event/event-bus';
 	}
 }

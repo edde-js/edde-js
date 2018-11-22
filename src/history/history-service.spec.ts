@@ -1,7 +1,7 @@
 import test from "ava";
 import {HistoryService} from "./history-service";
-import {ToString} from "../utils";
+import {GetString} from "../utils";
 
 test('HistoryService: Common', test => {
-	test.is(ToString(new HistoryService()), 'edde-js/history/history-service');
+	test.is(GetString(new HistoryService()), 'edde-js/history/history-service');
 });

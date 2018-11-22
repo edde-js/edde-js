@@ -2,7 +2,7 @@ import test from "ava";
 import {Container} from "./container";
 import {Make} from "./make";
 import {Inject} from "./inject";
-import {ToString} from "../utils";
+import {GetString} from "../utils";
 
 class DependencyService {
 	public static toString() {
@@ -65,13 +65,13 @@ test('Container: Common', test => {
 	test.deepEqual(container.create(TeTestService), container.create(TeTestService));
 	test.deepEqual(container.create<TeTestService>(TeTestService).container, container);
 	test.true(service.foo);
-	test.deepEqual(ToString(service.dependency), 'dependency-service');
-	test.deepEqual(ToString(container.create<TeTestService>(TeTestService).anotherDependency), 'another-dependency-service');
+	test.deepEqual(GetString(service.dependency), 'dependency-service');
+	test.deepEqual(GetString(container.create<TeTestService>(TeTestService).anotherDependency), 'another-dependency-service');
 	/**
 	 * just to heat up code coverage
 	 */
 	container.autowire(service);
-	test.deepEqual(ToString(service.dependency), 'dependency-service');
+	test.deepEqual(GetString(service.dependency), 'dependency-service');
 });
 test('Container: Missing Service', test => {
 	const container = new Container();
