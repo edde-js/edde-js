@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {StateManager, SubscribeObject} from "../state";
+import {State, StateManager, SubscribeObject} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -46,8 +46,15 @@ export class Component {
 	 * @param state
 	 */
 	public state(state: Object): Component {
-		this.stateManager.state(ToString(this)).push(state);
+		this.getState().push(state);
 		return this;
+	}
+
+	/**
+	 * softly return state for this component
+	 */
+	public getState(): State {
+		return this.stateManager.state(ToString(this));
 	}
 
 	/**
