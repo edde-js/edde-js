@@ -1,12 +1,10 @@
 import test from "ava";
-import {ToString} from "./to-string";
+import {GetString, ToString} from "./to-string";
 
+@ToString('foo')
 class Foo {
-	public static toString() {
-		return 'foo';
-	}
 }
 
 test('ToString: Common', test => {
-	test.is(ToString(new Foo), 'foo');
+	test.is(GetString(new Foo), 'foo');
 });

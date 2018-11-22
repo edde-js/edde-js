@@ -5,6 +5,7 @@ import {ToString} from "../utils";
 /**
  * simple DI container implementation
  */
+@ToString('edde-js/container/container')
 export class Container {
 	protected factories: HashMap<Factory>;
 
@@ -63,9 +64,5 @@ export class Container {
 			});
 		});
 		return instance;
-	}
-
-	public static toString() {
-		return 'edde-js/container/container';
 	}
 }

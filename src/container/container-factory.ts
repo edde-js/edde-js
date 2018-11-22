@@ -12,12 +12,16 @@ import {StateManager} from "../state";
  * Creates container with common services used in edde-js.
  */
 export class ContainerFactory {
+	public static container(): Container {
+		return this.registerServices(new Container());
+	}
+
 	/**
 	 * create a container with all edde-js common services registered (supposes web browser runtime). Also all listener services are
 	 * created
 	 */
 	public static create(): Container {
-		const container = this.registerServices(new Container());
+		const container = this.container();
 		this.setupHistoryService(container);
 		return container;
 	}

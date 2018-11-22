@@ -1,6 +1,8 @@
 import {RuntimeDocument, RuntimeDocumentFragment, RuntimeWindow} from "./types";
 import {Html} from "../dom";
+import {ToString} from "../utils";
 
+@ToString('edde-js/runtime/runtime')
 export class Runtime {
 	protected window: RuntimeWindow;
 	protected document: RuntimeDocument;
@@ -65,9 +67,5 @@ export class Runtime {
 
 	public html(): Html {
 		return this.root || (this.root = new Html(<HTMLElement>this.document.querySelector('html')));
-	}
-
-	public static toString() {
-		return 'edde-js/runtime/runtime';
 	}
 }

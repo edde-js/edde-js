@@ -1,4 +1,4 @@
-import {Collection, HashMap, CollectionCallback, LoopContext} from ".";
+import {Collection, CollectionCallback, HashMap, HasMapCallback, LoopContext} from ".";
 
 /**
  * Class intended to be used when one key could have multiple values (for example
@@ -118,6 +118,15 @@ export class HashMapCollection<T> {
 	 */
 	public each(name: string, callback: CollectionCallback<T>): LoopContext<T> {
 		return this.toCollection(name).each(callback);
+	}
+
+	/**
+	 * run through all names collections
+	 *
+	 * @param callback
+	 */
+	public eachCollection(callback: HasMapCallback<Collection<T>>): LoopContext<Collection<T>> {
+		return this.hashMap.each(callback);
 	}
 
 	/**

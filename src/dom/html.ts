@@ -226,6 +226,13 @@ export class Html {
 	}
 
 	/**
+	 * exports outerHtml as a string
+	 */
+	public export(): string {
+		return this.element.outerHTML;
+	}
+
+	/**
 	 * update text of this element
 	 *
 	 * @param text

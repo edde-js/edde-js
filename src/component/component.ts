@@ -1,29 +1,28 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {Strings, ToString} from "../utils";
-import {HashMap} from "../collection";
-import {State} from "../state/state";
+import {Strings, GetString} from "../utils";
+import {Collection, HashMap} from "../collection";
+import {State, StateManager, SubscribeObject} from "../state";
 
 export class Component {
 	@Inject(Container)
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
+	@Inject(StateManager)
+	protected stateManager: StateManager;
 	protected root: Html;
-	protected state: State;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
 	public constructor() {
-		this.state = new State();
 		this.binds = new HashMap();
 		this.mounts = new HashMap();
 	}
 
-	public render(state: State = new State()): Html {
-		this.state = state;
-		this.root = this.templateManager.render(ToString(this));
+	public render(): Html {
+		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
@@ -31,14 +30,42 @@ export class Component {
 		return this.root = this.onRender();
 	}
 
+	public isRendered(): boolean {
+		return !!this.root;
+	}
+
 	/**
-	 * push a new state to this component
+	 * subscribe this component to states
+	 */
+	public subscribe(): Component {
+		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
+			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+		});
+		return this;
+	}
+
+	/**
+	 * shortcut to push state; all components with same state name will be notified
 	 *
 	 * @param state
 	 */
-	public push(state: State): Component {
-		this.state = state;
+	public state(state: Object): Component {
+		this.getState().push(state);
 		return this;
+	}
+
+	/**
+	 * softly return state for this component
+	 */
+	public getState(): State {
+		return this.stateManager.state(GetString(this));
+	}
+
+	/**
+	 * this method is called when a component is created (by a Container)
+	 */
+	protected init() {
+		this.subscribe();
 	}
 
 	/**
@@ -66,7 +93,7 @@ export class Component {
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveLinks(): void {
-		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.fromKebabCase(html.rattr('data-link'))] = html);
+		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.toKebabCase(html.rattr('data-link'))] = html);
 	}
 
 	/**

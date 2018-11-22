@@ -1,6 +1,9 @@
-import {HashMap} from "../collection";
+import {Collection, HashMap} from "../collection";
 import {State} from "./state";
+import {PushState} from "./types";
+import {ToString} from "../utils";
 
+@ToString('edde-js/state/state-manager')
 export class StateManager {
 	protected states: HashMap<State>;
 
@@ -14,8 +17,8 @@ export class StateManager {
 	 *
 	 * @param name
 	 */
-	public state(name: string): State {
-		return this.states.ensure(name, () => new State());
+	public state(name: ToString): State {
+		return this.states.ensure(name.toString(), () => new State());
 	}
 
 	/**
@@ -27,7 +30,13 @@ export class StateManager {
 		return this.states.require(name, `Requested unknown state [${name}].`);
 	}
 
-	public static toString() {
-		return 'edde-js/state/state-manager';
+	public push(states: PushState[]): StateManager {
+		new Collection(states).each(pushState => this.state(pushState.name).push(pushState.state));
+		return this;
+	}
+
+	public refresh(): StateManager {
+		this.states.each((_, state) => state.refresh());
+		return this;
 	}
 }

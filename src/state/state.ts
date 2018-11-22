@@ -1,7 +1,6 @@
-import {HashMap, HashMapCollection} from "../collection";
+import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
-
-type Subscriber = (value: any) => void;
+import {Subscriber} from "./types";
 
 /**
  * Simple map used to keep component state on one place; that means,
@@ -9,10 +8,12 @@ type Subscriber = (value: any) => void;
  */
 export class State extends HashMap<any> {
 	protected subscribers: HashMapCollection<Subscriber>;
+	protected refreshes: HashMapCollection<Subscriber>;
 
 	public constructor() {
 		super();
 		this.subscribers = new HashMapCollection();
+		this.refreshes = new HashMapCollection();
 	}
 
 	/**
@@ -23,18 +24,41 @@ export class State extends HashMap<any> {
 	 */
 	public subscribe(name: ToString, subscriber: Subscriber): State {
 		this.subscribers.add(name.toString(), subscriber);
+		this.refreshes.add(name.toString(), subscriber);
 		return this;
 	}
 
 	/**
-	 * subscribe a handler and call it with current state value
-	 *
-	 * @param name
-	 * @param subscriber
+	 * refresh all newly added subscribers
 	 */
-	public restore(name: ToString, subscriber: Subscriber): State {
-		this.subscribe(name, subscriber);
-		subscriber(this.get(name.toString()));
+	public refresh(): State {
+		this.refreshes.eachCollection((name, subscribers) => {
+			const value = this.get(<string>name);
+			subscribers.each(subscriber => this.call(subscriber, value));
+		});
+		this.refreshes.clear();
+		return this;
+	}
+
+	public set(name: string | number, value: any): HashMap<any> {
+		super.set(name, value);
+		this.subscribers.ensure(<string>name, () => new Collection()).each(subscriber => this.call(subscriber, value));
+		return this;
+	}
+
+	/**
+	 * push a new state object
+	 *
+	 * @param state
+	 */
+	public push(state: Object): State {
+		this.clear();
+		this.copy(new HashMap(state));
+		return this;
+	}
+
+	protected call(subscriber: Subscriber, value: any): State {
+		subscriber(value, this);
 		return this;
 	}
 }

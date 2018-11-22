@@ -2,7 +2,7 @@ import {Html} from "../dom";
 
 export class Template {
 	/**
-	 * source html of the template (should be clonned)
+	 * source html of the template (should be cloned)
 	 */
 	protected html: Html;
 
