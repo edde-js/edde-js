@@ -8,10 +8,12 @@ import {Subscriber} from "./types";
  */
 export class State extends HashMap<any> {
 	protected subscribers: HashMapCollection<Subscriber>;
+	protected refreshes: HashMapCollection<Subscriber>;
 
 	public constructor() {
 		super();
 		this.subscribers = new HashMapCollection();
+		this.refreshes = new HashMapCollection();
 	}
 
 	/**
@@ -22,6 +24,19 @@ export class State extends HashMap<any> {
 	 */
 	public subscribe(name: ToString, subscriber: Subscriber): State {
 		this.subscribers.add(name.toString(), subscriber);
+		this.refreshes.add(name.toString(), subscriber);
+		return this;
+	}
+
+	/**
+	 * refresh all newly added subscribers
+	 */
+	public refresh(): State {
+		this.refreshes.eachCollection((name, subscribers) => {
+			const value = this.get(<string>name);
+			subscribers.each(subscriber => this.call(subscriber, value));
+		});
+		this.refreshes.clear();
 		return this;
 	}
 
@@ -43,7 +58,7 @@ export class State extends HashMap<any> {
 	}
 
 	protected call(subscriber: Subscriber, value: any): State {
-		subscriber(value);
+		subscriber(value, this);
 		return this;
 	}
 }
