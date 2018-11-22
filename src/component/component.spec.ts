@@ -1,6 +1,6 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {StateManager, Subscribe} from "../state";
+import {Bind, State, StateManager, Subscribe} from "../state";
 import {Component} from "./component";
 import {ToString} from "../utils";
 
@@ -14,7 +14,7 @@ class SomeComponent extends Component {
 		this.status = value;
 	}
 
-	@Subscribe('foo')
+	@Bind('foo')
 	public stateFoo(value: string) {
 		this.foo = value;
 	}
@@ -33,6 +33,7 @@ test('Component: Subscribe', test => {
 		'foo-value': 'prdel',
 	});
 	test.is(component.status, 'prdel');
+	component.bind(stateManager.state(SomeComponent));
 	stateManager.push([
 		{
 			name: 'some-component',
@@ -43,6 +44,9 @@ test('Component: Subscribe', test => {
 	]);
 	test.is(component.foo, 'whepee!');
 	component.foo = 'nope';
-	component.state({'foo': 'yahoo!'});
+	component.push({'foo': 'yahoo!'});
+	test.is(component.foo, 'yahoo!');
+	component.bind(new State());
+	component.push({'foo': 'foo!'});
 	test.is(component.foo, 'yahoo!');
 });

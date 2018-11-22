@@ -1,9 +1,9 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {Strings, GetString} from "../utils";
-import {Collection, HashMap} from "../collection";
-import {State, StateManager, SubscribeObject} from "../state";
+import {GetString, Strings} from "../utils";
+import {HashMap} from "../collection";
+import {BindsName, State, StateManager, SubscribesName} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -12,6 +12,7 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(StateManager)
 	protected stateManager: StateManager;
+	protected state: State;
 	protected root: Html;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
@@ -27,7 +28,8 @@ export class Component {
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
-		return this.root = this.onRender();
+		this.root = this.onRender();
+		return this.root;
 	}
 
 	public isRendered(): boolean {
@@ -38,9 +40,26 @@ export class Component {
 	 * subscribe this component to states
 	 */
 	public subscribe(): Component {
-		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
-		});
+		this.stateManager.remember(this);
+		return this;
+	}
+
+	public unsubscribe(state: State, property: string = SubscribesName): Component {
+		state.forget(<any>this, property);
+		return this;
+	}
+
+	/**
+	 * bind and refresh state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
+	 *
+	 * @param state
+	 */
+	public bind(state: State): Component {
+		if (this.state) {
+			this.unsubscribe(state, BindsName);
+		}
+		this.stateManager.remember(this, BindsName);
+		(this.state = state).update();
 		return this;
 	}
 
@@ -49,7 +68,7 @@ export class Component {
 	 *
 	 * @param state
 	 */
-	public state(state: Object): Component {
+	public push(state: Object): Component {
 		this.getState().push(state);
 		return this;
 	}
@@ -58,7 +77,7 @@ export class Component {
 	 * softly return state for this component
 	 */
 	public getState(): State {
-		return this.stateManager.state(GetString(this));
+		return this.state || (this.state = this.stateManager.state(GetString(this)));
 	}
 
 	/**
