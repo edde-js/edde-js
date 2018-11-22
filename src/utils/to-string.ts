@@ -6,7 +6,12 @@ export type ToString = {
  * Simple decorator to name a "class" by usage of native toString() method.
  */
 export function ToString(name: string): (constructor: Function) => void {
-	return (constructor: any) => constructor.toString = () => name;
+	/**
+	 * cannot be one liner as returned value is used instead of the original object!
+	 */
+	return (constructor: any) => {
+		constructor.toString = () => name;
+	};
 }
 
 /**
