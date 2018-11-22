@@ -17,8 +17,8 @@ export class StateManager {
 	 *
 	 * @param name
 	 */
-	public state(name: string): State {
-		return this.states.ensure(name, () => new State());
+	public state(name: ToString): State {
+		return this.states.ensure(name.toString(), () => new State());
 	}
 
 	/**

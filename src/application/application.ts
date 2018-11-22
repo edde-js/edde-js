@@ -3,7 +3,7 @@ import {Runtime} from "../runtime";
 import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
-import {ToString, GetString} from "../utils";
+import {ToString} from "../utils";
 import {PushState, StateManager} from "../state";
 
 /**

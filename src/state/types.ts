@@ -10,4 +10,4 @@ export type SubscribeProperty = {
 export type SubscribeObject = {
 	'::subscribers': SubscribeProperty[];
 };
-export type PushState = { name: string, state: Object };
+export type PushState = { name: ToString, state: Object };
