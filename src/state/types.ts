@@ -3,7 +3,7 @@ import {State} from "./state";
 
 export type Subscriber = (value: any, state: State) => void;
 export type SubscribeProperty = {
-	state: ToString;
+	state: ToString | null;
 	name: string;
 	handler: string
 };

@@ -9,7 +9,7 @@ export function Subscribe(name: string, state: ToString | null = null): (target:
 			});
 		}
 		target['::subscribers'].push({
-			state: state || ToString(target),
+			state,
 			name,
 			handler,
 		});
