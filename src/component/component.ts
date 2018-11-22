@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {HashMap} from "../collection";
-import {BindsName, PushState, State, StateManager, SubscribesName} from "../state";
+import {BindsName, State, StateManager, SubscribesName} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -22,16 +22,13 @@ export class Component {
 		this.mounts = new HashMap();
 	}
 
-	public render(state?: PushState): Html {
+	public render(): Html {
 		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
 		this.root = this.onRender();
-		if (state) {
-			this.bind(this.stateManager.state(state.name).push(state.state));
-		}
 		return this.root;
 	}
 
