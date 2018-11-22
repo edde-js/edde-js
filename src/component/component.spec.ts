@@ -4,12 +4,12 @@ import {StateManager, Subscribe} from "../state";
 import {Component} from "./component";
 
 class SomeComponent extends Component {
-	public state: string;
+	public status: string;
 	public foo: string;
 
 	@Subscribe('foo-value', 'foo')
 	public stateFooValue(value: string) {
-		this.state = value;
+		this.status = value;
 	}
 
 	@Subscribe('foo')
@@ -31,7 +31,7 @@ test('Component: Subscribe', test => {
 	state.push({
 		'foo-value': 'prdel',
 	});
-	test.is(component.state, 'prdel');
+	test.is(component.status, 'prdel');
 	stateManager.push([
 		{
 			name: 'some-component',
@@ -41,4 +41,7 @@ test('Component: Subscribe', test => {
 		}
 	]);
 	test.is(component.foo, 'whepee!');
+	component.foo = 'nope';
+	component.state({'foo': 'yahoo!'});
+	test.is(component.foo, 'yahoo!');
 });

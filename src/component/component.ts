@@ -41,6 +41,16 @@ export class Component {
 	}
 
 	/**
+	 * shortcut to push state; all components with same state name will be notified
+	 *
+	 * @param state
+	 */
+	public state(state: Object): Component {
+		this.stateManager.state(ToString(this)).push(state);
+		return this;
+	}
+
+	/**
 	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
 	 * components are not directly created as a component instance is used per rendered template
 	 */
