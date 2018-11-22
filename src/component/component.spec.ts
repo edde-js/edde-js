@@ -33,6 +33,7 @@ test('Component: Subscribe', test => {
 		'foo-value': 'prdel',
 	});
 	test.is(component.status, 'prdel');
+	component.bind(stateManager.state(SomeComponent));
 	stateManager.push([
 		{
 			name: 'some-component',
@@ -43,6 +44,6 @@ test('Component: Subscribe', test => {
 	]);
 	test.is(component.foo, 'whepee!');
 	component.foo = 'nope';
-	component.state({'foo': 'yahoo!'});
+	component.push({'foo': 'yahoo!'});
 	test.is(component.foo, 'yahoo!');
 });

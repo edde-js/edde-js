@@ -1,7 +1,7 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {Strings, GetString} from "../utils";
+import {GetString, Strings} from "../utils";
 import {Collection, HashMap} from "../collection";
 import {State, StateManager, SubscribeObject} from "../state";
 
@@ -12,6 +12,7 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(StateManager)
 	protected stateManager: StateManager;
+	protected state: State;
 	protected root: Html;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
@@ -39,7 +40,26 @@ export class Component {
 	 */
 	public subscribe(): Component {
 		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(this)).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+			if (!subscribeProperty.state) {
+				return;
+			}
+			this.stateManager.state(subscribeProperty.state.toString()).subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
+		});
+		return this;
+	}
+
+	/**
+	 * bind state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
+	 *
+	 * @param state
+	 */
+	public bind(state: State): Component {
+		this.state = state;
+		new Collection((<SubscribeObject><any>this)['::subscribers'] || []).each(subscribeProperty => {
+			if (subscribeProperty.state) {
+				return;
+			}
+			state.subscribe(subscribeProperty.name, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 		return this;
 	}
@@ -49,7 +69,7 @@ export class Component {
 	 *
 	 * @param state
 	 */
-	public state(state: Object): Component {
+	public push(state: Object): Component {
 		this.getState().push(state);
 		return this;
 	}
@@ -58,7 +78,7 @@ export class Component {
 	 * softly return state for this component
 	 */
 	public getState(): State {
-		return this.stateManager.state(GetString(this));
+		return this.state || (this.state = this.stateManager.state(GetString(this)));
 	}
 
 	/**
