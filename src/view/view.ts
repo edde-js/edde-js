@@ -13,7 +13,7 @@ export abstract class AbstractView extends Component implements IView {
 		if (!this.isRendered()) {
 			this.runtime.require(state.get('root', () => 'main')).append(this.render());
 		}
-		super.stateVisible(visible, state);
+//		super.stateVisible(visible, state);
 	}
 
 	public mount(): IView {

@@ -3,7 +3,6 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {HashMap} from "../collection";
-import {State, Subscribe} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -31,11 +30,6 @@ export class Component {
 
 	public isRendered(): boolean {
 		return !!this.root;
-	}
-
-	@Subscribe('visible')
-	public stateVisible(visible: boolean, state: State) {
-		visible ? this.show() : this.hide();
 	}
 
 	public show(): Component {
