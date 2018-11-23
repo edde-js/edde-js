@@ -9,7 +9,7 @@ import {StateManager} from "./state-manager";
 class StateObject {
 	public hovno: string;
 
-	@Subscribe('hovno')
+	@Subscribe.To('hovno')
 	public stateHovno(value: string) {
 		this.hovno = value;
 	}

@@ -10,20 +10,20 @@ class SomeComponent extends Component {
 	public relative: string;
 	public foo: string;
 
-	@Subscribe('absolute', 'foo')
+	@Subscribe.State('absolute', 'foo')
 	public stateAbsolute(value: string) {
 		this.absolute = value;
 	}
 
-	@Subscribe('relative')
+	@Subscribe.To('relative')
 	public stateRelative(value: string) {
 		this.relative = value;
 	}
 
-//	@Bind('foo')
-//	public stateFoo(value: string) {
-//		this.foo = value;
-//	}
+//	@Local('foo')
+	public stateFoo(value: string) {
+		this.foo = value;
+	}
 }
 
 test('Component: Subscribe', test => {
