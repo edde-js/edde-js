@@ -37,6 +37,16 @@ export class StateManager {
 		return this;
 	}
 
+	/**
+	 * unsubscribe an object from all known states
+	 *
+	 * @param object
+	 */
+	public forget(object: Object): StateManager {
+		this.states.each((_, state) => state.forget(object));
+		return this;
+	}
+
 	public push(states: States): StateManager {
 		new HashMap(states).each((name, state) => this.state(name).push(state));
 		return this;

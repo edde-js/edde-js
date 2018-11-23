@@ -1,6 +1,6 @@
 import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
-import {SubscribeProperty, Subscriber, SubscribersName} from "./types";
+import {SubscribeObject, Subscriber, SubscribersName} from "./types";
 
 /**
  * Simple map used to keep component state on one place; that means,
@@ -33,11 +33,11 @@ export class State extends HashMap<any> {
 	 * of potential API collision for subscribe one method and unsubscribe object
 	 *
 	 * @param object
-	 * @param property
 	 */
-	public forget(object: Object, property: string = SubscribersName): State {
-		new Collection((<any>object)[property]).each((subscribeProperty: SubscribeProperty) => {
+	public forget(object: Object): State {
+		new Collection((<SubscribeObject>object)[SubscribersName]).each(subscribeProperty => {
 			this.subscribers.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
+			this.updates.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
 			this.updates.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
 		});
 		return this;
