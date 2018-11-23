@@ -9,14 +9,14 @@ import {StateManager} from "./state-manager";
 class StateObject {
 	public hovno: string;
 
-	@Subscribe.To('hovno')
+	@Subscribe.This('hovno')
 	public stateHovno(value: string) {
 		this.hovno = value;
 	}
 }
 
 test('State: Subscribe', test => {
-	const state = new State();
+	const state = new State('foo');
 	let counter = 0;
 	state.subscribe('foo', () => {
 		counter++;
@@ -31,7 +31,7 @@ test('State: Subscribe', test => {
 	test.is(counter, 2, 'subscribe has not been called!');
 });
 test('State: Subscribe', test => {
-	const state = new State();
+	const state = new State('foo');
 	let counter = 0;
 	state.subscribe('foo', () => {
 		counter++;
@@ -49,7 +49,7 @@ test('State: Subscribe', test => {
 	test.is(counter, 3, 'subscribe has not been called!');
 });
 test('State: Update', test => {
-	const state = new State();
+	const state = new State('foo');
 	let counter = 0;
 	state.push({
 		'foo': 1,

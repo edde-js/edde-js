@@ -7,13 +7,19 @@ import {SubscribeObject, Subscriber, SubscribersName} from "./types";
  * component could be rebuild to desired state by using this class.
  */
 export class State extends HashMap<any> {
+	protected name: string;
 	protected subscribers: HashMapCollection<Subscriber>;
 	protected updates: HashMapCollection<Subscriber>;
 
-	public constructor() {
+	public constructor(name: string) {
 		super();
+		this.name = name;
 		this.subscribers = new HashMapCollection();
 		this.updates = new HashMapCollection();
+	}
+
+	public getName(): string {
+		return this.name;
 	}
 
 	/**

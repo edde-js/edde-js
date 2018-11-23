@@ -8,7 +8,7 @@ export abstract class AbstractView extends Component implements IView {
 	@Inject(Runtime)
 	protected runtime: Runtime;
 
-	@Subscribe.To('visible')
+	@Subscribe.This('visible')
 	public stateVisible(visible: boolean, state: State) {
 		if (!this.isRendered()) {
 			this.runtime.require(state.get('root', () => 'main')).append(this.render());

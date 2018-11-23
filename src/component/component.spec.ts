@@ -15,12 +15,12 @@ class SomeComponent extends Component {
 		this.absolute = value;
 	}
 
-	@Subscribe.To('relative')
+	@Subscribe.This('relative')
 	public stateRelative(value: string) {
 		this.relative = value;
 	}
 
-//	@Local('foo')
+	@Subscribe.Local('foo')
 	public stateFoo(value: string) {
 		this.foo = value;
 	}

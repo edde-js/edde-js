@@ -4,7 +4,7 @@ import {State} from "./state";
 export type States = { [index: string]: any };
 export type Subscriber = (value: any, state: State) => void;
 export type SubscribeProperty = {
-	state: ToString | null;
+	state: ToString;
 	name: string;
 	handler: string
 };

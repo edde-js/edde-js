@@ -3,12 +3,16 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {HashMap} from "../collection";
+import {State, StateManager} from "../state";
 
 export class Component {
 	@Inject(Container)
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
+	@Inject(StateManager)
+	protected stateManager: StateManager;
+	protected state: State;
 	protected root: Html;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
@@ -30,6 +34,10 @@ export class Component {
 
 	public isRendered(): boolean {
 		return !!this.root;
+	}
+
+	public local(): State {
+		return this.state || (this.state = this.stateManager.random());
 	}
 
 	public show(): Component {

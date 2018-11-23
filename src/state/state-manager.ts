@@ -2,9 +2,13 @@ import {Collection, HashMap} from "../collection";
 import {State} from "./state";
 import {States, SubscribeObject, SubscribersName} from "./types";
 import {GetString, ToString} from "../utils";
+import {UuidGenerator} from "../crypto";
+import {Inject} from "../container";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
+	@Inject(UuidGenerator)
+	protected uuidGenerator: UuidGenerator;
 	protected states: HashMap<State>;
 
 	public constructor() {
@@ -18,7 +22,14 @@ export class StateManager {
 	 * @param name
 	 */
 	public state(name: ToString): State {
-		return this.states.ensure(name.toString(), () => new State());
+		return this.states.ensure(name.toString(), () => new State(name.toString()));
+	}
+
+	/**
+	 * generate a new random state
+	 */
+	public random(): State {
+		return this.state(this.uuidGenerator.uuid4());
 	}
 
 	/**
@@ -32,7 +43,17 @@ export class StateManager {
 
 	public remember(object: Object): StateManager {
 		new Collection((<SubscribeObject>object)[SubscribersName] || []).each(subscribeProperty => {
-			this.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(object)).subscribe(subscribeProperty.name, (<any>object)[subscribeProperty.handler].bind(object));
+			let state: string = <any>null;
+			switch (subscribeProperty.state) {
+				case '$this':
+					state = GetString(object);
+					break;
+				case '$local':
+					break;
+				default:
+					state = subscribeProperty.state.toString();
+			}
+			this.state(state).subscribe(subscribeProperty.name, (<any>object)[subscribeProperty.handler].bind(object));
 		});
 		return this;
 	}
