@@ -68,6 +68,16 @@ export class State extends HashMap<any> {
 	 */
 	public push(state: Object): State {
 		this.clear();
+		this.patch(state);
+		return this;
+	}
+
+	/**
+	 * append values from the given object
+	 *
+	 * @param state
+	 */
+	public patch(state: Object): State {
 		this.copy(new HashMap(state));
 		return this;
 	}

@@ -42,6 +42,11 @@ export class StateManager {
 		return this;
 	}
 
+	public patch(states: PushState[]): StateManager {
+		new Collection(states).each(pushState => this.state(pushState.name).patch(pushState.state));
+		return this;
+	}
+
 	public refresh(): StateManager {
 		this.states.each((_, state) => state.update());
 		return this;

@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {HashMap} from "../collection";
-import {BindsName, State, StateManager, SubscribesName} from "../state";
+import {BindsName, State, StateManager, Subscribe, SubscribesName} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -74,10 +74,38 @@ export class Component {
 	}
 
 	/**
+	 * append state values
+	 *
+	 * @param state
+	 */
+	public patch(state: Object): Component {
+		this.getState().patch(state);
+		return this;
+	}
+
+	/**
 	 * softly return state for this component
 	 */
 	public getState(): State {
 		return this.state || (this.state = this.stateManager.state(GetString(this)));
+	}
+
+	@Subscribe('visible')
+	public stateVisible(visible: boolean, state: State) {
+		visible ? this.show() : this.hide();
+	}
+
+	public show(): Component {
+		this.root && this.root.removeClass('is-hidden');
+		return this;
+	}
+
+	/**
+	 * just hide a view, no DOM tree manipulation should be done here
+	 */
+	public hide(): Component {
+		this.root && this.root.addClass('is-hidden');
+		return this;
 	}
 
 	/**
