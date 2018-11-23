@@ -1,6 +1,6 @@
 import {Collection, HashMap} from "../collection";
 import {State} from "./state";
-import {States, SubscribeProperty, SubscribesName} from "./types";
+import {States, SubscribeObject, SubscribersName} from "./types";
 import {GetString, ToString} from "../utils";
 
 @ToString('edde-js/state/state-manager')
@@ -30,8 +30,8 @@ export class StateManager {
 		return this.states.require(name, `Requested unknown state [${name}].`);
 	}
 
-	public remember(object: Object, property: string = SubscribesName): StateManager {
-		new Collection((<any>object)[property] || []).each((subscribeProperty: SubscribeProperty) => {
+	public remember(object: Object): StateManager {
+		new Collection((<SubscribeObject>object)[SubscribersName] || []).each(subscribeProperty => {
 			this.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(object)).subscribe(subscribeProperty.name, (<any>object)[subscribeProperty.handler].bind(object));
 		});
 		return this;
@@ -47,7 +47,7 @@ export class StateManager {
 		return this;
 	}
 
-	public refresh(): StateManager {
+	public update(): StateManager {
 		this.states.each((_, state) => state.update());
 		return this;
 	}

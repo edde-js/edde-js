@@ -1,14 +1,14 @@
 import {ToString} from "../utils";
-import {SubscribeObject} from "./types";
+import {SubscribeObject, SubscribersName} from "./types";
 
 export function Subscribe(name: string, state: ToString | null = null): (target: any, property: string) => void {
 	return function (target: SubscribeObject, handler: string) {
-		if (!Object.getOwnPropertyDescriptor(target, '::subscribers')) {
-			Object.defineProperty(target, '::subscribers', {
-				value: (target['::subscribers'] || []).slice(0)
+		if (!Object.getOwnPropertyDescriptor(target, SubscribersName)) {
+			Object.defineProperty(target, SubscribersName, {
+				value: (target[SubscribersName] || []).slice(0)
 			});
 		}
-		target['::subscribers'].push({
+		target[SubscribersName].push({
 			state,
 			name,
 			handler,

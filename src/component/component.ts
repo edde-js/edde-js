@@ -2,17 +2,14 @@ import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
-import {Collection, HashMap} from "../collection";
-import {BindProperty, BindsName, State, StateManager, Subscribe} from "../state";
+import {HashMap} from "../collection";
+import {State, Subscribe} from "../state";
 
 export class Component {
 	@Inject(Container)
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
-	@Inject(StateManager)
-	protected stateManager: StateManager;
-	protected state: State;
 	protected root: Html;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
@@ -36,57 +33,6 @@ export class Component {
 		return !!this.root;
 	}
 
-	/**
-	 * subscribe this component to states
-	 */
-	public subscribe(): Component {
-		this.stateManager.remember(this);
-		return this;
-	}
-
-	/**
-	 * bind and refresh state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
-	 *
-	 * @param state
-	 */
-	public bind(state: State): Component {
-		if (this.state) {
-			this.state.forget(this) && this.state.forget(this, BindsName);
-		}
-		new Collection((<any>this)[BindsName] || []).each((bindProperty: BindProperty) => {
-			state.subscribe(bindProperty.name, (<any>this)[bindProperty.handler].bind(this));
-		});
-		this.state = state;
-		return this;
-	}
-
-	/**
-	 * shortcut to push state; all components with same state name will be notified
-	 *
-	 * @param state
-	 */
-	public push(state: Object): Component {
-		this.getState().push(state);
-		return this;
-	}
-
-	/**
-	 * append state values
-	 *
-	 * @param state
-	 */
-	public patch(state: Object): Component {
-		this.getState().patch(state);
-		return this;
-	}
-
-	/**
-	 * softly return state for this component
-	 */
-	public getState(): State {
-		return this.state || (this.state = this.stateManager.state(GetString(this)));
-	}
-
 	@Subscribe('visible')
 	public stateVisible(visible: boolean, state: State) {
 		visible ? this.show() : this.hide();
@@ -103,13 +49,6 @@ export class Component {
 	public hide(): Component {
 		this.root && this.root.addClass('is-hidden');
 		return this;
-	}
-
-	/**
-	 * this method is called when a component is created (by a Container)
-	 */
-	protected init() {
-		this.subscribe();
 	}
 
 	/**
