@@ -28,14 +28,14 @@ test('Component: Subscribe', test => {
 	 * because init() is protected, this hack "unlocks" visibility
 	 */
 	(<any>component).init();
-	const state = stateManager.require('foo');
+	let state = stateManager.require('foo');
 	state.push({
 		'foo-value': 'prdel',
 	});
 	test.is(component.status, 'prdel');
 	component.bind(stateManager.state(SomeComponent));
 	stateManager.push({
-		'some-component': {
+		[<any>SomeComponent]: {
 			'foo': 'whepee!'
 		}
 	});
@@ -43,7 +43,9 @@ test('Component: Subscribe', test => {
 	component.foo = 'nope';
 	component.push({'foo': 'yahoo!'});
 	test.is(component.foo, 'yahoo!');
+	state = component.getState();
 	component.bind(new State());
-	component.push({'foo': 'foo!'});
+	test.is(component.foo, 'yahoo!');
+	state.patch({'foo': 'foo!'});
 	test.is(component.foo, 'yahoo!');
 });

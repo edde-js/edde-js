@@ -2,8 +2,8 @@ import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
-import {HashMap} from "../collection";
-import {BindsName, State, StateManager, Subscribe, SubscribesName} from "../state";
+import {Collection, HashMap} from "../collection";
+import {BindProperty, BindsName, State, StateManager, Subscribe} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -44,11 +44,6 @@ export class Component {
 		return this;
 	}
 
-	public unsubscribe(state: State, property: string = SubscribesName): Component {
-		state.forget(<any>this, property);
-		return this;
-	}
-
 	/**
 	 * bind and refresh state; if a component has unresolved subscribers (without explicit state), those are registered to the given state
 	 *
@@ -56,10 +51,12 @@ export class Component {
 	 */
 	public bind(state: State): Component {
 		if (this.state) {
-			this.unsubscribe(state, BindsName);
+			this.state.forget(this) && this.state.forget(this, BindsName);
 		}
-		this.stateManager.remember(this, BindsName);
-		(this.state = state).update();
+		new Collection((<any>this)[BindsName] || []).each((bindProperty: BindProperty) => {
+			state.subscribe(bindProperty.name, (<any>this)[bindProperty.handler].bind(this));
+		});
+		this.state = state;
 		return this;
 	}
 
