@@ -1,7 +1,7 @@
 import {ToString} from "../utils";
 import {State} from "./state";
 
-export type PushState = { name: ToString, state: Object };
+export type States = { [index: string]: any };
 export const SubscribesName = '::subscribers';
 export const BindsName = '::binds';
 export type Subscriber = (value: any, state: State) => void;

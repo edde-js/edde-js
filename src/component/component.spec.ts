@@ -34,14 +34,11 @@ test('Component: Subscribe', test => {
 	});
 	test.is(component.status, 'prdel');
 	component.bind(stateManager.state(SomeComponent));
-	stateManager.push([
-		{
-			name: 'some-component',
-			state: {
-				'foo': 'whepee!'
-			}
+	stateManager.push({
+		'some-component': {
+			'foo': 'whepee!'
 		}
-	]);
+	});
 	test.is(component.foo, 'whepee!');
 	component.foo = 'nope';
 	component.push({'foo': 'yahoo!'});

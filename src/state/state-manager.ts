@@ -1,6 +1,6 @@
 import {Collection, HashMap} from "../collection";
 import {State} from "./state";
-import {PushState, SubscribeProperty, SubscribesName} from "./types";
+import {States, SubscribeProperty, SubscribesName} from "./types";
 import {GetString, ToString} from "../utils";
 
 @ToString('edde-js/state/state-manager')
@@ -37,13 +37,13 @@ export class StateManager {
 		return this;
 	}
 
-	public push(states: PushState[]): StateManager {
-		new Collection(states).each(pushState => this.state(pushState.name).push(pushState.state));
+	public push(states: States): StateManager {
+		new HashMap(states).each((name, state) => this.state(name).push(state));
 		return this;
 	}
 
-	public patch(states: PushState[]): StateManager {
-		new Collection(states).each(pushState => this.state(pushState.name).patch(pushState.state));
+	public patch(states: States): StateManager {
+		new HashMap(states).each((name, state) => this.state(name).patch(state));
 		return this;
 	}
 

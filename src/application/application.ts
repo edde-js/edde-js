@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {PushState, StateManager} from "../state";
+import {StateManager, States} from "../state";
 
 /**
  * Covers basic stuff related to an application.
@@ -37,7 +37,7 @@ export class Application {
 	 *
 	 * @param states
 	 */
-	public states(states: PushState[]): Application {
+	public states(states: States): Application {
 		this.stateManager.push(states);
 		return this;
 	}
