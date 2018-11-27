@@ -21,7 +21,7 @@ class SomeComponent extends Component {
 	}
 
 	@Subscribe.Local('foo')
-	public stateFoo(value: string) {
+	public stateLocal(value: string) {
 		this.foo = value;
 	}
 }
@@ -41,4 +41,6 @@ test('Component: Subscribe', test => {
 	});
 	test.is(component.relative, 'yep!');
 	test.is(component.absolute, 'mwah!');
+//	component.local().set('foo', 'bar');
+//	test.is(component.foo, 'bar');
 });

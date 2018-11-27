@@ -49,6 +49,7 @@ export class StateManager {
 					state = GetString(object);
 					break;
 				case '$local':
+					state = this.uuidGenerator.uuid4();
 					break;
 				default:
 					state = subscribeProperty.state.toString();
