@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {HashMap} from "../collection";
-import {State, StateManager} from "../state";
+import {React, State, StateManager} from "../state";
 
 export class Component {
 	@Inject(Container)
@@ -12,8 +12,8 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(StateManager)
 	protected stateManager: StateManager;
-	protected state: State;
 	protected root: Html;
+	protected state: State;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
@@ -22,22 +22,47 @@ export class Component {
 		this.mounts = new HashMap();
 	}
 
+	protected init() {
+		/**
+		 * all components of the same class are by default bound to the same state
+		 */
+		this.state = this.stateManager.state(GetString(this));
+	}
+
 	public render(): Html {
 		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
-		this.root = this.onRender();
-		return this.root;
+		return this.onRender();
+	}
+
+	/**
+	 * register a new state to this component
+	 *
+	 * @param state
+	 */
+	public register(state: State): Component {
+		if (this.state) {
+			this.state.forget(this);
+		}
+		(this.state = state).remember(this);
+		return this;
+	}
+
+	public push(object: Object): Component {
+		this.state.push(object);
+		return this;
+	}
+
+	public patch(object: Object): Component {
+		this.state.patch(object);
+		return this;
 	}
 
 	public isRendered(): boolean {
 		return !!this.root;
-	}
-
-	public local(): State {
-		return this.state || (this.state = this.stateManager.random());
 	}
 
 	public show(): Component {
@@ -51,6 +76,11 @@ export class Component {
 	public hide(): Component {
 		this.root && this.root.addClass('is-hidden');
 		return this;
+	}
+
+	@React('visible')
+	public stateVisible(visible: boolean, state: State) {
+		visible ? this.show() : this.hide();
 	}
 
 	/**

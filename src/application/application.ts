@@ -46,7 +46,6 @@ export class Application {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
-		this.stateManager.update();
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

@@ -1,6 +1,7 @@
 import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
-import {SubscribeObject, Subscriber, SubscribersName} from "./types";
+import {Subscriber} from "./types";
+import {ReactProperty, ReactsProperty} from "./react";
 
 /**
  * Simple map used to keep component state on one place; that means,
@@ -9,13 +10,11 @@ import {SubscribeObject, Subscriber, SubscribersName} from "./types";
 export class State extends HashMap<any> {
 	protected name: string;
 	protected subscribers: HashMapCollection<Subscriber>;
-	protected updates: HashMapCollection<Subscriber>;
 
 	public constructor(name: string) {
 		super();
 		this.name = name;
 		this.subscribers = new HashMapCollection();
-		this.updates = new HashMapCollection();
 	}
 
 	public getName(): string {
@@ -30,7 +29,19 @@ export class State extends HashMap<any> {
 	 */
 	public subscribe(name: ToString, subscriber: Subscriber): State {
 		this.subscribers.add(name.toString(), subscriber);
-		this.updates.add(name.toString(), subscriber);
+		return this;
+	}
+
+	/**
+	 * register all reactive properties to this state
+	 *
+	 * @param object
+	 * @param property
+	 */
+	public remember(object: Object, property: string = ReactsProperty): State {
+		new Collection((<any>object)[property] || []).each((reactProperty: ReactProperty) => {
+			this.subscribe(reactProperty.property, (<any>object)[reactProperty.handler].bind(object));
+		});
 		return this;
 	}
 
@@ -39,25 +50,12 @@ export class State extends HashMap<any> {
 	 * of potential API collision for subscribe one method and unsubscribe object
 	 *
 	 * @param object
+	 * @param property
 	 */
-	public forget(object: Object): State {
-		new Collection((<SubscribeObject>object)[SubscribersName]).each(subscribeProperty => {
-			this.subscribers.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
-			this.updates.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
-			this.updates.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
+	public forget(object: Object, property: string = ReactsProperty): State {
+		new Collection((<any>object)[property]).each((reactProperty: ReactProperty) => {
+			this.subscribers.deleteBy(item => item === (<any>object)[reactProperty.handler]);
 		});
-		return this;
-	}
-
-	/**
-	 * refresh all newly added subscribers
-	 */
-	public update(): State {
-		this.updates.eachCollection((name, subscribers) => {
-			const value = this.get(<string>name);
-			subscribers.each(subscriber => this.call(subscriber, value));
-		});
-		this.updates.clear();
 		return this;
 	}
 
