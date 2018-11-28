@@ -17,12 +17,12 @@ export abstract class AbstractView extends Component implements IView {
 	}
 
 	public mount(): IView {
-		this.state.set('visible', true);
+		this.show();
 		return this;
 	}
 
 	public umount(): IView {
-		this.state.set('visible', false);
+		this.hide();
 		return this;
 	}
 

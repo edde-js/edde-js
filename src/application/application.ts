@@ -33,19 +33,15 @@ export class Application {
 	}
 
 	/**
-	 * push state of an application
+	 * startup an application with concrete state
 	 *
 	 * @param states
 	 */
-	public states(states: States): Application {
-		this.stateManager.push(states);
-		return this;
-	}
-
-	public startup(): void {
+	public startup(states: States = {}): void {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
+		this.stateManager.push(states);
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

@@ -26,7 +26,7 @@ export class Component {
 		/**
 		 * all components of the same class are by default bound to the same state
 		 */
-		this.state = this.stateManager.state(GetString(this));
+		this.register(this.stateManager.state(GetString(this)));
 	}
 
 	public render(): Html {
@@ -51,13 +51,17 @@ export class Component {
 		return this;
 	}
 
+	public getState(): State {
+		return this.state;
+	}
+
 	public push(object: Object): Component {
-		this.state.push(object);
+		this.getState().push(object);
 		return this;
 	}
 
 	public patch(object: Object): Component {
-		this.state.patch(object);
+		this.getState().patch(object);
 		return this;
 	}
 
@@ -66,7 +70,7 @@ export class Component {
 	}
 
 	public show(): Component {
-		this.root && this.root.removeClass('is-hidden');
+		this.getState().set('visible', true);
 		return this;
 	}
 
@@ -74,13 +78,13 @@ export class Component {
 	 * just hide a view, no DOM tree manipulation should be done here
 	 */
 	public hide(): Component {
-		this.root && this.root.addClass('is-hidden');
+		this.getState().set('visible', true);
 		return this;
 	}
 
 	@React('visible')
 	public stateVisible(visible: boolean, state: State) {
-		visible ? this.show() : this.hide();
+		this.root.toggleClass('is-hidden', !visible);
 	}
 
 	/**
