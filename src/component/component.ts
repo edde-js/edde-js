@@ -51,6 +51,17 @@ export class Component {
 		return this;
 	}
 
+	/**
+	 * set a new state and update the component by executing the state
+	 *
+	 * @param state
+	 */
+	public update(state: State): Component {
+		this.register(state);
+		this.state.update();
+		return this;
+	}
+
 	public getState(): State {
 		return this.state;
 	}
