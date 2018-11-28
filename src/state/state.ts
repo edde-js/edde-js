@@ -10,11 +10,13 @@ import {ReactProperty, ReactsProperty} from "./react";
 export class State extends HashMap<any> {
 	protected name: string;
 	protected subscribers: HashMapCollection<Subscriber>;
+	protected updates: HashMapCollection<Subscriber>;
 
 	public constructor(name: string) {
 		super();
 		this.name = name;
 		this.subscribers = new HashMapCollection();
+		this.updates = new HashMapCollection();
 	}
 
 	public getName(): string {
@@ -29,6 +31,7 @@ export class State extends HashMap<any> {
 	 */
 	public subscribe(name: ToString, subscriber: Subscriber): State {
 		this.subscribers.add(name.toString(), subscriber);
+		this.updates.add(name.toString(), subscriber);
 		return this;
 	}
 
@@ -55,7 +58,21 @@ export class State extends HashMap<any> {
 	public forget(object: Object, property: string = ReactsProperty): State {
 		new Collection((<any>object)[property]).each((reactProperty: ReactProperty) => {
 			this.subscribers.deleteBy(item => item === (<any>object)[reactProperty.handler]);
+			this.updates.deleteBy(item => item === (<any>object)[reactProperty.handler]);
+			this.updates.deleteBy(item => item === (<any>object)[reactProperty.handler]);
 		});
+		return this;
+	}
+
+	/**
+	 * refresh all newly added subscribers
+	 */
+	public update(): State {
+		this.updates.eachCollection((name, subscribers) => {
+			const value = this.get(<string>name);
+			subscribers.each(subscriber => this.call(subscriber, value));
+		});
+		this.updates.clear();
 		return this;
 	}
 
