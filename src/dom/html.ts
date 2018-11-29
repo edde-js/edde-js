@@ -61,6 +61,11 @@ export class Html {
 		return this;
 	}
 
+	public forgotEvents(): Html {
+		this.events.eachCollection((name, collection) => collection.each(nativeListener => this.element.removeEventListener(<string>name, nativeListener)));
+		return this;
+	}
+
 	/**
 	 * executes selector on the given element
 	 *
@@ -202,6 +207,7 @@ export class Html {
 	 * remove $this element
 	 */
 	public remove(): Html {
+		this.forgotEvents();
 		this.element.remove();
 		return this;
 	}

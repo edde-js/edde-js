@@ -2,8 +2,9 @@ import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
-import {HashMap} from "../collection";
+import {Collection, HashMap} from "../collection";
 import {React, State, StateManager} from "../state";
+import {NATIVE_PROPERTY, NativeObject} from "./native";
 
 export class Component {
 	@Inject(Container)
@@ -35,6 +36,7 @@ export class Component {
 		this.resolveMounts();
 		this.resolveLinks();
 		this.resolveComponents();
+		this.resolveNatives();
 		return this.onRender();
 	}
 
@@ -132,6 +134,12 @@ export class Component {
 	protected resolveComponents(): void {
 		this.root.selectorCollection('[data-component]').each(html => {
 			html.replaceBy(this.container.create<Component>(html.rattr('data-component')).render());
+		});
+	}
+
+	protected resolveNatives(): void {
+		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
+			nativeProperty.callback(this).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
 		});
 	}
 
