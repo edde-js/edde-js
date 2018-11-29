@@ -141,7 +141,7 @@ export class Component {
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
-			nativeProperty.callback(this).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
+			(nativeProperty.callback ? nativeProperty.callback(this) : this.root).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
 		});
 	}
 

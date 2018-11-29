@@ -4,14 +4,13 @@ import {Component} from "./component";
 export type NativePropertyCallback<T extends Component> = (object: T) => Html;
 export type NativeProperty = {
 	event: string,
-	callback: NativePropertyCallback<any>,
+	callback?: NativePropertyCallback<any>,
 	handler: string,
 };
 export const NATIVE_PROPERTY = '::natives';
 export type NativeObject = { [NATIVE_PROPERTY]: NativeProperty[] };
 
-//@ts-ignore
-export function Native<T extends Component>(event: string, callback: NativePropertyCallback<T> = (component => component.root)) {
+export function Native<T extends Component>(event: string, callback?: NativePropertyCallback<T>) {
 	return function (target: any, handler: string) {
 		const object: NativeObject = target;
 		if (!Object.getOwnPropertyDescriptor(object, NATIVE_PROPERTY)) {
