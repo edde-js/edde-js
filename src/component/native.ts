@@ -1,6 +1,7 @@
 import {Html} from "../dom";
+import {Component} from "./component";
 
-export type NativePropertyCallback<T> = (object: T) => Html;
+export type NativePropertyCallback<T extends Component> = (object: T) => Html;
 export type NativeProperty = {
 	event: string,
 	callback: NativePropertyCallback<any>,
@@ -9,7 +10,8 @@ export type NativeProperty = {
 export const NATIVE_PROPERTY = '::natives';
 export type NativeObject = { [NATIVE_PROPERTY]: NativeProperty[] };
 
-export function Native<T>(event: string, callback?: NativePropertyCallback<T>) {
+//@ts-ignore
+export function Native<T extends Component>(event: string, callback: NativePropertyCallback<T> = (component => component.root)) {
 	return function (target: any, handler: string) {
 		const object: NativeObject = target;
 		if (!Object.getOwnPropertyDescriptor(object, NATIVE_PROPERTY)) {
@@ -19,7 +21,7 @@ export function Native<T>(event: string, callback?: NativePropertyCallback<T>) {
 		}
 		object[NATIVE_PROPERTY].push({
 			event,
-			callback: callback || (component => component.root),
+			callback,
 			handler
 		});
 	}
