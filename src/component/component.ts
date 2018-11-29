@@ -25,9 +25,6 @@ export class Component {
 	}
 
 	protected init() {
-		/**
-		 * all components of the same class are by default bound to the same state
-		 */
 		this.register({'_': this.stateManager.random()});
 	}
 
