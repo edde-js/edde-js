@@ -91,7 +91,7 @@ export class Component {
 	 * just hide a view, no DOM tree manipulation should be done here
 	 */
 	public hide(): Component {
-		this.getState().set('visible', true);
+		this.getState().set('visible', false);
 		return this;
 	}
 
