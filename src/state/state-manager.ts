@@ -26,6 +26,13 @@ export class StateManager {
 	}
 
 	/**
+	 * register a random state
+	 */
+	public random(): State {
+		return this.state(this.uuidGenerator.uuid4());
+	}
+
+	/**
 	 * when a required state does not exist, an error is thrown
 	 *
 	 * @param name

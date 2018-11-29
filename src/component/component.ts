@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {React, State, StateManager} from "../state";
+import {React, REACT_PROPERTY, ReactProperty, State, StateManager} from "../state";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 
 export class Component {
@@ -14,11 +14,12 @@ export class Component {
 	@Inject(StateManager)
 	protected stateManager: StateManager;
 	protected root: Html;
-	protected state: State;
+	protected states: HashMap<State>;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
 
 	public constructor() {
+		this.states = new HashMap();
 		this.binds = new HashMap();
 		this.mounts = new HashMap();
 	}
@@ -27,7 +28,7 @@ export class Component {
 		/**
 		 * all components of the same class are by default bound to the same state
 		 */
-		this.register(this.stateManager.state(GetString(this)));
+		this.register({'_': this.stateManager.random()});
 	}
 
 	public render(): Html {
@@ -43,38 +44,39 @@ export class Component {
 	/**
 	 * register a new state to this component
 	 *
-	 * @param state
+	 * @param states
 	 */
-	public register(state: State): Component {
-		if (this.state) {
-			this.state.forget(this);
-		}
-		(this.state = state).remember(this);
+	public register(states: { [index: string]: State }): Component {
+		this.states.each((_, state) => state.forget(this));
+		this.states.clear().copy(new HashMap(states));
+		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
+			this.state(reactProperty.state).subscribe(reactProperty.property, (<any>this)[reactProperty.handler].bind(this));
+		});
 		return this;
 	}
 
 	/**
 	 * set a new state and update the component by executing the state
 	 *
-	 * @param state
+	 * @param states
 	 */
-	public update(state: State): Component {
-		this.register(state);
-		this.state.update();
+	public update(states: { [index: string]: State }): Component {
+		this.register(states);
+		this.states.each((_, state) => state.update());
 		return this;
 	}
 
-	public getState(): State {
-		return this.state;
+	public state(name: string = '_'): State {
+		return this.states.require(name, `Requested unknown state [${name}] on component [${GetString(this)}].`);
 	}
 
-	public push(object: Object): Component {
-		this.getState().push(object);
+	public push(name: string, object: Object): Component {
+		this.state(name).push(object);
 		return this;
 	}
 
-	public patch(object: Object): Component {
-		this.getState().patch(object);
+	public patch(name: string, object: Object): Component {
+		this.state(name).patch(object);
 		return this;
 	}
 
@@ -83,7 +85,7 @@ export class Component {
 	}
 
 	public show(): Component {
-		this.getState().set('visible', true);
+		this.state().set('visible', true);
 		return this;
 	}
 
@@ -91,7 +93,7 @@ export class Component {
 	 * just hide a view, no DOM tree manipulation should be done here
 	 */
 	public hide(): Component {
-		this.getState().set('visible', false);
+		this.state().set('visible', false);
 		return this;
 	}
 

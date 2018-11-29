@@ -1,4 +1,4 @@
 export * from "./types";
 export * from "./state";
 export * from "./state-manager";
-export * from "./react";
+export * from "../component/react";

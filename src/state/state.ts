@@ -1,7 +1,7 @@
 import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
 import {Subscriber} from "./types";
-import {REACT_PROPERTY, ReactProperty} from "./react";
+import {REACT_PROPERTY, ReactProperty} from "../component/react";
 
 /**
  * Simple map used to keep component state on one place; that means,
