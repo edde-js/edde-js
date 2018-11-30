@@ -24,8 +24,13 @@ export class Application {
 	@Inject(Runtime)
 	protected runtime: Runtime;
 
-	public views(views: Collection<ToString>): Application {
-		views.each(name => {
+	public components(components: ToString[]): Application {
+		new Collection(components).each(name => this.container.register(name, Make.classOf(name)));
+		return this;
+	}
+
+	public views(views: ToString[]): Application {
+		new Collection(views).each(name => {
 			this.container.register(name, Make.service(name));
 			this.viewManager.register(name);
 		});
