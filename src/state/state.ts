@@ -1,19 +1,25 @@
 import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
-import {SubscribeProperty, Subscriber, SubscribesName} from "./types";
+import {Subscriber} from "./types";
 
 /**
  * Simple map used to keep component state on one place; that means,
  * component could be rebuild to desired state by using this class.
  */
 export class State extends HashMap<any> {
+	protected name: string;
 	protected subscribers: HashMapCollection<Subscriber>;
 	protected updates: HashMapCollection<Subscriber>;
 
-	public constructor() {
+	public constructor(name: string) {
 		super();
+		this.name = name;
 		this.subscribers = new HashMapCollection();
 		this.updates = new HashMapCollection();
+	}
+
+	public getName(): string {
+		return this.name;
 	}
 
 	/**
@@ -29,17 +35,14 @@ export class State extends HashMap<any> {
 	}
 
 	/**
-	 * "forget" all registered methods of the given object; strange name because
-	 * of potential API collision for subscribe one method and unsubscribe object
+	 * unsubscribe given property
 	 *
-	 * @param object
-	 * @param property
+	 * @param name
+	 * @param subscriber
 	 */
-	public forget(object: Object, property: string = SubscribesName): State {
-		new Collection((<any>object)[property]).each((subscribeProperty: SubscribeProperty) => {
-			this.subscribers.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
-			this.updates.deleteBy(item => item === (<any>object)[subscribeProperty.handler]);
-		});
+	public unsubscribe(name: ToString, subscriber: Subscriber): State {
+		this.subscribers.removeBy(name.toString(), item => item === subscriber);
+		this.updates.removeBy(name.toString(), item => item === subscriber);
 		return this;
 	}
 

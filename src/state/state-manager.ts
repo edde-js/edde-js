@@ -1,10 +1,13 @@
-import {Collection, HashMap} from "../collection";
+import {HashMap} from "../collection";
 import {State} from "./state";
-import {States, SubscribeProperty, SubscribesName} from "./types";
-import {GetString, ToString} from "../utils";
+import {ToString} from "../utils";
+import {UuidGenerator} from "../crypto";
+import {Inject} from "../container";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
+	@Inject(UuidGenerator)
+	protected uuidGenerator: UuidGenerator;
 	protected states: HashMap<State>;
 
 	public constructor() {
@@ -18,7 +21,14 @@ export class StateManager {
 	 * @param name
 	 */
 	public state(name: ToString): State {
-		return this.states.ensure(name.toString(), () => new State());
+		return this.states.ensure(name.toString(), () => new State(name.toString()));
+	}
+
+	/**
+	 * register a random state
+	 */
+	public random(): State {
+		return this.state(this.uuidGenerator.uuid4());
 	}
 
 	/**
@@ -30,25 +40,13 @@ export class StateManager {
 		return this.states.require(name, `Requested unknown state [${name}].`);
 	}
 
-	public remember(object: Object, property: string = SubscribesName): StateManager {
-		new Collection((<any>object)[property] || []).each((subscribeProperty: SubscribeProperty) => {
-			this.state(subscribeProperty.state ? subscribeProperty.state.toString() : GetString(object)).subscribe(subscribeProperty.name, (<any>object)[subscribeProperty.handler].bind(object));
-		});
+	public push(states: Object): StateManager {
+		new HashMap(<any>states).each((name, state) => this.state(name).push(state));
 		return this;
 	}
 
-	public push(states: States): StateManager {
-		new HashMap(states).each((name, state) => this.state(name).push(state));
-		return this;
-	}
-
-	public patch(states: States): StateManager {
-		new HashMap(states).each((name, state) => this.state(name).patch(state));
-		return this;
-	}
-
-	public refresh(): StateManager {
-		this.states.each((_, state) => state.update());
+	public patch(states: Object): StateManager {
+		new HashMap(<any>states).each((name, state) => this.state(name).patch(state));
 		return this;
 	}
 }

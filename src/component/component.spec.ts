@@ -1,22 +1,29 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {Bind, State, StateManager, Subscribe} from "../state";
+import {StateManager} from "../state";
 import {Component} from "./component";
 import {ToString} from "../utils";
+import {React} from "./react";
 
 @ToString('some-component')
 class SomeComponent extends Component {
-	public status: string;
-	public foo: string;
+	public react: string;
+	public bar: string;
+	public count: number = 0;
 
-	@Subscribe('foo-value', 'foo')
-	public stateFooValue(value: string) {
-		this.status = value;
+	@React('foo')
+	public reactFoo(value: string) {
+		this.react = value;
 	}
 
-	@Bind('foo')
-	public stateFoo(value: string) {
-		this.foo = value;
+	@React('count')
+	public reactCount() {
+		this.count++;
+	}
+
+	@React('bar', 'bar')
+	public reactBar(value: string) {
+		this.bar = value;
 	}
 }
 
@@ -24,28 +31,35 @@ test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
 	const stateManager = container.create<StateManager>(StateManager);
 	const component = container.autowire(new SomeComponent());
-	/**
-	 * because init() is protected, this hack "unlocks" visibility
-	 */
-	(<any>component).init();
-	let state = stateManager.require('foo');
-	state.push({
-		'foo-value': 'prdel',
+	component.register({
+		'_': stateManager.state(SomeComponent),
+		'bar': stateManager.state('bar')
 	});
-	test.is(component.status, 'prdel');
-	component.bind(stateManager.state(SomeComponent));
-	stateManager.push({
+	stateManager.patch({
 		[<any>SomeComponent]: {
-			'foo': 'whepee!'
-		}
+			'foo': 'yep!'
+		},
+		'bar': {
+			'bar': 'yahoo!',
+		},
 	});
-	test.is(component.foo, 'whepee!');
-	component.foo = 'nope';
-	component.push({'foo': 'yahoo!'});
-	test.is(component.foo, 'yahoo!');
-	state = component.getState();
-	component.bind(new State());
-	test.is(component.foo, 'yahoo!');
-	state.patch({'foo': 'foo!'});
-	test.is(component.foo, 'yahoo!');
+	test.is(component.react, 'yep!');
+	test.is(component.bar, 'yahoo!');
+});
+test('Component: Forget', test => {
+	const container = ContainerFactory.container();
+	const stateManager = container.create<StateManager>(StateManager);
+	const component = container.autowire(new SomeComponent());
+	component.register({
+		'_': stateManager.state(SomeComponent),
+	});
+	component.register({
+		'_': stateManager.state(SomeComponent),
+	});
+	stateManager.patch({
+		[<any>SomeComponent]: {
+			'count': true
+		},
+	});
+	test.is(component.count, 1);
 });

@@ -40,7 +40,7 @@ export class HashMap<T> {
 	 *
 	 * @param name
 	 */
-	public has(name: string): boolean {
+	public has(name: string | number): boolean {
 		return this.hashMap.hasOwnProperty(name);
 	}
 
@@ -50,7 +50,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param callback
 	 */
-	public get(name: string, callback: () => T | null = () => null): T | null {
+	public get(name: string | number, callback: () => T | null = () => null): T | null {
 		return this.has(name) ? this.hashMap[name] : callback();
 	}
 
@@ -61,7 +61,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param callback
 	 */
-	public ensure(name: string, callback: () => T): T {
+	public ensure(name: string | number, callback: () => T): T {
 		let value = this.get(name);
 		if (!value) {
 			this.set(name, value = callback());
@@ -76,7 +76,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param error
 	 */
-	public require(name: string, error: string | null = null): T {
+	public require(name: string | number, error: string | null = null): T {
 		const item = this.hashMap[name];
 		if (!item) {
 			throw new Error(error || `Required element [${name}] is missing in hash map!`);

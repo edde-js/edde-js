@@ -18,6 +18,16 @@ export class Collection<T> {
 	}
 
 	/**
+	 * add an item and return input value (to enable chaining on input)
+	 *
+	 * @param item
+	 */
+	public addi(item: T): T {
+		this.add(item);
+		return item;
+	}
+
+	/**
 	 * return first item of the collection
 	 */
 	public first(): T | null {

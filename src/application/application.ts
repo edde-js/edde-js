@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {StateManager, States} from "../state";
+import {StateManager} from "../state";
 
 /**
  * Covers basic stuff related to an application.
@@ -24,8 +24,13 @@ export class Application {
 	@Inject(Runtime)
 	protected runtime: Runtime;
 
-	public views(views: Collection<ToString>): Application {
-		views.each(name => {
+	public components(components: ToString[]): Application {
+		new Collection(components).each(name => this.container.register(name, Make.classOf(name)));
+		return this;
+	}
+
+	public views(views: ToString[]): Application {
+		new Collection(views).each(name => {
 			this.container.register(name, Make.service(name));
 			this.viewManager.register(name);
 		});
@@ -33,20 +38,15 @@ export class Application {
 	}
 
 	/**
-	 * push state of an application
+	 * startup an application with concrete state
 	 *
 	 * @param states
 	 */
-	public states(states: States): Application {
-		this.stateManager.push(states);
-		return this;
-	}
-
-	public startup(): void {
+	public startup(states: Object = {}): void {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
-		this.stateManager.refresh();
+		this.stateManager.push(states);
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};
