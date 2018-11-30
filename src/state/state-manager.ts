@@ -1,6 +1,5 @@
 import {HashMap} from "../collection";
 import {State} from "./state";
-import {States} from "./types";
 import {ToString} from "../utils";
 import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
@@ -41,13 +40,13 @@ export class StateManager {
 		return this.states.require(name, `Requested unknown state [${name}].`);
 	}
 
-	public push(states: States): StateManager {
-		new HashMap(states).each((name, state) => this.state(name).push(state));
+	public push(states: Object): StateManager {
+		new HashMap(<any>states).each((name, state) => this.state(name).push(state));
 		return this;
 	}
 
-	public patch(states: States): StateManager {
-		new HashMap(states).each((name, state) => this.state(name).patch(state));
+	public patch(states: Object): StateManager {
+		new HashMap(<any>states).each((name, state) => this.state(name).patch(state));
 		return this;
 	}
 }

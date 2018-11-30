@@ -1,6 +1,6 @@
 import {IView} from "./types";
-import {Component} from "../component";
-import {React, State} from "../state";
+import {Component, React} from "../component";
+import {State} from "../state";
 import {Runtime} from "../runtime";
 import {Inject} from "../container";
 

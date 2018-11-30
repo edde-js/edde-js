@@ -9,6 +9,7 @@ export class Html {
 	protected element: Element;
 	protected events: HashMapCollection<NativeListener>;
 	protected parent: Html;
+	protected slot: string;
 
 	public constructor(element: Element) {
 		this.element = element;
@@ -52,6 +53,19 @@ export class Html {
 		} else if (hasClass === false) {
 			this.addClass(name);
 		}
+		return this;
+	}
+
+	/**
+	 * when used, previously set "slot" class is replaced by a new one
+	 *
+	 * @param name
+	 */
+	public slotClass(name: string): Html {
+		if (this.slot) {
+			this.removeClass(this.slot);
+		}
+		this.addClass(this.slot = name);
 		return this;
 	}
 

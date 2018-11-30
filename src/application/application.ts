@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {StateManager, States} from "../state";
+import {StateManager} from "../state";
 
 /**
  * Covers basic stuff related to an application.
@@ -37,7 +37,7 @@ export class Application {
 	 *
 	 * @param states
 	 */
-	public startup(states: States = {}): void {
+	public startup(states: Object = {}): void {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());

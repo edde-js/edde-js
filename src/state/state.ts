@@ -1,7 +1,6 @@
 import {Collection, HashMap, HashMapCollection} from "../collection";
 import {ToString} from "../utils";
 import {Subscriber} from "./types";
-import {REACT_PROPERTY, ReactProperty} from "../component/react";
 
 /**
  * Simple map used to keep component state on one place; that means,
@@ -36,29 +35,14 @@ export class State extends HashMap<any> {
 	}
 
 	/**
-	 * register all reactive properties to this state
+	 * unsubscribe given property
 	 *
-	 * @param object
+	 * @param name
+	 * @param subscriber
 	 */
-	public remember(object: Object): State {
-		new Collection((<any>object)[REACT_PROPERTY] || []).each((reactProperty: ReactProperty) => {
-			this.subscribe(reactProperty.property, (<any>object)[reactProperty.handler].bind(object));
-		});
-		return this;
-	}
-
-	/**
-	 * "forget" all registered methods of the given object; strange name because
-	 * of potential API collision for subscribe one method and unsubscribe object
-	 *
-	 * @param object
-	 */
-	public forget(object: Object): State {
-		new Collection((<any>object)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
-			this.subscribers.deleteBy(item => item === (<any>object)[reactProperty.handler]);
-			this.updates.deleteBy(item => item === (<any>object)[reactProperty.handler]);
-			this.updates.deleteBy(item => item === (<any>object)[reactProperty.handler]);
-		});
+	public unsubscribe(name: ToString, subscriber: Subscriber): State {
+		this.subscribers.removeBy(name.toString(), item => item === subscriber);
+		this.updates.removeBy(name.toString(), item => item === subscriber);
 		return this;
 	}
 

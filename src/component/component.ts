@@ -3,8 +3,10 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {React, REACT_PROPERTY, ReactProperty, State, StateManager} from "../state";
+import {State, StateManager, States} from "../state";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
+import {SUBSCRIBE_PROPERTY, SubscribeObject} from "./subscribe";
+import {React, REACT_PROPERTY, ReactProperty} from "./react";
 
 export class Component {
 	@Inject(Container)
@@ -35,6 +37,7 @@ export class Component {
 		this.resolveLinks();
 		this.resolveComponents();
 		this.resolveNatives();
+		this.resolveSubscribes();
 		return this.onRender();
 	}
 
@@ -43,12 +46,10 @@ export class Component {
 	 *
 	 * @param states
 	 */
-	public register(states: { [index: string]: State }): Component {
-		this.states.each((_, state) => state.forget(this));
-		this.states.clear().copy(new HashMap(states));
-		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
-			this.state(reactProperty.state).subscribe(reactProperty.property, (<any>this)[reactProperty.handler].bind(this));
-		});
+	public register(states: States): Component {
+		this.unsubscribe();
+		this.states.copy(new HashMap(states));
+		this.subscribe();
 		return this;
 	}
 
@@ -99,6 +100,24 @@ export class Component {
 		this.root.toggleClass('is-hidden', !visible);
 	}
 
+	public subscribe(): Component {
+		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
+			if (this.states.has(reactProperty.state)) {
+				this.states.require(reactProperty.state).subscribe(reactProperty.property, (<any>this)[reactProperty.handler].bind(this));
+			}
+		});
+		return this;
+	}
+
+	public unsubscribe(): Component {
+		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
+			if (this.states.has(reactProperty.state)) {
+				this.states.require(reactProperty.state).unsubscribe(reactProperty.property, (<any>this)[reactProperty.handler]);
+			}
+		});
+		return this;
+	}
+
 	/**
 	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
 	 * components are not directly created as a component instance is used per rendered template
@@ -132,13 +151,28 @@ export class Component {
 	 */
 	protected resolveComponents(): void {
 		this.root.selectorCollection('[data-component]').each(html => {
-			html.replaceBy(this.container.create<Component>(html.rattr('data-component')).render());
+			const component = this.container.create<Component>(html.rattr('data-component'));
+			let state = html.attr('data-state');
+			switch (state) {
+				case '$':
+					state = GetString(component);
+			}
+			if (state) {
+				component.register({'_': this.stateManager.state(state)});
+			}
+			html.replaceBy(component.render());
 		});
 	}
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
 			(nativeProperty.callback ? nativeProperty.callback(this) : this.root).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
+		});
+	}
+
+	protected resolveSubscribes(): void {
+		new Collection((<SubscribeObject><unknown>this)[SUBSCRIBE_PROPERTY]).each(subscribeProperty => {
+			this.stateManager.state(subscribeProperty.state).subscribe(subscribeProperty.property, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 	}
 

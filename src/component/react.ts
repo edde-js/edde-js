@@ -3,7 +3,7 @@ export type ReactProperty = {
 	handler: string,
 	state: string,
 };
-export const REACT_PROPERTY = '::natives';
+export const REACT_PROPERTY = '::reacts';
 export type ReactObject = { [REACT_PROPERTY]: ReactProperty[] };
 
 export function React(property: string, state: string = '_') {
