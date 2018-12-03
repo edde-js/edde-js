@@ -1,7 +1,7 @@
 import {Html} from "../dom";
 import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
-import {GetString, Strings} from "../utils";
+import {GetString, Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
 import {State, StateManager, States} from "../state";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
@@ -183,7 +183,12 @@ export class Component {
 		return this.root;
 	}
 
-	public component<U extends Component>(bind: string): U {
-		return this.container.create(this.binds.require(bind, `Requested unknown component bind [${bind}].`));
+	public component<U extends Component>(bind: ToString): U {
+		const name = bind.toString();
+		return this.container.create(
+			this.binds.has(name) ?
+				this.binds.require(name, `Requested unknown component bind [${name}].`) :
+				name
+		);
 	}
 }
