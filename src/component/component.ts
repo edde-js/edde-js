@@ -31,6 +31,9 @@ export class Component {
 	}
 
 	public render(): Html {
+		this.render = () => {
+			throw new Error(`Cannot render component [${GetString(this)}] multiple times; please create a new instance.`);
+		};
 		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveMounts();
@@ -38,7 +41,7 @@ export class Component {
 		this.resolveComponents();
 		this.resolveNatives();
 		this.resolveSubscribes();
-		return this.onRender();
+		return this.root = this.onRender();
 	}
 
 	/**

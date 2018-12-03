@@ -33,8 +33,8 @@ export class TemplateManager {
 	 */
 	public bind(root: Html): TemplateManager {
 		root.selectorCollection('[data-template]').each(html => {
-			this.register(html.rattr('data-template'), new Template(html.detach()));
-			html.removeAttr('data-template');
+			this.register(html.rattr('data-template'), new Template(html.clone().removeAttr('data-template')));
+			html.remove();
 		});
 		return this;
 	}

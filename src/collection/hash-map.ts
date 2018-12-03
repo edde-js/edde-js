@@ -19,6 +19,14 @@ export class HashMap<T> {
 	 * @param value
 	 */
 	public set(name: string | number, value: T): HashMap<T> {
+		if (!Object.getOwnPropertyDescriptor(this.hashMap, name)) {
+			Object.defineProperty(this.hashMap, name, {
+				value: value,
+				enumerable: true,
+				configurable: true,
+				writable: true
+			});
+		}
 		this.hashMap[name] = value;
 		return this;
 	}
@@ -114,7 +122,7 @@ export class HashMap<T> {
 	 * @param name
 	 */
 	public remove(name: string): HashMap<T> {
-		this.set(name, <any>null);
+		this.set(name, <any>undefined);
 		delete this.hashMap[name];
 		return this;
 	}
