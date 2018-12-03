@@ -4,6 +4,7 @@ import {Container, Inject} from "../container";
 import {HashMap} from "../collection";
 import {EventBus} from "../event";
 import {DeadRouteEvent, MountViewEvent, RefreshViewEvent, UmountViewEvent} from "./events";
+import {StateManager} from "../state";
 
 @ToString('edde-js/view/view-manager')
 export class ViewManager {
@@ -11,6 +12,8 @@ export class ViewManager {
 	protected container: Container;
 	@Inject(EventBus)
 	protected eventBus: EventBus;
+	@Inject(StateManager)
+	protected stateManager: StateManager;
 	protected views: HashMap<IView>;
 	protected current: IView;
 
@@ -47,6 +50,7 @@ export class ViewManager {
 		this.current = view;
 		this.current.mount();
 		this.eventBus.emit(new MountViewEvent(this.current, path));
+		this.stateManager.update();
 		return this.current;
 	}
 

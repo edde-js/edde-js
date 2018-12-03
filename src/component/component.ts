@@ -61,7 +61,7 @@ export class Component {
 	 *
 	 * @param states
 	 */
-	public update(states: { [index: string]: State }): Component {
+	public update(states: { [index: string]: State } = {}): Component {
 		this.register(states);
 		this.states.each((_, state) => state.update());
 		return this;
@@ -139,14 +139,20 @@ export class Component {
 	 * mounts are pieces of DOM elements mounted to this component; that means mounted elements could be accessed through "mounts" hashmap
 	 */
 	protected resolveMounts(): void {
-		this.root.selectorCollection('[data-mount]').each(html => this.mounts.set(html.rattr('data-mount'), html));
+		this.root.selectorCollection('[data-mount]').each(html => {
+			this.mounts.set(html.rattr('data-mount'), html);
+			html.removeAttr('data-mount');
+		});
 	}
 
 	/**
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveLinks(): void {
-		this.root.selectorCollection('[data-link]').each(html => (<any>this)[Strings.toKebabCase(html.rattr('data-link'))] = html);
+		this.root.selectorCollection('[data-link]').each(html => {
+			(<any>this)[Strings.toKebabCase(html.rattr('data-link'))] = html;
+			html.removeAttr('data-link');
+		});
 	}
 
 	/**
@@ -165,6 +171,7 @@ export class Component {
 			}
 			html.replaceBy(component.render());
 		});
+		this.update();
 	}
 
 	protected resolveNatives(): void {

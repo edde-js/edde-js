@@ -49,4 +49,18 @@ export class StateManager {
 		new HashMap(<any>states).each((name, state) => this.state(name).patch(state));
 		return this;
 	}
+
+	public update(): StateManager {
+		this.states.each((_, state) => state.update());
+		return this;
+	}
+
+	/**
+	 * export all states (just for read)
+	 */
+	public export(): { [index: string]: {} } {
+		const object: { [index: string]: {} } = {};
+		this.states.each((name, state) => object[name] = state.toObject());
+		return object;
+	}
 }
