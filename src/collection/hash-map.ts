@@ -1,4 +1,4 @@
-import {HasMapCallback, LoopContext} from "./types";
+import {HashMapKey, HasMapCallback, LoopContext} from "./types";
 
 /**
  * Class for simple hash map - basically it's string index/typed value; this
@@ -18,7 +18,15 @@ export class HashMap<T> {
 	 * @param name
 	 * @param value
 	 */
-	public set(name: string | number, value: T): HashMap<T> {
+	public set(name: HashMapKey, value: T): HashMap<T> {
+		if (!Object.getOwnPropertyDescriptor(this.hashMap, name)) {
+			Object.defineProperty(this.hashMap, name, {
+				value: value,
+				enumerable: true,
+				configurable: true,
+				writable: true
+			});
+		}
 		this.hashMap[name] = value;
 		return this;
 	}
@@ -29,7 +37,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param value
 	 */
-	public seti(name: string | number, value: T): T {
+	public seti(name: HashMapKey, value: T): T {
 		this.set(name, value);
 		return value;
 	}
@@ -40,7 +48,7 @@ export class HashMap<T> {
 	 *
 	 * @param name
 	 */
-	public has(name: string | number): boolean {
+	public has(name: HashMapKey): boolean {
 		return this.hashMap.hasOwnProperty(name);
 	}
 
@@ -50,7 +58,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param callback
 	 */
-	public get(name: string | number, callback: () => T | null = () => null): T | null {
+	public get(name: HashMapKey, callback: () => T | null = () => null): T | null {
 		return this.has(name) ? this.hashMap[name] : callback();
 	}
 
@@ -61,7 +69,7 @@ export class HashMap<T> {
 	 * @param name
 	 * @param callback
 	 */
-	public ensure(name: string | number, callback: () => T): T {
+	public ensure(name: HashMapKey, callback: () => T): T {
 		let value = this.get(name);
 		if (!value) {
 			this.set(name, value = callback());
@@ -76,12 +84,11 @@ export class HashMap<T> {
 	 * @param name
 	 * @param error
 	 */
-	public require(name: string | number, error: string | null = null): T {
-		const item = this.hashMap[name];
-		if (!item) {
+	public require(name: HashMapKey, error: string | null = null): T {
+		if (!this.has(name)) {
 			throw new Error(error || `Required element [${name}] is missing in hash map!`);
 		}
-		return item;
+		return <T>this.get(name);
 	}
 
 	/**
@@ -108,13 +115,20 @@ export class HashMap<T> {
 		return this;
 	}
 
+	public patch(patch: { [index: string]: T }): HashMap<T> {
+		for (const key in patch) {
+			this.set(key, patch[key]);
+		}
+		return this;
+	}
+
 	/**
 	 * remove an item from hash map
 	 *
 	 * @param name
 	 */
-	public remove(name: string): HashMap<T> {
-		this.set(name, <any>null);
+	public remove(name: HashMapKey): HashMap<T> {
+		this.set(name, <any>undefined);
 		delete this.hashMap[name];
 		return this;
 	}

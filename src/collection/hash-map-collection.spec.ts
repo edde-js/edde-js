@@ -14,7 +14,7 @@ test('HashMapCollection: Adding elements', test => {
 	hashMapCollection.add('foo', 2);
 	hashMapCollection.add('foo', 3);
 	test.false(hashMapCollection.isEmpty(), 'not empty hash map collection is still empty!?');
-	test.deepEqual(hashMapCollection.toArray('foo'), [1, 2, 3], 'named collection equals');
+	test.deepEqual(hashMapCollection.toArray('foo'), [1, 2, 3], 'named collection is not equal');
 	test.true(hashMapCollection.has('foo'), 'there is an element called "foo"');
 	test.false(hashMapCollection.has('moo'), 'there is no element called "moo"');
 });

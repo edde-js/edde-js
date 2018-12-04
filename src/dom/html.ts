@@ -69,6 +69,11 @@ export class Html {
 		return this;
 	}
 
+	public removeAttr(name: string): Html {
+		this.element.removeAttribute(name);
+		return this;
+	}
+
 	public listenTo(event: string, nativeListener: NativeListener): Html {
 		this.events.add(event, nativeListener);
 		this.element.addEventListener(event, nativeListener, false);

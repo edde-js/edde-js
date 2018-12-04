@@ -32,7 +32,10 @@ export class TemplateManager {
 	 * register templates from the given DOM subtree
 	 */
 	public bind(root: Html): TemplateManager {
-		root.selectorCollection('[data-template]').each(html => this.register(html.rattr('data-template'), new Template(html.detach())));
+		root.selectorCollection('[data-template]').each(html => {
+			this.register(html.rattr('data-template'), new Template(html.clone().removeAttr('data-template')));
+			html.remove();
+		});
 		return this;
 	}
 

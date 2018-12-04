@@ -1,4 +1,4 @@
-import {Collection, HashMap, HashMapCollection} from "../collection";
+import {Collection, HashMap, HashMapCollection, HashMapKey} from "../collection";
 import {ToString} from "../utils";
 import {Subscriber} from "./types";
 
@@ -51,16 +51,19 @@ export class State extends HashMap<any> {
 	 */
 	public update(): State {
 		this.updates.eachCollection((name, subscribers) => {
+			if (!this.has(name)) {
+				return;
+			}
 			const value = this.get(<string>name);
-			subscribers.each(subscriber => this.call(subscriber, value));
+			subscribers.each(subscriber => subscriber(value, this));
 		});
 		this.updates.clear();
 		return this;
 	}
 
-	public set(name: string | number, value: any): HashMap<any> {
+	public set(name: HashMapKey, value: any): HashMap<any> {
 		super.set(name, value);
-		this.subscribers.ensure(<string>name, () => new Collection()).each(subscriber => this.call(subscriber, value));
+		this.subscribers.ensure(<string>name, () => new Collection()).each(subscriber => subscriber(value, this));
 		return this;
 	}
 
@@ -82,11 +85,6 @@ export class State extends HashMap<any> {
 	 */
 	public patch(state: Object): State {
 		this.copy(new HashMap(state));
-		return this;
-	}
-
-	protected call(subscriber: Subscriber, value: any): State {
-		subscriber(value, this);
 		return this;
 	}
 }

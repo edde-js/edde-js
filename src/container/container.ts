@@ -32,9 +32,8 @@ export class Container {
 	public create<T>(name: ToString): T {
 		const factory = this.factories.require(name.toString(), `Requested unknown factory [${name.toString()}].`);
 		const instance: any = factory.call(factory, this);
-		if (instance.init && typeof instance.init === 'function') {
-			instance.init();
-		}
+		(instance.init || (() => instance)).call(instance);
+		instance.init = (() => instance);
 		return instance;
 	}
 

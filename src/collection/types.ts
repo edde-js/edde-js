@@ -16,4 +16,5 @@ export type CollectionCallback<T> = (this: LoopContext<T>, value: T, index: numb
 /**
  * specific item callback for a hashmap (string/number indexed, arbitrary value)
  */
-export type HasMapCallback<T> = (this: LoopContext<T>, key: string | number, value: T) => any | boolean;
+export type HasMapCallback<T> = (this: LoopContext<T>, key: string, value: T) => any | boolean;
+export type HashMapKey = string | number;
