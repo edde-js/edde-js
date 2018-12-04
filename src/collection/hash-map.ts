@@ -6,11 +6,10 @@ import {HashMapKey, HasMapCallback, LoopContext} from "./types";
  * objects there is another implementation.
  */
 export class HashMap<T> {
-	protected hashMap: Map<HashMapKey, T>;
+	protected hashMap: { [index: string]: T };
 
 	public constructor(hashMap: { [index: string]: T } = {}) {
-		this.hashMap = new Map();
-		this.patch(hashMap);
+		this.hashMap = hashMap;
 	}
 
 	/**
@@ -20,7 +19,15 @@ export class HashMap<T> {
 	 * @param value
 	 */
 	public set(name: HashMapKey, value: T): HashMap<T> {
-		this.hashMap.set(name, value);
+		if (!Object.getOwnPropertyDescriptor(this.hashMap, name)) {
+			Object.defineProperty(this.hashMap, name, {
+				value: value,
+				enumerable: true,
+				configurable: true,
+				writable: true
+			});
+		}
+		this.hashMap[name] = value;
 		return this;
 	}
 
@@ -42,7 +49,7 @@ export class HashMap<T> {
 	 * @param name
 	 */
 	public has(name: HashMapKey): boolean {
-		return this.hashMap.has(name);
+		return this.hashMap.hasOwnProperty(name);
 	}
 
 	/**
@@ -52,7 +59,7 @@ export class HashMap<T> {
 	 * @param callback
 	 */
 	public get(name: HashMapKey, callback: () => T | null = () => null): T | null {
-		return this.has(name) ? <T>this.hashMap.get(name) : callback();
+		return this.has(name) ? this.hashMap[name] : callback();
 	}
 
 	/**
@@ -78,7 +85,7 @@ export class HashMap<T> {
 	 * @param error
 	 */
 	public require(name: HashMapKey, error: string | null = null): T {
-		if (!this.hashMap.has(name)) {
+		if (!this.has(name)) {
 			throw new Error(error || `Required element [${name}] is missing in hash map!`);
 		}
 		return <T>this.get(name);
@@ -110,7 +117,7 @@ export class HashMap<T> {
 
 	public patch(patch: { [index: string]: T }): HashMap<T> {
 		for (const key in patch) {
-			this.hashMap.set(key, patch[key]);
+			this.set(key, patch[key]);
 		}
 		return this;
 	}
@@ -121,7 +128,8 @@ export class HashMap<T> {
 	 * @param name
 	 */
 	public remove(name: HashMapKey): HashMap<T> {
-		this.hashMap.delete(name);
+		this.set(name, <any>undefined);
+		delete this.hashMap[name];
 		return this;
 	}
 
@@ -139,20 +147,14 @@ export class HashMap<T> {
 			key: null,
 			cancelled: false,
 		};
-		this.hashMap.forEach((v, k) => {
-			/**
-			 * because of some motherfucker out there, foreach cannot be broke out; thus
-			 * it's needed to use this shitty construct to loop ALL items, but not call
-			 * callback on them
-			 */
-			if (!context.cancelled) {
-				context.loop = true;
-				context.count++;
-				if (callback.call(context, context.key = k, context.value = v) === false) {
-					context.cancelled = true;
-				}
+		for (const key in this.hashMap) {
+			context.loop = true;
+			context.count++;
+			if (callback.call(context, context.key = key, context.value = this.hashMap[key]) === false) {
+				context.cancelled = true;
+				break;
 			}
-		});
+		}
 		return context;
 	}
 
@@ -174,7 +176,7 @@ export class HashMap<T> {
 	 * clear internal hash map
 	 */
 	public clear(): HashMap<T> {
-		this.hashMap.clear();
+		this.hashMap = {};
 		return this;
 	}
 
@@ -182,8 +184,6 @@ export class HashMap<T> {
 	 * return internal hash map representation
 	 */
 	public toObject(): { [index: string]: T } {
-		const object: any = {};
-		this.each((k, v) => object[k] = v);
-		return object;
+		return this.hashMap;
 	}
 }
