@@ -18,7 +18,11 @@ export class MessageBus extends AbstractMessageHandler {
 	}
 
 	public resolve(message: Message): IMessageHandler {
-		return this.container.create<IMessageHandler>(message.getNamespace() + '.' + message.getType() + '-message-handler');
+		try {
+			return this.container.create<IMessageHandler>(message.getNamespace() + '.' + message.getType() + '-message-handler');
+		} catch (e) {
+			return this.container.create<IMessageHandler>('message-bus.' + message.getType() + '-message-handler');
+		}
 	}
 
 	public createPacket(uuid?: string): Packet {

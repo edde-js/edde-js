@@ -6,7 +6,7 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {StateManager} from "../state";
+import {StateManager, StateMessageHandler} from "../state";
 import {UuidGenerator} from "../crypto";
 import {MessageBus, MessageService} from "../message";
 
@@ -49,6 +49,7 @@ export class ContainerFactory {
 			.register(UuidGenerator, Make.service(UuidGenerator))
 			.register(MessageBus, Make.service(MessageBus))
 			.register(MessageService, Make.service(MessageService))
+			.register(StateMessageHandler, Make.service(StateMessageHandler))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))
