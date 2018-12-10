@@ -48,12 +48,13 @@ export class StateManager {
 	/**
 	 * request a state and return temporary state; when a new state will be available, update will be executed
 	 *
+	 * @param name
 	 * @param namespace
 	 * @param attrs
 	 */
-	public request(namespace: ToString, attrs: {} | null = null): State {
+	public request(name: ToString, namespace: ToString, attrs: {} | null = null): State {
 		this.messageService.send(this.messageBus.createMessage('state', namespace.toString(), attrs));
-		return this.state(namespace);
+		return this.state(name);
 	}
 
 	public push(states: Object): StateManager {
