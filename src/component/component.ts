@@ -167,7 +167,7 @@ export class Component {
 					state = GetString(component);
 			}
 			if (state) {
-				component.register({'_': this.stateManager.state(state)});
+				component.register({'_': this.stateManager.request(state)});
 			}
 			html.replaceBy(component.render());
 		});
