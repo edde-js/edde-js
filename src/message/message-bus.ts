@@ -13,8 +13,8 @@ export class MessageBus extends AbstractMessageHandler {
 
 	public packet(packet: Packet): Packet {
 		const response = this.createPacket();
-		packet.messages(message => this.message(message, response));
-		return packet;
+		packet.messages().each(message => this.message(message, response));
+		return response;
 	}
 
 	public resolve(message: Message): IMessageHandler {
@@ -30,11 +30,10 @@ export class MessageBus extends AbstractMessageHandler {
 		return this;
 	}
 
-	public import(object: { uuid: string, messages: { type: string, namespace: string, uuid: string }[] }): Packet {
+	public import(object: { uuid: string, messages?: { type: string, namespace: string, uuid: string, attrs?: {} }[] }): Packet {
 		const packet = this.createPacket(object.uuid);
-		new Collection(object.messages).each(item => {
-			const message = this.createMessage(item.type, item.namespace, item.uuid);
-			packet.message(message);
+		new Collection(object.messages || []).each(item => {
+			packet.message(this.createMessage(item.type, item.namespace, item.attrs, item.uuid));
 		});
 		return packet;
 	}

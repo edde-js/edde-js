@@ -14,4 +14,8 @@ export class Message {
 	public getNamespace(): string {
 		return this.message.get('namespace');
 	}
+
+	public getAttrs(): HashMap<any> {
+		return this.message.ensure('attrs', () => new HashMap);
+	}
 }

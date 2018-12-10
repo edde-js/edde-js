@@ -1,26 +1,26 @@
-import {Collection, CollectionCallback} from "../collection";
+import {Collection, HashMap} from "../collection";
 import {Message} from "./message";
 
 export class Packet {
-	protected uuid: string;
-	protected messageCollection: Collection<Message>;
+	protected packet: HashMap<any>;
 
 	public constructor(uuid: string) {
-		this.uuid = uuid;
-		this.messageCollection = new Collection();
+		this.packet = new HashMap({
+			uuid: uuid,
+			messages: new Collection()
+		});
 	}
 
 	public getUuid(): string {
-		return this.uuid;
+		return this.packet.require('uuid');
 	}
 
 	public message(message: Message): Packet {
-		this.messageCollection.add(message);
+		this.packet.require('messages').add(message);
 		return this;
 	}
 
-	public messages(callback: CollectionCallback<Message>): Packet {
-		this.messageCollection.each(callback);
-		return this;
+	public messages(): Collection<Message> {
+		return this.packet.require('messages');
 	}
 }
