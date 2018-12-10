@@ -16,7 +16,7 @@ export class Message {
 	}
 
 	public getUuid(): string {
-		return this.message.require('namespace');
+		return this.message.require('uuid');
 	}
 
 	public getAttrs(): HashMap<any> {
