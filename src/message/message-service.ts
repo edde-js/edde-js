@@ -51,15 +51,13 @@ export class MessageService {
 					 * be called which will initiate the fetch.
 					 */
 					case 1:
+						this.packet = this.messageBus.createPacket();
 						if (content) {
 							xmlHttpRequest.setRequestHeader('Content-Type', 'application/json')
 						}
 						xmlHttpRequest.setRequestHeader('Accept', 'application/json');
 						timeoutId = setTimeout(() => {
 							xmlHttpRequest.abort();
-//							this.ajaxHandler.onTimeout(xmlHttpRequest);
-//							this.ajaxHandler.onFail(xmlHttpRequest);
-//							this.ajaxHandler.onAlways(xmlHttpRequest);
 						}, this.config.timeout);
 						break;
 					/**
@@ -89,20 +87,12 @@ export class MessageService {
 						try {
 							if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 299) {
 								this.messageBus.packet(this.messageBus.import(JSON.parse(xmlHttpRequest.response)));
-//								this.ajaxHandler.onSuccess(xmlHttpRequest);
 							} else if (xmlHttpRequest.status >= 400 && xmlHttpRequest.status <= 499) {
-//								this.ajaxHandler.onClientFail(xmlHttpRequest);
-//								this.ajaxHandler.onFail(xmlHttpRequest);
 							} else if (xmlHttpRequest.status >= 500 && xmlHttpRequest.status <= 599) {
-//								this.ajaxHandler.onServerFail(xmlHttpRequest);
-//								this.ajaxHandler.onFail(xmlHttpRequest);
 							}
 						} catch (e) {
 							throw e;
-//							this.ajaxHandler.onError(xmlHttpRequest);
-//							this.ajaxHandler.onFail(xmlHttpRequest);
 						}
-//						this.ajaxHandler.onAlways(xmlHttpRequest);
 						break;
 				}
 			};
