@@ -3,11 +3,16 @@ import {State} from "./state";
 import {ToString} from "../utils";
 import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
+import {MessageBus, MessageService} from "../message";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
 	@Inject(UuidGenerator)
 	protected uuidGenerator: UuidGenerator;
+	@Inject(MessageService)
+	protected messageService: MessageService;
+	@Inject(MessageBus)
+	protected messageBus: MessageBus;
 	protected states: HashMap<State>;
 
 	public constructor() {
@@ -43,11 +48,12 @@ export class StateManager {
 	/**
 	 * request a state and return temporary state; when a new state will be available, update will be executed
 	 *
-	 * @param name
+	 * @param namespace
+	 * @param attrs
 	 */
-	public request(name: ToString): State {
-		// messageBus.packet()->message(messageBus.createMessage('state', '...'))
-		return this.state(name);
+	public request(namespace: ToString, attrs: {} | null = null): State {
+		this.messageService.send(this.messageBus.createMessage('state', namespace.toString(), attrs));
+		return this.state(namespace);
 	}
 
 	public push(states: Object): StateManager {

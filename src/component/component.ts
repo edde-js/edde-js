@@ -99,7 +99,7 @@ export class Component {
 	}
 
 	@React('visible')
-	public stateVisible(visible: boolean, state: State) {
+	public stateVisible(visible: boolean) {
 		this.root.toggleClass('is-hidden', !visible);
 	}
 
