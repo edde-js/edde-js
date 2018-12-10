@@ -36,8 +36,18 @@ export class StateManager {
 	 *
 	 * @param name
 	 */
-	public require(name: string): State {
-		return this.states.require(name, `Requested unknown state [${name}].`);
+	public require(name: ToString): State {
+		return this.states.require(name.toString(), `Requested unknown state [${name.toString()}].`);
+	}
+
+	/**
+	 * request a state and return temporary state; when a new state will be available, update will be executed
+	 *
+	 * @param name
+	 */
+	public request(name: ToString): State {
+		// messageBus.packet()->message(messageBus.createMessage('state', '...'))
+		return this.state(name);
 	}
 
 	public push(states: Object): StateManager {
