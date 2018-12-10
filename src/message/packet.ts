@@ -23,4 +23,13 @@ export class Packet {
 	public messages(): Collection<Message> {
 		return this.packet.require('messages');
 	}
+
+	public export(): Object {
+		const object = {
+			uuid: this.getUuid(),
+			messages: <any>[]
+		};
+		this.messages().each(message => object.messages.push(message.export()));
+		return object;
+	}
 }

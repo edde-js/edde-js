@@ -8,14 +8,27 @@ export class Message {
 	}
 
 	public getType(): string {
-		return this.message.get('type');
+		return this.message.require('type');
 	}
 
 	public getNamespace(): string {
-		return this.message.get('namespace');
+		return this.message.require('namespace');
+	}
+
+	public getUuid(): string {
+		return this.message.require('uuid');
 	}
 
 	public getAttrs(): HashMap<any> {
 		return this.message.ensure('attrs', () => new HashMap);
+	}
+
+	public export(): Object {
+		return {
+			type: this.getType(),
+			namespace: this.getNamespace(),
+			uuid: this.getUuid(),
+			attrs: this.getAttrs().toObject()
+		};
 	}
 }

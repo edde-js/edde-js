@@ -24,12 +24,12 @@ test('Message: Unknown service', test => {
 			messages: [
 				{
 					uuid: '2',
-					type: 'state',
+					type: 'foo',
 					namespace: 'kaboom'
 				}
 			]
 		}));
-	}, error => error.message === 'Requested unknown factory [kaboom.state-message-handler].');
+	}, error => error.message === 'Requested unknown factory [message-bus.foo-message-handler].');
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()

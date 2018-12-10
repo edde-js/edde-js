@@ -99,7 +99,7 @@ export class Component {
 	}
 
 	@React('visible')
-	public stateVisible(visible: boolean, state: State) {
+	public stateVisible(visible: boolean) {
 		this.root.toggleClass('is-hidden', !visible);
 	}
 
@@ -167,7 +167,7 @@ export class Component {
 					state = GetString(component);
 			}
 			if (state) {
-				component.register({'_': this.stateManager.state(state)});
+				component.register({'_': this.stateManager.request(state)});
 			}
 			html.replaceBy(component.render());
 		});
