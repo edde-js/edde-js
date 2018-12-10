@@ -6,6 +6,7 @@ export * from "./crypto";
 export * from "./dom";
 export * from "./event";
 export * from "./history";
+export * from "./message";
 export * from "./runtime";
 export * from "./state";
 export * from "./template";
