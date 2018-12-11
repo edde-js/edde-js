@@ -29,7 +29,7 @@ test('Message: Unknown service', test => {
 				}
 			]
 		}));
-	}, error => error.message === 'Requested unknown factory [message-bus.foo-message-handler].');
+	}, error => error.message === 'Requested unknown factory [message-bus.common-message-service].');
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()
