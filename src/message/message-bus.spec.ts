@@ -10,7 +10,7 @@ import {AbstractMessageService} from "./message-service";
 @ToString('foo.bar.state-message-handler')
 class SomeStateHandler extends AbstractMessageService {
 	public message(message: Message, packet: Packet): IMessageService {
-		packet.message(this.createMessage('hovno', 'nope', {'foo': 'bar'}));
+		packet.message(this.createMessage('nope', 'hovno', {'foo': 'bar'}));
 		return this;
 	}
 }
@@ -39,7 +39,7 @@ test('Message: Common', test => {
 		uuid: '1',
 		messages: [
 			{
-				service: 'foo.bar',
+				service: 'foo.bar.state-message-handler',
 				type: 'state',
 				uuid: '2'
 			}
