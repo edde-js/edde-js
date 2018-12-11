@@ -8,7 +8,7 @@ export class Strings {
 		return (string.match(/[^\x20\t\r\n\f]+/g) || []).join(' ');
 	}
 
-	public static toKebabCase(string: string): string {
+	public static toCamelCase(string: string): string {
 		return string.replace(/-\w/g, _ => _[1].toUpperCase());
 	}
 

@@ -1,16 +1,16 @@
 import test from "ava";
 import {ContainerFactory, Make} from "../container";
 import {MessageBus} from "./message-bus";
-import {AbstractMessageHandler} from "./message-handler";
 import {Message} from "./message";
 import {Packet} from "./packet";
-import {IMessageHandler} from "./types";
+import {IMessageService} from "./types";
 import {ToString} from "../utils";
+import {AbstractMessageService} from "./message-service";
 
-@ToString('foo.bar.state-message-handler')
-class SomeStateHandler extends AbstractMessageHandler {
-	public message(message: Message, packet: Packet): IMessageHandler {
-		packet.message(this.createMessage('hovno', 'nope', {'foo': 'bar'}));
+@ToString('foo.bar.some-message-service')
+class SomeMessageService extends AbstractMessageService {
+	public onStateMessage(message: Message, packet: Packet): IMessageService {
+		packet.message(this.createMessage('nope', 'hovno', {'foo': 'bar'}));
 		return this;
 	}
 }
@@ -23,31 +23,31 @@ test('Message: Unknown service', test => {
 			uuid: '1',
 			messages: [
 				{
-					uuid: '2',
+					service: 'kaboom',
 					type: 'foo',
-					namespace: 'kaboom'
+					uuid: '2'
 				}
 			]
 		}));
-	}, error => error.message === 'Requested unknown factory [message-bus.foo-message-handler].');
+	}, error => error.message === 'Requested unknown factory [message-bus.common-message-service].');
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()
-		.register(SomeStateHandler, Make.service(SomeStateHandler));
+		.register(SomeMessageService, Make.service(SomeMessageService));
 	const messageBus = container.create<MessageBus>(MessageBus);
 	const response = messageBus.packet(messageBus.import({
 		uuid: '1',
 		messages: [
 			{
-				uuid: '2',
+				service: 'foo.bar.some-message-service',
 				type: 'state',
-				namespace: 'foo.bar'
+				uuid: '2'
 			}
 		]
 	}));
 	test.is(response.messages().getCount(), 1);
 	const message = (<Message>response.messages().index(0));
 	test.is('hovno', message.getType());
-	test.is('nope', message.getNamespace());
+	test.is('nope', message.getService());
 	test.deepEqual({'foo': 'bar'}, message.getAttrs().toObject());
 });
