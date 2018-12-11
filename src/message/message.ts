@@ -7,12 +7,12 @@ export class Message {
 		this.message = new HashMap(message);
 	}
 
-	public getType(): string {
-		return this.message.require('type');
+	public getService(): string {
+		return this.message.require('service');
 	}
 
-	public getNamespace(): string {
-		return this.message.require('namespace');
+	public getType(): string {
+		return this.message.require('type');
 	}
 
 	public getUuid(): string {
@@ -25,8 +25,8 @@ export class Message {
 
 	public export(): Object {
 		return {
+			service: this.getService(),
 			type: this.getType(),
-			namespace: this.getNamespace(),
 			uuid: this.getUuid(),
 			attrs: this.getAttrs().toObject()
 		};

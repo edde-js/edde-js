@@ -19,7 +19,7 @@ export class MessageBus extends AbstractMessageService {
 
 	public resolve(message: Message): IMessageService {
 		try {
-			return this.container.create<IMessageService>(message.getNamespace() + '.' + message.getType() + '-message-handler');
+			return this.container.create<IMessageService>(message.getService());
 		} catch (e) {
 			return this.container.create<IMessageService>('message-bus.' + message.getType() + '-message-handler');
 		}
@@ -34,10 +34,10 @@ export class MessageBus extends AbstractMessageService {
 		return this;
 	}
 
-	public import(object: { uuid: string, messages?: { type: string, namespace: string, uuid: string, attrs?: {} }[] }): Packet {
+	public import(object: { uuid: string, messages?: { service: string, type: string, uuid: string, attrs?: {} }[] }): Packet {
 		const packet = this.createPacket(object.uuid);
 		new Collection(object.messages || []).each(item => {
-			packet.message(this.createMessage(item.type, item.namespace, item.attrs, item.uuid));
+			packet.message(this.createMessage(item.service, item.type, item.attrs, item.uuid));
 		});
 		return packet;
 	}

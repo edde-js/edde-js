@@ -23,9 +23,9 @@ test('Message: Unknown service', test => {
 			uuid: '1',
 			messages: [
 				{
-					uuid: '2',
+					service: 'kaboom',
 					type: 'foo',
-					namespace: 'kaboom'
+					uuid: '2'
 				}
 			]
 		}));
@@ -39,15 +39,15 @@ test('Message: Common', test => {
 		uuid: '1',
 		messages: [
 			{
-				uuid: '2',
+				service: 'foo.bar',
 				type: 'state',
-				namespace: 'foo.bar'
+				uuid: '2'
 			}
 		]
 	}));
 	test.is(response.messages().getCount(), 1);
 	const message = (<Message>response.messages().index(0));
 	test.is('hovno', message.getType());
-	test.is('nope', message.getNamespace());
+	test.is('nope', message.getService());
 	test.deepEqual({'foo': 'bar'}, message.getAttrs().toObject());
 });
