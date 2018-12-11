@@ -7,9 +7,9 @@ import {IMessageService} from "./types";
 import {ToString} from "../utils";
 import {AbstractMessageService} from "./message-service";
 
-@ToString('foo.bar.state-message-handler')
-class SomeStateHandler extends AbstractMessageService {
-	public message(message: Message, packet: Packet): IMessageService {
+@ToString('foo.bar.some-message-service')
+class SomeMessageService extends AbstractMessageService {
+	public onStateMessage(message: Message, packet: Packet): IMessageService {
 		packet.message(this.createMessage('nope', 'hovno', {'foo': 'bar'}));
 		return this;
 	}
@@ -33,13 +33,13 @@ test('Message: Unknown service', test => {
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()
-		.register(SomeStateHandler, Make.service(SomeStateHandler));
+		.register(SomeMessageService, Make.service(SomeMessageService));
 	const messageBus = container.create<MessageBus>(MessageBus);
 	const response = messageBus.packet(messageBus.import({
 		uuid: '1',
 		messages: [
 			{
-				service: 'foo.bar.state-message-handler',
+				service: 'foo.bar.some-message-service',
 				type: 'state',
 				uuid: '2'
 			}

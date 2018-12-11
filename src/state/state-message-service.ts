@@ -3,7 +3,7 @@ import {Inject} from "../container";
 import {AbstractMessageService, IMessageService, Message, Packet} from "../message";
 import {ToString} from "../utils";
 
-@ToString('message-bus.state-message-handler')
+@ToString('message-bus.state-message-service')
 export class StateMessageService extends AbstractMessageService {
 	@Inject(StateManager)
 	protected stateManager: StateManager;

@@ -21,7 +21,11 @@ export class MessageBus extends AbstractMessageService {
 		try {
 			return this.container.create<IMessageService>(message.getService());
 		} catch (e) {
-			return this.container.create<IMessageService>('message-bus.' + message.getType() + '-message-handler');
+			try {
+				return this.container.create<IMessageService>('message-bus.' + message.getType() + '-message-service');
+			} catch (e) {
+				return this.container.create<IMessageService>('message-bus.common-message-service');
+			}
 		}
 	}
 

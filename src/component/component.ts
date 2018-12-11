@@ -150,7 +150,7 @@ export class Component {
 	 */
 	protected resolveLinks(): void {
 		this.root.selectorCollection('[data-link]').each(html => {
-			(<any>this)[Strings.toKebabCase(html.rattr('data-link'))] = html;
+			(<any>this)[Strings.toCamelCase(html.rattr('data-link'))] = html;
 			html.removeAttr('data-link');
 		});
 	}
