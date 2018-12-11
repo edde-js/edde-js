@@ -3,14 +3,14 @@ import {State} from "./state";
 import {ToString} from "../utils";
 import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
-import {MessageBus, MessageService} from "../message";
+import {MessageBus, MessagePortal} from "../message";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
 	@Inject(UuidGenerator)
 	protected uuidGenerator: UuidGenerator;
-	@Inject(MessageService)
-	protected messageService: MessageService;
+	@Inject(MessagePortal)
+	protected messagePortal: MessagePortal;
 	@Inject(MessageBus)
 	protected messageBus: MessageBus;
 	protected states: HashMap<State>;
@@ -53,7 +53,7 @@ export class StateManager {
 	 * @param attrs
 	 */
 	public request(name: ToString, namespace: ToString, attrs: {} | null = null): State {
-		this.messageService.send(this.messageBus.createMessage('state', namespace.toString(), attrs));
+		this.messagePortal.send(this.messageBus.createMessage('state', namespace.toString(), attrs));
 		return this.state(name);
 	}
 

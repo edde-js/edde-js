@@ -1,15 +1,15 @@
 import test from "ava";
 import {ContainerFactory, Make} from "../container";
 import {MessageBus} from "./message-bus";
-import {AbstractMessageHandler} from "./message-handler";
 import {Message} from "./message";
 import {Packet} from "./packet";
-import {IMessageHandler} from "./types";
+import {IMessageService} from "./types";
 import {ToString} from "../utils";
+import {AbstractMessageService} from "./message-service";
 
 @ToString('foo.bar.state-message-handler')
-class SomeStateHandler extends AbstractMessageHandler {
-	public message(message: Message, packet: Packet): IMessageHandler {
+class SomeStateHandler extends AbstractMessageService {
+	public message(message: Message, packet: Packet): IMessageService {
 		packet.message(this.createMessage('hovno', 'nope', {'foo': 'bar'}));
 		return this;
 	}

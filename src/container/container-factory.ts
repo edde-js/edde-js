@@ -6,9 +6,9 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {StateManager, StateMessageHandler} from "../state";
+import {StateManager, StateMessageService} from "../state";
 import {UuidGenerator} from "../crypto";
-import {MessageBus, MessageService} from "../message";
+import {MessageBus, MessagePortal} from "../message";
 
 /**
  * Creates container with common services used in edde-js.
@@ -48,8 +48,8 @@ export class ContainerFactory {
 			.register(StateManager, Make.service(StateManager))
 			.register(UuidGenerator, Make.service(UuidGenerator))
 			.register(MessageBus, Make.service(MessageBus))
-			.register(MessageService, Make.service(MessageService))
-			.register(StateMessageHandler, Make.service(StateMessageHandler))
+			.register(MessagePortal, Make.service(MessagePortal))
+			.register(StateMessageService, Make.service(StateMessageService))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))
