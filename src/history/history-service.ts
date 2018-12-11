@@ -1,8 +1,7 @@
 import {Inject} from "../container";
 import {Runtime} from "../runtime";
-import {ViewManager} from "../view/view-manager";
+import {MountViewEvent, ViewManager} from "../view";
 import {ListenTo} from "../event";
-import {MountViewEvent} from "../view";
 import {ToString} from "../utils";
 
 @ToString('edde-js/history/history-service')

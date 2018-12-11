@@ -3,7 +3,7 @@ import {Make} from "./make";
 import {EventBus} from "../event";
 import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
-import {ViewManager} from "../view/view-manager";
+import {ViewManager} from "../view";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
 import {StateManager, StateMessageService} from "../state";

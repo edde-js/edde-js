@@ -1,6 +1,6 @@
 import {Container, Inject, Make} from "../container";
 import {Runtime} from "../runtime";
-import {ViewManager} from "../view/view-manager";
+import {ViewManager} from "../view";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
