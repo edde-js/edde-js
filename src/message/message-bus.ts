@@ -18,8 +18,12 @@ export class MessageBus extends AbstractMessageService {
 	}
 
 	public resolve(message: Message): IMessageService {
+		const resolve = [
+
+		];
+
 		try {
-			return this.container.create<IMessageService>(message.getService());
+			return this.container.create<IMessageService>(message.getTarget());
 		} catch (e) {
 			try {
 				return this.container.create<IMessageService>('message-bus.' + message.getType() + '-message-service');

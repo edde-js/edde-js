@@ -10,7 +10,7 @@ export class StateMessageService extends AbstractMessageService {
 
 	public message(message: Message, packet: Packet): IMessageService {
 		const patch: any = {};
-		patch[message.getService()] = message.getAttrs().toObject();
+		patch[message.getTarget()] = message.getAttrs().toObject();
 		this.stateManager.patch(patch);
 		return this;
 	}

@@ -48,6 +48,6 @@ test('Message: Common', test => {
 	test.is(response.messages().getCount(), 1);
 	const message = (<Message>response.messages().index(0));
 	test.is('hovno', message.getType());
-	test.is('nope', message.getService());
+	test.is('nope', message.getTarget());
 	test.deepEqual({'foo': 'bar'}, message.getAttrs().toObject());
 });
