@@ -25,8 +25,8 @@ export class Message {
 
 	public export(): Object {
 		return {
-			target: this.getTarget(),
 			type: this.getType(),
+			target: this.getTarget(),
 			attrs: this.getAttrs().toObject()
 		};
 	}
