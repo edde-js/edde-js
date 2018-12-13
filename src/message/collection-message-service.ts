@@ -6,21 +6,20 @@ import {Inject} from "../container";
 import {MessagePortal} from "./message-portal";
 import {Collection} from "../collection";
 import {Messages} from "./messages";
-import {ReactorManager} from "../reactor";
 
 @ToString('message-bus.collection-message-service')
 export class CollectionMessageService extends AbstractMessageService {
-	@Inject(ReactorManager)
-	protected reactorManager: ReactorManager;
+//	@Inject(ReactorManager)
+//	protected reactorManager: ReactorManager;
 	@Inject(MessagePortal)
 	protected messagePortal: MessagePortal;
 
 	public onCollectionMessage(message: Message): IMessageService {
 		const target = message.getTarget();
 		new Collection<string>(message.getAttrs().require('collection')).each(uuid => {
-			if (this.reactorManager.has(uuid)) {
-				return;
-			}
+//			if (this.reactorManager.has(uuid)) {
+//				return;
+//			}
 			this.messagePortal.send(Messages.select(target, {
 				'uuid': uuid,
 			}));
