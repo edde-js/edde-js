@@ -4,15 +4,10 @@ import {Message} from "./message";
 export class Packet {
 	protected packet: HashMap<any>;
 
-	public constructor(uuid: string) {
+	public constructor() {
 		this.packet = new HashMap({
-			uuid: uuid,
 			messages: new Collection()
 		});
-	}
-
-	public getUuid(): string {
-		return this.packet.require('uuid');
 	}
 
 	public message(message: Message): Packet {
@@ -26,7 +21,6 @@ export class Packet {
 
 	public export(): Object {
 		const object = {
-			uuid: this.getUuid(),
 			messages: <any>[]
 		};
 		this.messages().each(message => object.messages.push(message.export()));
