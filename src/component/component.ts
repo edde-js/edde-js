@@ -16,15 +16,11 @@ export class Component {
 	protected stateManager: StateManager;
 	protected components: Collection<Component>;
 	protected states: HashMap<State>;
-	protected binds: HashMap<string>;
-	protected mounts: HashMap<Html>;
 	protected root: Html;
 
 	public constructor() {
 		this.components = new Collection();
 		this.states = new HashMap();
-		this.binds = new HashMap();
-		this.mounts = new HashMap();
 	}
 
 	public render(): Html {
@@ -98,12 +94,7 @@ export class Component {
 	}
 
 	public component<U extends Component>(bind: ToString): U {
-		const name = bind.toString();
-		return this.container.create(
-			this.binds.has(name) ?
-				this.binds.require(name, `Requested unknown component bind [${name}].`) :
-				name
-		);
+		return this.container.create(bind.toString());
 	}
 
 	/**
