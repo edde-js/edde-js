@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {StateManager} from "../state";
+import {ReactorManager} from "../reactor";
 
 /**
  * Covers basic stuff related to an application.
@@ -15,8 +15,8 @@ import {StateManager} from "../state";
 export class Application {
 	@Inject(Container)
 	protected container: Container;
-	@Inject(StateManager)
-	protected stateManager: StateManager;
+	@Inject(ReactorManager)
+	protected reactorManager: ReactorManager;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
 	@Inject(ViewManager)
@@ -46,7 +46,7 @@ export class Application {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
-		this.stateManager.patch(states);
+		this.reactorManager.patch(states);
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

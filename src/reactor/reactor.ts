@@ -6,7 +6,7 @@ import {Subscriber} from "./types";
  * Simple map used to keep component state on one place; that means,
  * component could be rebuild to desired state by using this class.
  */
-export class State extends HashMap<any> {
+export class Reactor extends HashMap<any> {
 	protected name: string;
 	protected subscribers: HashMapCollection<Subscriber>;
 	protected updates: HashMapCollection<Subscriber>;
@@ -28,7 +28,7 @@ export class State extends HashMap<any> {
 	 * @param name
 	 * @param subscriber
 	 */
-	public subscribe(name: ToString, subscriber: Subscriber): State {
+	public subscribe(name: ToString, subscriber: Subscriber): Reactor {
 		this.subscribers.add(name.toString(), subscriber);
 		this.updates.add(name.toString(), subscriber);
 		return this;
@@ -40,7 +40,7 @@ export class State extends HashMap<any> {
 	 * @param name
 	 * @param subscriber
 	 */
-	public unsubscribe(name: ToString, subscriber: Subscriber): State {
+	public unsubscribe(name: ToString, subscriber: Subscriber): Reactor {
 		this.subscribers.removeBy(name.toString(), item => item === subscriber);
 		this.updates.removeBy(name.toString(), item => item === subscriber);
 		return this;
@@ -49,7 +49,7 @@ export class State extends HashMap<any> {
 	/**
 	 * refresh all newly added subscribers
 	 */
-	public update(): State {
+	public update(): Reactor {
 		this.updates.eachCollection((name, subscribers) => {
 			if (!this.has(name)) {
 				return;
@@ -78,7 +78,7 @@ export class State extends HashMap<any> {
 	 *
 	 * @param state
 	 */
-	public push(state: Object): State {
+	public push(state: Object): Reactor {
 		this.clear();
 		this.patch(state);
 		return this;
@@ -89,7 +89,7 @@ export class State extends HashMap<any> {
 	 *
 	 * @param state
 	 */
-	public patch(state: Object): State {
+	public patch(state: Object): Reactor {
 		this.copy(new HashMap(state));
 		return this;
 	}

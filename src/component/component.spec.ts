@@ -1,6 +1,6 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {StateManager} from "../state";
+import {ReactorManager} from "../reactor";
 import {Component} from "./component";
 import {ToString} from "../utils";
 import {React} from "./react";
@@ -29,13 +29,13 @@ class SomeComponent extends Component {
 
 test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<StateManager>(StateManager);
+	const reactorManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.state(SomeComponent),
-		'bar': stateManager.state('bar')
+		'default': reactorManager.reactor(SomeComponent),
+		'bar': reactorManager.reactor('bar')
 	});
-	stateManager.patch({
+	reactorManager.patch({
 		[<any>SomeComponent]: {
 			'foo': 'yep!'
 		},
@@ -48,15 +48,15 @@ test('Component: Subscribe', test => {
 });
 test('Component: Forget', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<StateManager>(StateManager);
+	const reactorManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.state(SomeComponent),
+		'default': reactorManager.reactor(SomeComponent),
 	});
 	component.register({
-		'_': stateManager.state(SomeComponent),
+		'default': reactorManager.reactor(SomeComponent),
 	});
-	stateManager.patch({
+	reactorManager.patch({
 		[<any>SomeComponent]: {
 			'count': true
 		},

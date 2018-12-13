@@ -6,7 +6,7 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {StateManager} from "../state";
+import {ReactorManager} from "../reactor";
 import {UuidGenerator} from "../crypto";
 import {MessageBus, MessagePortal, StateMessageService} from "../message";
 
@@ -45,7 +45,7 @@ export class ContainerFactory {
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
 			.register(TemplateManager, Make.service(TemplateManager))
-			.register(StateManager, Make.service(StateManager))
+			.register(ReactorManager, Make.service(ReactorManager))
 			.register(UuidGenerator, Make.service(UuidGenerator))
 			.register(MessageBus, Make.service(MessageBus))
 			.register(MessagePortal, Make.service(MessagePortal))

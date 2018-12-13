@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {State, StateManager, States} from "../state";
+import {Reactor, ReactorManager, Reactors} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
 
@@ -12,15 +12,15 @@ export class Component {
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
-	@Inject(StateManager)
-	protected stateManager: StateManager;
+	@Inject(ReactorManager)
+	protected reactorManager: ReactorManager;
 	protected components: Collection<Component>;
-	protected states: HashMap<State>;
+	protected reactors: HashMap<Reactor>;
 	protected root: Html;
 
 	public constructor() {
 		this.components = new Collection();
-		this.states = new HashMap();
+		this.reactors = new HashMap();
 	}
 
 	public render(): Html {
@@ -37,11 +37,11 @@ export class Component {
 	/**
 	 * register a new state to this component
 	 *
-	 * @param states
+	 * @param reactors
 	 */
-	public register(states: States): Component {
+	public register(reactors: Reactors): Component {
 		this.unsubscribe();
-		this.states.copy(new HashMap(states));
+		this.reactors.copy(new HashMap(reactors));
 		this.subscribe();
 		return this;
 	}
@@ -49,25 +49,25 @@ export class Component {
 	/**
 	 * set a new state and update the component by executing the state
 	 *
-	 * @param states
+	 * @param reactors
 	 */
-	public update(states: { [index: string]: State } = {}): Component {
-		this.register(states);
-		this.states.each((_, state) => state.update());
+	public update(reactors: Reactors = {}): Component {
+		this.register(reactors);
+		this.reactors.each((_, reactor) => reactor.update());
 		return this;
 	}
 
-	public state(name: string = 'default'): State {
-		return this.states.require(name, `Requested unknown state [${name}] on component [${GetString(this)}].`);
+	public reactor(name: string = 'default'): Reactor {
+		return this.reactors.require(name, `Requested unknown reactor [${name}] on component [${GetString(this)}].`);
 	}
 
 	public push(name: string, object: Object): Component {
-		this.state(name).push(object);
+		this.reactor(name).push(object);
 		return this;
 	}
 
 	public patch(name: string, object: Object): Component {
-		this.state(name).patch(object);
+		this.reactor(name).patch(object);
 		return this;
 	}
 
@@ -77,8 +77,8 @@ export class Component {
 
 	public subscribe(): Component {
 		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
-			if (this.states.has(reactProperty.state)) {
-				this.states.require(reactProperty.state).subscribe(reactProperty.property, (<any>this)[reactProperty.handler].bind(this));
+			if (this.reactors.has(reactProperty.reactor)) {
+				this.reactors.require(reactProperty.reactor).subscribe(reactProperty.property, (<any>this)[reactProperty.handler].bind(this));
 			}
 		});
 		return this;
@@ -86,8 +86,8 @@ export class Component {
 
 	public unsubscribe(): Component {
 		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
-			if (this.states.has(reactProperty.state)) {
-				this.states.require(reactProperty.state).unsubscribe(reactProperty.property, (<any>this)[reactProperty.handler]);
+			if (this.reactors.has(reactProperty.reactor)) {
+				this.reactors.require(reactProperty.reactor).unsubscribe(reactProperty.property, (<any>this)[reactProperty.handler]);
 			}
 		});
 		return this;
