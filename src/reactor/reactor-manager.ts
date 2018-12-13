@@ -1,15 +1,9 @@
 import {HashMap} from "../collection";
 import {Reactor} from "./reactor";
 import {ToString} from "../utils";
-import {Inject} from "../container";
-import {MessageBus, MessagePortal} from "../message";
 
 @ToString('edde-js/reactor/reactor-manager')
 export class ReactorManager {
-	@Inject(MessagePortal)
-	protected messagePortal: MessagePortal;
-	@Inject(MessageBus)
-	protected messageBus: MessageBus;
 	protected reactors: HashMap<Reactor>;
 
 	public constructor() {
