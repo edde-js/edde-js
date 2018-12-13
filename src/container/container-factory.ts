@@ -6,9 +6,9 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {StateManager, StateMessageService} from "../state";
+import {StateManager} from "../state";
 import {UuidGenerator} from "../crypto";
-import {MessageBus, MessagePortal} from "../message";
+import {MessageBus, MessagePortal, StateMessageService} from "../message";
 
 /**
  * Creates container with common services used in edde-js.

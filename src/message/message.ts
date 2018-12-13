@@ -7,16 +7,16 @@ export class Message {
 		this.message = new HashMap(message);
 	}
 
-	public getService(): string {
-		return this.message.require('service');
-	}
-
 	public getType(): string {
 		return this.message.require('type');
 	}
 
-	public getUuid(): string {
-		return this.message.require('uuid');
+	public hasTarget(): boolean {
+		return !!this.getTarget();
+	}
+
+	public getTarget(): string | null {
+		return this.message.get('target') || null;
 	}
 
 	public getAttrs(): HashMap<any> {
@@ -25,9 +25,8 @@ export class Message {
 
 	public export(): Object {
 		return {
-			service: this.getService(),
+			target: this.getTarget(),
 			type: this.getType(),
-			uuid: this.getUuid(),
 			attrs: this.getAttrs().toObject()
 		};
 	}
