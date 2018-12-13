@@ -133,4 +133,21 @@ export class Component {
 				name
 		);
 	}
+
+	/**
+	 * called when a component should be ready to use
+	 */
+	public wakeup(): Component {
+		this.subscribe();
+		return this;
+	}
+
+	/**
+	 * called when a component is going to sleep (component should not be destroyed);
+	 * component no longer registers any events (include state changes)
+	 */
+	public sleep(): Component {
+		this.unsubscribe();
+		return this;
+	}
 }

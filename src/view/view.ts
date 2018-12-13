@@ -7,15 +7,25 @@ export abstract class AbstractView extends Component implements IView {
 	@Inject(Runtime)
 	protected runtime: Runtime;
 
+	protected onMount(): IView {
+		this.components.each(component => component.wakeup());
+		return this;
+	}
+
+	protected onUmount(): IView {
+		this.components.each(component => component.sleep());
+		return this;
+	}
+
 	public mount(): IView {
-		this.mount = <() => IView><unknown>this.show;
+		this.mount = this.onMount;
 		this.runtime.require('main').append(this.render());
-		this.show();
+		this.onMount();
 		return this;
 	}
 
 	public umount(): IView {
-		this.hide();
+		this.onUmount();
 		return this;
 	}
 
