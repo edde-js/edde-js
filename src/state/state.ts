@@ -62,6 +62,12 @@ export class State extends HashMap<any> {
 	}
 
 	public set(name: HashMapKey, value: any): HashMap<any> {
+		/**
+		 * works quite well for scalar values; states SHOULD contain just scalar values, so we're fine
+		 */
+		if (this.get(name) === value) {
+			return this;
+		}
 		super.set(name, value);
 		this.subscribers.ensure(<string>name, () => new Collection()).each(subscriber => subscriber(value, this));
 		return this;

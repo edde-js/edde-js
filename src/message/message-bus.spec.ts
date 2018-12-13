@@ -10,7 +10,7 @@ import {AbstractMessageService} from "./message-service";
 @ToString('foo.bar.some-message-service')
 class SomeMessageService extends AbstractMessageService {
 	public onStateMessage(message: Message, packet: Packet): IMessageService {
-		packet.message(this.createMessage('hovno', 'nope', {'foo': 'bar'}));
+		packet.message(new Message('hovno', 'nope', {'foo': 'bar'}));
 		return this;
 	}
 }

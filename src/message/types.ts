@@ -4,8 +4,6 @@ import {ToString} from "../utils";
 
 export interface IMessageService {
 	message(message: Message, packet: Packet): IMessageService;
-
-	createMessage(type: string, namespace: string): Message;
 }
 
 @ToString('edde/message/message-service-config')

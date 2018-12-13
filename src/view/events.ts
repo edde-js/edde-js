@@ -1,9 +1,11 @@
 import {AbstractEvent} from "../event";
 import {IView} from "./types";
+import {ToString} from "../utils";
 
 /**
  * Sent when there is no view to get the current path.
  */
+@ToString('dead-route-event')
 export class DeadRouteEvent extends AbstractEvent {
 	protected path: string;
 
@@ -36,11 +38,14 @@ export abstract class AbstractViewEvent extends AbstractEvent {
 	}
 }
 
+@ToString('umount-view-event')
 export class UmountViewEvent extends AbstractViewEvent {
 }
 
+@ToString('mount-view-event')
 export class MountViewEvent extends AbstractViewEvent {
 }
 
+@ToString('refresh-view-event')
 export class RefreshViewEvent extends AbstractViewEvent {
 }

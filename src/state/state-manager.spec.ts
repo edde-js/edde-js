@@ -10,7 +10,3 @@ test('StateManager: State', test => {
 	const stateManager = ContainerFactory.container().create<StateManager>(StateManager);
 	test.is(stateManager.state('foo'), stateManager.state('foo'));
 });
-test('StateManager: Require', test => {
-	const stateManager = ContainerFactory.container().create<StateManager>(StateManager);
-	test.throws(() => stateManager.require('mrdka'), error => error.message === 'Requested unknown state [mrdka].');
-});
