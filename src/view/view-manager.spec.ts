@@ -2,7 +2,7 @@ import test from "ava";
 import {ContainerFactory, Make} from "../container";
 import {ViewManager} from "./view-manager";
 import {EventBus} from "../event";
-import {DeadRouteEvent} from "./events";
+import {DeadRouteEvent, MountViewEvent} from "./events";
 import {AbstractView} from "./view";
 import {GetString, ToString} from "../utils";
 import {IView} from "./types";
@@ -31,12 +31,20 @@ test('ViewManager: Common Events', test => {
 	container.register(SomeView, Make.service(SomeView));
 	viewManager.register(SomeView);
 	let deadEvent = null;
+	let routedView = null;
+	let routedPath = null;
 	eventBus.listener(DeadRouteEvent).add((event: DeadRouteEvent) => {
 		deadEvent = event.getPath();
+	});
+	eventBus.listener(MountViewEvent).add((event: MountViewEvent) => {
+		routedView = event.getView();
+		routedPath = event.getPath();
 	});
 	viewManager.routeTo('nope');
 	test.is(deadEvent, 'nope');
 	const view = viewManager.routeTo('/path');
+	test.is(routedView, view);
+	test.is(routedPath, '/path');
 	test.truthy(view);
 	test.is(GetString(<IView>view), 'boo');
 	test.truthy((<any>view).root);
