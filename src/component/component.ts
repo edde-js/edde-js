@@ -97,6 +97,32 @@ export class Component {
 		return this;
 	}
 
+	public component<U extends Component>(bind: ToString): U {
+		const name = bind.toString();
+		return this.container.create(
+			this.binds.has(name) ?
+				this.binds.require(name, `Requested unknown component bind [${name}].`) :
+				name
+		);
+	}
+
+	/**
+	 * called when a component should be ready to use
+	 */
+	public wakeup(): Component {
+		this.subscribe();
+		return this;
+	}
+
+	/**
+	 * called when a component is going to sleep (component should not be destroyed);
+	 * component no longer registers any events (include state changes)
+	 */
+	public sleep(): Component {
+		this.unsubscribe();
+		return this;
+	}
+
 	/**
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
@@ -123,31 +149,5 @@ export class Component {
 
 	protected onRender(): Html {
 		return this.root;
-	}
-
-	public component<U extends Component>(bind: ToString): U {
-		const name = bind.toString();
-		return this.container.create(
-			this.binds.has(name) ?
-				this.binds.require(name, `Requested unknown component bind [${name}].`) :
-				name
-		);
-	}
-
-	/**
-	 * called when a component should be ready to use
-	 */
-	public wakeup(): Component {
-		this.subscribe();
-		return this;
-	}
-
-	/**
-	 * called when a component is going to sleep (component should not be destroyed);
-	 * component no longer registers any events (include state changes)
-	 */
-	public sleep(): Component {
-		this.unsubscribe();
-		return this;
 	}
 }
