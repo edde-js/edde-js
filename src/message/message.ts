@@ -1,33 +1,37 @@
 import {HashMap} from "../collection";
 
 export class Message {
-	protected message: HashMap<any>;
+	protected type: string;
+	protected target: string | null;
+	protected attrs: {} | null;
 
 	public constructor(type: string, target: string | null = null, attrs: {} | null = null) {
-		this.message = new HashMap({
-			type,
-			target,
-			attrs,
-		});
+		this.type = type;
+		this.target = target || null;
+		this.attrs = attrs || null;
 	}
 
 	public getType(): string {
-		return this.message.require('type');
+		return this.type;
 	}
 
 	public hasTarget(): boolean {
-		return !!this.getTarget();
+		return !!this.target;
 	}
 
 	public getTarget(): string | null {
-		return this.message.get('target') || null;
+		return this.target;
 	}
 
 	public getAttrs(): HashMap<any> {
-		return new HashMap(this.message.get('attrs', () => new Object()));
+		return new HashMap(this.attrs);
 	}
 
 	public export(): Object {
-		return this.message.toObject();
+		return {
+			type: this.type,
+			target: this.target,
+			attrs: this.attrs,
+		};
 	}
 }
