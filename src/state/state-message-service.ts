@@ -9,9 +9,11 @@ export class StateMessageService extends AbstractMessageService {
 	protected stateManager: StateManager;
 
 	public message(message: Message, packet: Packet): IMessageService {
-		const patch: any = {};
-		patch[message.getTarget()] = message.getAttrs().toObject();
-		this.stateManager.patch(patch);
+		if (message.hasTarget()) {
+			const patch: any = {};
+			patch[<string>message.getTarget()] = message.getAttrs().toObject();
+			this.stateManager.patch(patch);
+		}
 		return this;
 	}
 }

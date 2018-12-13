@@ -11,6 +11,10 @@ export class Message {
 		return this.message.require('type');
 	}
 
+	public hasTarget(): boolean {
+		return !!this.getTarget();
+	}
+
 	public getTarget(): string | null {
 		return this.message.get('target') || null;
 	}

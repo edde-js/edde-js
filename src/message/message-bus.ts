@@ -18,23 +18,26 @@ export class MessageBus extends AbstractMessageService {
 	}
 
 	public resolve(message: Message): IMessageService {
-		const resolve = [
-
-		];
-
-		try {
-			return this.container.create<IMessageService>(message.getTarget());
-		} catch (e) {
+		const resolve: string[] = [];
+		message.hasTarget() && resolve.push(<string>message.getTarget());
+		resolve.push('message-bus.' + message.getType() + '-message-service');
+		resolve.push('message-bus.common-message-service');
+		let service = null;
+		const loop = new Collection(resolve).each(resolve => {
 			try {
-				return this.container.create<IMessageService>('message-bus.' + message.getType() + '-message-service');
+				service = this.container.create<IMessageService>(resolve);
+				return false;
 			} catch (e) {
-				return this.container.create<IMessageService>('message-bus.common-message-service');
 			}
+		});
+		if (loop.cancelled) {
+			return <IMessageService><unknown>service;
 		}
+		throw new Error(`Cannot resolve any message service for message type [${message.getType()}]. Please register one message service of [${resolve.join(', ')}] to Container.`);
 	}
 
-	public createPacket(uuid?: string): Packet {
-		return new Packet(uuid || this.uuidGenerator.uuid4());
+	public createPacket(): Packet {
+		return new Packet();
 	}
 
 	public message(message: Message, packet: Packet): IMessageService {
@@ -42,10 +45,10 @@ export class MessageBus extends AbstractMessageService {
 		return this;
 	}
 
-	public import(object: { uuid: string, messages?: { service: string, type: string, uuid: string, attrs?: {} }[] }): Packet {
-		const packet = this.createPacket(object.uuid);
+	public import(object: { messages?: { type: string, target: string | null, attrs?: {} }[] }): Packet {
+		const packet = this.createPacket();
 		new Collection(object.messages || []).each(item => {
-			packet.message(this.createMessage(item.service, item.type, item.attrs, item.uuid));
+			packet.message(this.createMessage(item.type, item.target, item.attrs));
 		});
 		return packet;
 	}
