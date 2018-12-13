@@ -57,7 +57,7 @@ export class Component {
 		return this;
 	}
 
-	public state(name: string = '_'): State {
+	public state(name: string = 'default'): State {
 		return this.states.require(name, `Requested unknown state [${name}] on component [${GetString(this)}].`);
 	}
 

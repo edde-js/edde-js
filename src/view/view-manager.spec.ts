@@ -10,6 +10,7 @@ import {Runtime} from "../runtime";
 import {JSDOM} from "jsdom";
 import {TemplateManager} from "../template";
 import {Html} from "../dom";
+import {Component} from "../component";
 
 @ToString('boo')
 class SomeView extends AbstractView {
@@ -67,6 +68,7 @@ test('ViewManager: Common Events', test => {
 	test.is(refresh, view);
 	test.is(GetString(<IView>view), 'boo');
 	test.truthy((<any>view).root);
+	test.true((<Component><unknown>view).isRendered());
 	test.truthy((<any>view).root.getElement().parentElement);
 	test.is(runtime.require('main').getElement(), runtime.require('main').getElement());
 	test.is((<Html>(<any>view).root).getElement().outerHTML, '<div class="prdel"></div>');
