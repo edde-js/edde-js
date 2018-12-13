@@ -73,6 +73,11 @@ test('ViewManager: Common Events', test => {
 	test.is(runtime.require('body').getElement().outerHTML, '<body><main><div class="prdel"></div></main></body>');
 	test.truthy(viewManager.routeTo('/some-some'));
 	test.is(umount, view);
+	eventBus.listener(UmountViewEvent).add((event: UmountViewEvent) => {
+		event.cancel();
+	}, 1000);
+	test.truthy(viewManager.routeTo('/path'));
+	test.is(viewManager.routeTo('/path'), container.create(SomeSomeView));
 });
 test('View: Types', test => {
 	test.false(IView.canHandle('/'));

@@ -66,7 +66,7 @@ export class ViewManager {
 			}
 		});
 		if (context.cancelled) {
-			return context.value;
+			return this.current;
 		}
 		this.eventBus.emit(new DeadRouteEvent(path));
 		return null;
