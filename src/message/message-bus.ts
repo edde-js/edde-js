@@ -48,7 +48,7 @@ export class MessageBus extends AbstractMessageService {
 	public import(object: { messages?: { type: string, target?: string | null, attrs?: {} }[] }): Packet {
 		const packet = this.createPacket();
 		new Collection(object.messages || []).each(item => {
-			packet.message(this.createMessage(item.type, item.target || null, item.attrs || null));
+			packet.message(new Message(item.type, item.target || null, item.attrs || null));
 		});
 		return packet;
 	}

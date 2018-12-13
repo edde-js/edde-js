@@ -29,39 +29,6 @@ export class StateManager {
 		return this.states.ensure(name.toString(), () => new State(name.toString()));
 	}
 
-	/**
-	 * register a random state
-	 */
-	public random(): State {
-		return this.state(this.uuidGenerator.uuid4());
-	}
-
-	/**
-	 * when a required state does not exist, an error is thrown
-	 *
-	 * @param name
-	 */
-	public require(name: ToString): State {
-		return this.states.require(name.toString(), `Requested unknown state [${name.toString()}].`);
-	}
-
-	/**
-	 * request a state and return temporary state; when a new state will be available, update will be executed
-	 *
-	 * @param name
-	 * @param service
-	 * @param attrs
-	 */
-	public request(name: ToString, service: ToString, attrs: {} | null = null): State {
-		this.messagePortal.send(this.messageBus.createMessage(service.toString(), 'state', attrs));
-		return this.state(name);
-	}
-
-	public push(states: Object): StateManager {
-		new HashMap(<any>states).each((name, state) => this.state(name).push(state));
-		return this;
-	}
-
 	public patch(states: Object): StateManager {
 		new HashMap(<any>states).each((name, state) => this.state(name).patch(state));
 		return this;

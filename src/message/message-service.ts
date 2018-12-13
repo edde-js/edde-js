@@ -1,7 +1,6 @@
 import {IMessageService} from "./types";
 import {Message} from "./message";
 import {Packet} from "./packet";
-import {HashMap} from "../collection";
 import {GetString, Strings} from "../utils";
 
 export abstract class AbstractMessageService implements IMessageService {
@@ -12,13 +11,5 @@ export abstract class AbstractMessageService implements IMessageService {
 		}
 		(<any>this)[method].call(this, message, packet);
 		return this;
-	}
-
-	public createMessage(type: string, target: string | null, attrs: {} | null = null): Message {
-		return new Message({
-			type,
-			target,
-			attrs: new HashMap(<any>attrs)
-		});
 	}
 }
