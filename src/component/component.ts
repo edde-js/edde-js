@@ -111,6 +111,7 @@ export class Component {
 	 */
 	public wakeup(): Component {
 		this.subscribe();
+		this.onWakeup();
 		return this;
 	}
 
@@ -120,6 +121,7 @@ export class Component {
 	 */
 	public sleep(): Component {
 		this.unsubscribe();
+		this.onSleep();
 		return this;
 	}
 
@@ -149,5 +151,11 @@ export class Component {
 
 	protected onRender(): Html {
 		return this.root;
+	}
+
+	protected onWakeup(): void {
+	}
+
+	protected onSleep(): void {
 	}
 }
