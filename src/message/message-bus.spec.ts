@@ -10,7 +10,7 @@ import {AbstractMessageService} from "./message-service";
 @ToString('foo.bar.some-message-service')
 class SomeMessageService extends AbstractMessageService {
 	public onStateMessage(message: Message, packet: Packet): IMessageService {
-		packet.message(this.createMessage('nope', 'hovno', {'foo': 'bar'}));
+		packet.message(this.createMessage('hovno', 'nope', {'foo': 'bar'}));
 		return this;
 	}
 }
@@ -20,28 +20,24 @@ test('Message: Unknown service', test => {
 	const messageBus = container.create<MessageBus>(MessageBus);
 	test.throws(() => {
 		messageBus.packet(messageBus.import({
-			uuid: '1',
 			messages: [
 				{
-					service: 'kaboom',
 					type: 'foo',
-					uuid: '2'
+					target: 'kaboom',
 				}
 			]
 		}));
-	}, error => error.message === 'Requested unknown factory [message-bus.common-message-service].');
+	}, error => error.message === 'Cannot resolve any message service for message type [foo]. Please register one message service of [kaboom, message-bus.foo-message-service, message-bus.common-message-service] to Container.');
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()
 		.register(SomeMessageService, Make.service(SomeMessageService));
 	const messageBus = container.create<MessageBus>(MessageBus);
 	const response = messageBus.packet(messageBus.import({
-		uuid: '1',
 		messages: [
 			{
-				service: 'foo.bar.some-message-service',
 				type: 'state',
-				uuid: '2'
+				target: 'foo.bar.some-message-service',
 			}
 		]
 	}));

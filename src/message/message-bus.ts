@@ -45,10 +45,10 @@ export class MessageBus extends AbstractMessageService {
 		return this;
 	}
 
-	public import(object: { messages?: { type: string, target: string | null, attrs?: {} }[] }): Packet {
+	public import(object: { messages?: { type: string, target?: string | null, attrs?: {} }[] }): Packet {
 		const packet = this.createPacket();
 		new Collection(object.messages || []).each(item => {
-			packet.message(this.createMessage(item.type, item.target, item.attrs));
+			packet.message(this.createMessage(item.type, item.target || null, item.attrs || null));
 		});
 		return packet;
 	}
