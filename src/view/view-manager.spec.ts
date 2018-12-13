@@ -2,7 +2,7 @@ import test from "ava";
 import {ContainerFactory, Make} from "../container";
 import {ViewManager} from "./view-manager";
 import {EventBus} from "../event";
-import {DeadRouteEvent, MountViewEvent} from "./events";
+import {DeadRouteEvent, MountViewEvent, RefreshViewEvent} from "./events";
 import {AbstractView} from "./view";
 import {GetString, ToString} from "../utils";
 import {IView} from "./types";
@@ -33,6 +33,7 @@ test('ViewManager: Common Events', test => {
 	let deadEvent = null;
 	let routedView = null;
 	let routedPath = null;
+	let refresh = null;
 	eventBus.listener(DeadRouteEvent).add((event: DeadRouteEvent) => {
 		deadEvent = event.getPath();
 	});
@@ -40,16 +41,26 @@ test('ViewManager: Common Events', test => {
 		routedView = event.getView();
 		routedPath = event.getPath();
 	});
+	eventBus.listener(RefreshViewEvent).add((event: RefreshViewEvent) => {
+		refresh = event.getView();
+	});
 	viewManager.routeTo('nope');
 	test.is(deadEvent, 'nope');
 	const view = viewManager.routeTo('/path');
 	test.is(routedView, view);
 	test.is(routedPath, '/path');
 	test.truthy(view);
+	test.is(view, viewManager.routeTo('/path'));
+	test.is(refresh, view);
 	test.is(GetString(<IView>view), 'boo');
 	test.truthy((<any>view).root);
 	test.truthy((<any>view).root.getElement().parentElement);
 	test.is(runtime.require('main').getElement(), runtime.require('main').getElement());
 	test.is((<Html>(<any>view).root).getElement().outerHTML, '<div class="prdel"></div>');
 	test.is(runtime.require('body').getElement().outerHTML, '<body><main><div class="prdel"></div></main></body>');
+});
+test('View: Types', test => {
+	test.false(IView.canHandle('/'));
+	test.truthy(IView.mount());
+	test.truthy(IView.umount());
 });
