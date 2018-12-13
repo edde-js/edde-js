@@ -2,11 +2,9 @@ import {AbstractMessageService} from "./message-service";
 import {Message} from "./message";
 import {IMessageService} from "./types";
 import {ToString} from "../utils";
-import {Collection} from "../collection";
 import {ReactorManager} from "../reactor";
 import {Inject} from "../container";
 import {MessagePortal} from "./message-portal";
-import {Messages} from "./messages";
 
 @ToString('message-bus.collection-message-service')
 export class CollectionMessageService extends AbstractMessageService {
@@ -17,14 +15,9 @@ export class CollectionMessageService extends AbstractMessageService {
 
 	public onCollectionMessage(message: Message): IMessageService {
 		const target = message.getTarget();
-		new Collection<string>(message.getAttrs().require('collection')).each(uuid => {
-			if (this.reactorManager.has(uuid)) {
-				return;
-			}
-			this.messagePortal.send(Messages.select(target, {
-				'uuid': uuid,
-			}));
-		});
+		this.messagePortal.send(new Message('list', target, {
+			'list': message.getAttrs().require('collection'),
+		}));
 		return this;
 	}
 }
