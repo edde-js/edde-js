@@ -101,9 +101,9 @@ export class Component {
 	 * called when a component should be ready to use
 	 */
 	public wakeup(): Component {
+		this.onWakeup();
 		this.subscribe();
 		this.root.removeClass('is-hidden');
-		this.onWakeup();
 		return this;
 	}
 
@@ -112,9 +112,9 @@ export class Component {
 	 * component no longer registers any events (include state changes)
 	 */
 	public sleep(): Component {
+		this.onSleep();
 		this.unsubscribe();
 		this.root.addClass('is-hidden');
-		this.onSleep();
 		return this;
 	}
 
