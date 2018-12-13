@@ -3,7 +3,7 @@ import {State} from "./state";
 import {ToString} from "../utils";
 import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
-import {MessageBus, MessagePortal, Messages} from "../message";
+import {MessageBus, MessagePortal} from "../message";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
@@ -27,39 +27,6 @@ export class StateManager {
 	 */
 	public state(name: ToString): State {
 		return this.states.ensure(name.toString(), () => new State(name.toString()));
-	}
-
-	/**
-	 * register a random state
-	 */
-	public random(): State {
-		return this.state(this.uuidGenerator.uuid4());
-	}
-
-	/**
-	 * when a required state does not exist, an error is thrown
-	 *
-	 * @param name
-	 */
-	public require(name: ToString): State {
-		return this.states.require(name.toString(), `Requested unknown state [${name.toString()}].`);
-	}
-
-	/**
-	 * request a state and return temporary state; when a new state will be available, update will be executed
-	 *
-	 * @param name
-	 * @param target
-	 * @param attrs
-	 */
-	public request(name: ToString, target: ToString, attrs: {} | null = null): State {
-		this.messagePortal.send(Messages.state(target.toString(), attrs));
-		return this.state(name);
-	}
-
-	public push(states: Object): StateManager {
-		new HashMap(<any>states).each((name, state) => this.state(name).push(state));
-		return this;
 	}
 
 	public patch(states: Object): StateManager {
