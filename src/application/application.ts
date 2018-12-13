@@ -16,7 +16,7 @@ export class Application {
 	@Inject(Container)
 	protected container: Container;
 	@Inject(ReactorManager)
-	protected stateManager: ReactorManager;
+	protected reactorManager: ReactorManager;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
 	@Inject(ViewManager)
@@ -46,7 +46,7 @@ export class Application {
 		this.onStartup();
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
-		this.stateManager.patch(states);
+		this.reactorManager.patch(states);
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

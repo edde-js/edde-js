@@ -9,13 +9,13 @@ import {IMessageService} from "./types";
 @ToString('message-bus.state-message-service')
 export class StateMessageService extends AbstractMessageService {
 	@Inject(ReactorManager)
-	protected stateManager: ReactorManager;
+	protected reactorManager: ReactorManager;
 
 	public onStateMessage(message: Message, packet: Packet): IMessageService {
 		if (message.hasTarget()) {
 			const patch: any = {};
 			patch[<string>message.getTarget()] = message.getAttrs().toObject();
-			this.stateManager.patch(patch);
+			this.reactorManager.patch(patch);
 		}
 		return this;
 	}

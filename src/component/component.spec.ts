@@ -29,13 +29,13 @@ class SomeComponent extends Component {
 
 test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<ReactorManager>(ReactorManager);
+	const reactorManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.reactor(SomeComponent),
-		'bar': stateManager.reactor('bar')
+		'default': reactorManager.reactor(SomeComponent),
+		'bar': reactorManager.reactor('bar')
 	});
-	stateManager.patch({
+	reactorManager.patch({
 		[<any>SomeComponent]: {
 			'foo': 'yep!'
 		},
@@ -48,15 +48,15 @@ test('Component: Subscribe', test => {
 });
 test('Component: Forget', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<ReactorManager>(ReactorManager);
+	const reactorManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.reactor(SomeComponent),
+		'default': reactorManager.reactor(SomeComponent),
 	});
 	component.register({
-		'_': stateManager.reactor(SomeComponent),
+		'default': reactorManager.reactor(SomeComponent),
 	});
-	stateManager.patch({
+	reactorManager.patch({
 		[<any>SomeComponent]: {
 			'count': true
 		},

@@ -1,12 +1,12 @@
 export type ReactProperty = {
 	property: string,
 	handler: string,
-	state: string,
+	reactor: string,
 };
 export const REACT_PROPERTY = '::reacts';
 export type ReactObject = { [REACT_PROPERTY]: ReactProperty[] };
 
-export function React(property: string, state: string = '_') {
+export function React(property: string, reactor: string = '_') {
 	return function (target: any, handler: string) {
 		const object: ReactObject = target;
 		if (!Object.getOwnPropertyDescriptor(object, REACT_PROPERTY)) {
@@ -17,7 +17,7 @@ export function React(property: string, state: string = '_') {
 		object[REACT_PROPERTY].push({
 			property,
 			handler,
-			state,
+			reactor,
 		});
 	}
 }

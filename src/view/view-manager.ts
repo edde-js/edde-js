@@ -13,7 +13,7 @@ export class ViewManager {
 	@Inject(EventBus)
 	protected eventBus: EventBus;
 	@Inject(ReactorManager)
-	protected stateManager: ReactorManager;
+	protected reactorManager: ReactorManager;
 	protected views: HashMap<IView>;
 	protected current: IView;
 
@@ -50,7 +50,7 @@ export class ViewManager {
 		this.current = view;
 		this.current.mount();
 		this.eventBus.emit(new MountViewEvent(this.current, path));
-		this.stateManager.update();
+		this.reactorManager.update();
 		return this.current;
 	}
 
