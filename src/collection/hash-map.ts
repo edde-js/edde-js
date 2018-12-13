@@ -8,8 +8,8 @@ import {HashMapKey, HasMapCallback, LoopContext} from "./types";
 export class HashMap<T> {
 	protected hashMap: { [index: string]: T };
 
-	public constructor(hashMap: { [index: string]: T } = {}) {
-		this.hashMap = hashMap;
+	public constructor(hashMap: { [index: string]: T } | null = null) {
+		this.hashMap = hashMap || {};
 	}
 
 	/**

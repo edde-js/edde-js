@@ -3,7 +3,7 @@ import {State} from "./state";
 import {ToString} from "../utils";
 import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
-import {MessageBus, MessagePortal} from "../message";
+import {MessageBus, MessagePortal, Messages} from "../message";
 
 @ToString('edde-js/state/state-manager')
 export class StateManager {
@@ -49,11 +49,11 @@ export class StateManager {
 	 * request a state and return temporary state; when a new state will be available, update will be executed
 	 *
 	 * @param name
-	 * @param service
+	 * @param target
 	 * @param attrs
 	 */
-	public request(name: ToString, service: ToString, attrs: {} | null = null): State {
-		this.messagePortal.send(this.messageBus.createMessage(service.toString(), 'state', attrs));
+	public request(name: ToString, target: ToString, attrs: {} | null = null): State {
+		this.messagePortal.send(Messages.state(target.toString(), attrs));
 		return this.state(name);
 	}
 

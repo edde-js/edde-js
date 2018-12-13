@@ -3,8 +3,12 @@ import {HashMap} from "../collection";
 export class Message {
 	protected message: HashMap<any>;
 
-	public constructor(message: Object) {
-		this.message = new HashMap(message);
+	public constructor(type: string, target: string | null = null, attrs: {} | null = null) {
+		this.message = new HashMap({
+			type,
+			target,
+			attrs: new HashMap(attrs),
+		});
 	}
 
 	public getType(): string {
