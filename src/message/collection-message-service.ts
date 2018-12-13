@@ -18,6 +18,7 @@ export class CollectionMessageService extends AbstractMessageService {
 		this.messagePortal.send(new Message('list', target, {
 			'list': message.getAttrs().require('collection'),
 		}));
+		this.reactorManager.reactor(<string>target).patch(message.getAttrs().toObject());
 		return this;
 	}
 }
