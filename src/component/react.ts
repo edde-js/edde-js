@@ -6,7 +6,7 @@ export type ReactProperty = {
 export const REACT_PROPERTY = '::reacts';
 export type ReactObject = { [REACT_PROPERTY]: ReactProperty[] };
 
-export function React(property: string, reactor: string = '_') {
+export function React(property: string, reactor: string = 'default') {
 	return function (target: any, handler: string) {
 		const object: ReactObject = target;
 		if (!Object.getOwnPropertyDescriptor(object, REACT_PROPERTY)) {
