@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {Reactor, StateManager, States} from "../reactor";
+import {Reactor, ReactorManager, States} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
 
@@ -12,8 +12,8 @@ export class Component {
 	protected container: Container;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
-	@Inject(StateManager)
-	protected stateManager: StateManager;
+	@Inject(ReactorManager)
+	protected stateManager: ReactorManager;
 	protected components: Collection<Component>;
 	protected states: HashMap<Reactor>;
 	protected root: Html;

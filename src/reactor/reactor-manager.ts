@@ -5,7 +5,7 @@ import {Inject} from "../container";
 import {MessageBus, MessagePortal} from "../message";
 
 @ToString('edde-js/reactor/reactor-manager')
-export class StateManager {
+export class ReactorManager {
 	@Inject(MessagePortal)
 	protected messagePortal: MessagePortal;
 	@Inject(MessageBus)
@@ -26,12 +26,12 @@ export class StateManager {
 		return this.reactors.ensure(name.toString(), () => new Reactor(name.toString()));
 	}
 
-	public patch(states: Object): StateManager {
+	public patch(states: Object): ReactorManager {
 		new HashMap(<any>states).each((name, state) => this.reactor(name).patch(state));
 		return this;
 	}
 
-	public update(): StateManager {
+	public update(): ReactorManager {
 		this.reactors.each((_, state) => state.update());
 		return this;
 	}

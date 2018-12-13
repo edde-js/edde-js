@@ -1,3 +1,3 @@
 export * from "./types";
 export * from "./reactor";
-export * from "./state-manager";
+export * from "./reactor-manager";

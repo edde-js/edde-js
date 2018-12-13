@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {StateManager} from "../reactor";
+import {ReactorManager} from "../reactor";
 
 /**
  * Covers basic stuff related to an application.
@@ -15,8 +15,8 @@ import {StateManager} from "../reactor";
 export class Application {
 	@Inject(Container)
 	protected container: Container;
-	@Inject(StateManager)
-	protected stateManager: StateManager;
+	@Inject(ReactorManager)
+	protected stateManager: ReactorManager;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
 	@Inject(ViewManager)

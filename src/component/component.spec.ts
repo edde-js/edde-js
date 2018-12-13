@@ -1,6 +1,6 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {StateManager} from "../reactor";
+import {ReactorManager} from "../reactor";
 import {Component} from "./component";
 import {ToString} from "../utils";
 import {React} from "./react";
@@ -29,7 +29,7 @@ class SomeComponent extends Component {
 
 test('Component: Subscribe', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<StateManager>(StateManager);
+	const stateManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
 		'_': stateManager.reactor(SomeComponent),
@@ -48,7 +48,7 @@ test('Component: Subscribe', test => {
 });
 test('Component: Forget', test => {
 	const container = ContainerFactory.container();
-	const stateManager = container.create<StateManager>(StateManager);
+	const stateManager = container.create<ReactorManager>(ReactorManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
 		'_': stateManager.reactor(SomeComponent),
