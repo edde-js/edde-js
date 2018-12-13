@@ -8,10 +8,10 @@ test('ViewManager: Common Events', test => {
 	const container = ContainerFactory.container();
 	const viewManager = container.create<ViewManager>(ViewManager);
 	const eventBus = container.create<EventBus>(EventBus);
-	let deadEvent = false;
-	eventBus.listener(DeadRouteEvent).add(event => {
-		deadEvent = true;
+	let deadEvent = null;
+	eventBus.listener(DeadRouteEvent).add((event: DeadRouteEvent) => {
+		deadEvent = event.getPath();
 	});
 	viewManager.routeTo('nope');
-	test.true(deadEvent);
+	test.is(deadEvent, 'nope');
 });
