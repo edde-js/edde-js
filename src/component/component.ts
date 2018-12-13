@@ -102,6 +102,7 @@ export class Component {
 	 */
 	public wakeup(): Component {
 		this.subscribe();
+		this.root.removeClass('is-hidden');
 		this.onWakeup();
 		return this;
 	}
@@ -112,6 +113,7 @@ export class Component {
 	 */
 	public sleep(): Component {
 		this.unsubscribe();
+		this.root.addClass('is-hidden');
 		this.onSleep();
 		return this;
 	}
