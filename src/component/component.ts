@@ -5,8 +5,7 @@ import {GetString, Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
 import {State, StateManager, States} from "../state";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
-import {SUBSCRIBE_PROPERTY, SubscribeObject} from "./subscribe";
-import {React, REACT_PROPERTY, ReactProperty} from "./react";
+import {REACT_PROPERTY, ReactProperty} from "./react";
 
 export class Component {
 	@Inject(Container)
@@ -15,19 +14,17 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(StateManager)
 	protected stateManager: StateManager;
-	protected root: Html;
+	protected components: Collection<Component>;
 	protected states: HashMap<State>;
 	protected binds: HashMap<string>;
 	protected mounts: HashMap<Html>;
+	protected root: Html;
 
 	public constructor() {
+		this.components = new Collection();
 		this.states = new HashMap();
 		this.binds = new HashMap();
 		this.mounts = new HashMap();
-	}
-
-	protected init() {
-		this.register({'_': this.stateManager.random()});
 	}
 
 	public render(): Html {
@@ -36,11 +33,8 @@ export class Component {
 		};
 		this.root = this.templateManager.render(GetString(this));
 		this.resolveBinds();
-		this.resolveMounts();
-		this.resolveLinks();
 		this.resolveComponents();
 		this.resolveNatives();
-		this.resolveSubscribes();
 		return this.root = this.onRender();
 	}
 
@@ -85,24 +79,6 @@ export class Component {
 		return !!this.root;
 	}
 
-	public show(): Component {
-		this.state().set('visible', true);
-		return this;
-	}
-
-	/**
-	 * just hide a view, no DOM tree manipulation should be done here
-	 */
-	public hide(): Component {
-		this.state().set('visible', false);
-		return this;
-	}
-
-	@React('visible')
-	public stateVisible(visible: boolean) {
-		this.root.toggleClass('is-hidden', !visible);
-	}
-
 	public subscribe(): Component {
 		new Collection((<any>this)[REACT_PROPERTY]).each((reactProperty: ReactProperty) => {
 			if (this.states.has(reactProperty.state)) {
@@ -122,36 +98,11 @@ export class Component {
 	}
 
 	/**
-	 * resolve bound components; they're prepared into an array later used by component() method for component creation;
-	 * components are not directly created as a component instance is used per rendered template
+	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveBinds(): void {
 		this.root.selectorCollection('[data-bind]').each(html => {
-			this.binds.set(
-				html.rattr('data-bind'),
-				html.rattr('data-component', 'Missing required attribute [data-component]; use it to declare component name to be used for binding.')
-			);
-			html.remove();
-		});
-	}
-
-	/**
-	 * mounts are pieces of DOM elements mounted to this component; that means mounted elements could be accessed through "mounts" hashmap
-	 */
-	protected resolveMounts(): void {
-		this.root.selectorCollection('[data-mount]').each(html => {
-			this.mounts.set(html.rattr('data-mount'), html);
-			html.removeAttr('data-mount');
-		});
-	}
-
-	/**
-	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
-	 */
-	protected resolveLinks(): void {
-		this.root.selectorCollection('[data-link]').each(html => {
-			(<any>this)[Strings.toCamelCase(html.rattr('data-link'))] = html;
-			html.removeAttr('data-link');
+			(<any>this)[Strings.toCamelCase(html.rattr('data-bind'))] = html.removeAttr('data-bind');
 		});
 	}
 
@@ -160,29 +111,13 @@ export class Component {
 	 */
 	protected resolveComponents(): void {
 		this.root.selectorCollection('[data-component]').each(html => {
-			const component = this.container.create<Component>(html.rattr('data-component'));
-			let state = html.attr('data-state');
-			switch (state) {
-				case '$':
-					state = GetString(component);
-			}
-			if (state) {
-				component.register({'_': this.stateManager.request(state, state)});
-			}
-			html.replaceBy(component.render());
+			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component'))).render());
 		});
-		this.update();
 	}
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
 			(nativeProperty.callback ? nativeProperty.callback(this) : this.root).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
-		});
-	}
-
-	protected resolveSubscribes(): void {
-		new Collection((<SubscribeObject><unknown>this)[SUBSCRIBE_PROPERTY]).each(subscribeProperty => {
-			this.stateManager.state(subscribeProperty.state).subscribe(subscribeProperty.property, (<any>this)[subscribeProperty.handler].bind(this));
 		});
 	}
 
