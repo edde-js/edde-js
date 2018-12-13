@@ -33,7 +33,7 @@ export class MessageBus extends AbstractMessageService {
 		if (loop.cancelled) {
 			return <IMessageService><unknown>service;
 		}
-		throw new Error(`Cannot resolve any message service for message type [${message.getType()}]. Please register one message service of [${resolve.join(', ')}] to Container.`);
+		throw new Error(`Cannot resolve message service for message type [${message.getType()}]. Please register one message service of [${resolve.join(', ')}] to Container.`);
 	}
 
 	public createPacket(): Packet {

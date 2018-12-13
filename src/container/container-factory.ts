@@ -9,6 +9,7 @@ import {TemplateManager} from "../template";
 import {ReactorManager} from "../reactor";
 import {UuidGenerator} from "../crypto";
 import {CollectionMessageService, MessageBus, MessagePortal, StateMessageService} from "../message";
+import {StatesMessageService} from "../message/states-message-service";
 
 /**
  * Creates container with common services used in edde-js.
@@ -51,6 +52,7 @@ export class ContainerFactory {
 			.register(MessagePortal, Make.service(MessagePortal))
 			.register(StateMessageService, Make.service(StateMessageService))
 			.register(CollectionMessageService, Make.service(CollectionMessageService))
+			.register(StatesMessageService, Make.service(StatesMessageService))
 			.register(Runtime, Make.singleton(() => {
 				return new Runtime(window);
 			}))

@@ -27,7 +27,7 @@ test('Message: Unknown service', test => {
 				}
 			]
 		}));
-	}, error => error.message === 'Cannot resolve any message service for message type [foo]. Please register one message service of [kaboom, message-bus.foo-message-service, message-bus.common-message-service] to Container.');
+	}, error => error.message === 'Cannot resolve message service for message type [foo]. Please register one message service of [kaboom, message-bus.foo-message-service, message-bus.common-message-service] to Container.');
 });
 test('Message: Common', test => {
 	const container = ContainerFactory.container()
