@@ -1,41 +1,38 @@
 import {HashMap} from "../collection";
-import {State} from "./state";
+import {Reactor} from "./reactor";
 import {ToString} from "../utils";
-import {UuidGenerator} from "../crypto";
 import {Inject} from "../container";
 import {MessageBus, MessagePortal} from "../message";
 
-@ToString('edde-js/state/state-manager')
+@ToString('edde-js/reactor/reactor-manager')
 export class StateManager {
-	@Inject(UuidGenerator)
-	protected uuidGenerator: UuidGenerator;
 	@Inject(MessagePortal)
 	protected messagePortal: MessagePortal;
 	@Inject(MessageBus)
 	protected messageBus: MessageBus;
-	protected states: HashMap<State>;
+	protected reactors: HashMap<Reactor>;
 
 	public constructor() {
-		this.states = new HashMap();
+		this.reactors = new HashMap();
 	}
 
 	/**
-	 * return a state; it does not exist, new one is created and
+	 * return a reactor; it does not exist, new one is created and
 	 * set under the given name
 	 *
 	 * @param name
 	 */
-	public state(name: ToString): State {
-		return this.states.ensure(name.toString(), () => new State(name.toString()));
+	public reactor(name: ToString): Reactor {
+		return this.reactors.ensure(name.toString(), () => new Reactor(name.toString()));
 	}
 
 	public patch(states: Object): StateManager {
-		new HashMap(<any>states).each((name, state) => this.state(name).patch(state));
+		new HashMap(<any>states).each((name, state) => this.reactor(name).patch(state));
 		return this;
 	}
 
 	public update(): StateManager {
-		this.states.each((_, state) => state.update());
+		this.reactors.each((_, state) => state.update());
 		return this;
 	}
 
@@ -44,7 +41,7 @@ export class StateManager {
 	 */
 	public export(): { [index: string]: {} } {
 		const object: { [index: string]: {} } = {};
-		this.states.each((name, state) => object[name] = state.toObject());
+		this.reactors.each((name, reactor) => object[name] = reactor.toObject());
 		return object;
 	}
 }

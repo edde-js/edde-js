@@ -8,7 +8,7 @@ export * from "./event";
 export * from "./history";
 export * from "./message";
 export * from "./runtime";
-export * from "./state";
+export * from "./reactor";
 export * from "./template";
 export * from "./utils";
 export * from "./view";

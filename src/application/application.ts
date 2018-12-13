@@ -4,7 +4,7 @@ import {ViewManager} from "../view/view-manager";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {StateManager} from "../state";
+import {StateManager} from "../reactor";
 
 /**
  * Covers basic stuff related to an application.

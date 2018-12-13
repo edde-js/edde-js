@@ -1,6 +1,6 @@
 import test from "ava";
 import {ContainerFactory} from "../container";
-import {StateManager} from "../state";
+import {StateManager} from "../reactor";
 import {Component} from "./component";
 import {ToString} from "../utils";
 import {React} from "./react";
@@ -32,8 +32,8 @@ test('Component: Subscribe', test => {
 	const stateManager = container.create<StateManager>(StateManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.state(SomeComponent),
-		'bar': stateManager.state('bar')
+		'_': stateManager.reactor(SomeComponent),
+		'bar': stateManager.reactor('bar')
 	});
 	stateManager.patch({
 		[<any>SomeComponent]: {
@@ -51,10 +51,10 @@ test('Component: Forget', test => {
 	const stateManager = container.create<StateManager>(StateManager);
 	const component = container.autowire(new SomeComponent());
 	component.register({
-		'_': stateManager.state(SomeComponent),
+		'_': stateManager.reactor(SomeComponent),
 	});
 	component.register({
-		'_': stateManager.state(SomeComponent),
+		'_': stateManager.reactor(SomeComponent),
 	});
 	stateManager.patch({
 		[<any>SomeComponent]: {

@@ -3,7 +3,7 @@ import {Container, Inject} from "../container";
 import {TemplateManager} from "../template";
 import {GetString, Strings, ToString} from "../utils";
 import {Collection, HashMap} from "../collection";
-import {State, StateManager, States} from "../state";
+import {Reactor, StateManager, States} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
 
@@ -15,7 +15,7 @@ export class Component {
 	@Inject(StateManager)
 	protected stateManager: StateManager;
 	protected components: Collection<Component>;
-	protected states: HashMap<State>;
+	protected states: HashMap<Reactor>;
 	protected root: Html;
 
 	public constructor() {
@@ -51,13 +51,13 @@ export class Component {
 	 *
 	 * @param states
 	 */
-	public update(states: { [index: string]: State } = {}): Component {
+	public update(states: { [index: string]: Reactor } = {}): Component {
 		this.register(states);
 		this.states.each((_, state) => state.update());
 		return this;
 	}
 
-	public state(name: string = 'default'): State {
+	public state(name: string = 'default'): Reactor {
 		return this.states.require(name, `Requested unknown state [${name}] on component [${GetString(this)}].`);
 	}
 

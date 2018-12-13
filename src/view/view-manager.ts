@@ -4,7 +4,7 @@ import {Container, Inject} from "../container";
 import {HashMap} from "../collection";
 import {EventBus} from "../event";
 import {DeadRouteEvent, MountViewEvent, RefreshViewEvent, UmountViewEvent} from "./events";
-import {StateManager} from "../state";
+import {StateManager} from "../reactor";
 
 @ToString('edde-js/view/view-manager')
 export class ViewManager {

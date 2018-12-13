@@ -6,7 +6,7 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view/view-manager";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {StateManager} from "../state";
+import {StateManager} from "../reactor";
 import {UuidGenerator} from "../crypto";
 import {MessageBus, MessagePortal, StateMessageService} from "../message";
 
