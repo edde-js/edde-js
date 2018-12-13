@@ -1,21 +1,30 @@
 import {AbstractMessageService} from "./message-service";
 import {Message} from "./message";
-import {Packet} from "./packet";
 import {IMessageService} from "./types";
 import {ToString} from "../utils";
 import {Inject} from "../container";
+import {MessagePortal} from "./message-portal";
+import {Collection} from "../collection";
+import {Messages} from "./messages";
 import {ReactorManager} from "../reactor";
 
 @ToString('message-bus.collection-message-service')
 export class CollectionMessageService extends AbstractMessageService {
 	@Inject(ReactorManager)
 	protected reactorManager: ReactorManager;
+	@Inject(MessagePortal)
+	protected messagePortal: MessagePortal;
 
-	public onCollectionMessage(message: Message, packet: Packet): IMessageService {
-		console.log('state collection', message);
-//		const patch: any = {};
-//		patch[<string>message.getTarget()] = message.getAttrs().toObject();
-//		this.stateManager.patch(patch);
+	public onCollectionMessage(message: Message): IMessageService {
+		const target = message.getTarget();
+		new Collection<string>(message.getAttrs().require('collection')).each(uuid => {
+			if (this.reactorManager.has(uuid)) {
+				return;
+			}
+			this.messagePortal.send(Messages.select(target, {
+				'uuid': uuid,
+			}));
+		});
 		return this;
 	}
 }

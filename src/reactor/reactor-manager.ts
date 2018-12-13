@@ -16,6 +16,10 @@ export class ReactorManager {
 		this.reactors = new HashMap();
 	}
 
+	public has(name: ToString): boolean {
+		return this.reactors.has(name.toString());
+	}
+
 	/**
 	 * return a reactor; it does not exist, new one is created and
 	 * set under the given name
