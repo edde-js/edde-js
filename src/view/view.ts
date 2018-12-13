@@ -9,11 +9,13 @@ export abstract class AbstractView extends Component implements IView {
 
 	protected onMount(): IView {
 		this.components.each(component => component.wakeup());
+		this.root.removeClass('is-hidden');
 		return this;
 	}
 
 	protected onUmount(): IView {
 		this.components.each(component => component.sleep());
+		this.root.addClass('is-hidden');
 		return this;
 	}
 

@@ -9,6 +9,7 @@ import {IView} from "./types";
 import {Runtime} from "../runtime";
 import {JSDOM} from "jsdom";
 import {TemplateManager} from "../template";
+import {Html} from "../dom";
 
 @ToString('boo')
 class SomeView extends AbstractView {
@@ -23,7 +24,7 @@ test('ViewManager: Common Events', test => {
 	const eventBus = container.create<EventBus>(EventBus);
 	const templateManager = container.create<TemplateManager>(TemplateManager);
 	container.register(Runtime, function () {
-		return new Runtime(new JSDOM('<body><div data-template="boo"></div><main></main></body>').window);
+		return new Runtime(new JSDOM('<body><div class="prdel is-hidden" data-template="boo"></div><main></main></body>').window);
 	});
 	const runtime = container.create<Runtime>(Runtime);
 	templateManager.bind(runtime.html());
@@ -38,4 +39,7 @@ test('ViewManager: Common Events', test => {
 	const view = viewManager.routeTo('/path');
 	test.truthy(view);
 	test.is(GetString(<IView>view), 'boo');
+	test.truthy((<any>view).root);
+	test.is((<Html>(<any>view).root).getElement().outerHTML, '<div class="prdel"></div>');
+	test.is(runtime.require('body').getElement().outerHTML, '<body><main><div class="prdel"></div></main></body>');
 });
