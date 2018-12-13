@@ -19,12 +19,4 @@ export class StateMessageService extends AbstractMessageService {
 		}
 		return this;
 	}
-
-	public onCollectionMessage(message: Message, packet: Packet): IMessageService {
-		console.log('state collection', message);
-//		const patch: any = {};
-//		patch[<string>message.getTarget()] = message.getAttrs().toObject();
-//		this.stateManager.patch(patch);
-		return this;
-	}
 }

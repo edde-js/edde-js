@@ -7,7 +7,7 @@ export class Message {
 		this.message = new HashMap({
 			type,
 			target,
-			attrs: new HashMap(attrs),
+			attrs,
 		});
 	}
 
@@ -24,14 +24,10 @@ export class Message {
 	}
 
 	public getAttrs(): HashMap<any> {
-		return this.message.ensure('attrs', () => new HashMap);
+		return new HashMap(this.message.get('attrs', () => new Object()));
 	}
 
 	public export(): Object {
-		return {
-			type: this.getType(),
-			target: this.getTarget(),
-			attrs: this.getAttrs().toObject()
-		};
+		return this.message.toObject();
 	}
 }

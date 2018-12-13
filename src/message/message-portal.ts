@@ -60,7 +60,7 @@ export class MessagePortal {
 						xmlHttpRequest.setRequestHeader('Accept', 'application/json');
 						timeoutId = setTimeout(() => {
 							xmlHttpRequest.abort();
-						}, this.config.timeout);
+						}, this.config.timeout * 1000);
 						break;
 					/**
 					 * HEADERS_RECEIVED
@@ -98,7 +98,7 @@ export class MessagePortal {
 						break;
 				}
 			};
-			xmlHttpRequest.open('POST', this.config.url, false);
+			xmlHttpRequest.open('POST', this.config.url, true);
 			xmlHttpRequest.send(content);
 		} catch (e) {
 			throw e;
