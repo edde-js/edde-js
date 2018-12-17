@@ -126,4 +126,5 @@ test('Component: Scope', test => {
 	const component: SomeComponent = container.autowire(new SomeComponent());
 	test.is('<div class="yapee"><span>foo</span><div class="yahoo"><span>not so much important stuff here!</span></div></div>', component.render().getElement().outerHTML);
 	test.truthy(component.anotherComponent);
+	test.is(component, component.anotherComponent.root());
 });
