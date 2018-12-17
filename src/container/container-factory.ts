@@ -1,6 +1,6 @@
 import {Container} from "./container";
 import {Make} from "./make";
-import {EventBus} from "../event";
+import {EventBus, EventManager} from "../event";
 import {Runtime} from "../runtime";
 import {HistoryService} from "../history";
 import {ViewManager} from "../view";
@@ -42,7 +42,10 @@ export class ContainerFactory {
 		return container
 			.register(Container, Make.instance(container))
 			.register(Application, Make.service(Application))
-			.register(EventBus, Make.service(EventBus))
+			.register(EventManager, Make.service(EventManager))
+			.register(EventBus, Make.singleton(container => {
+				return container.create<EventManager>(EventManager).scope('global');
+			}))
 			.register(HistoryService, Make.subscriber(HistoryService))
 			.register(ViewManager, Make.subscriber(ViewManager))
 			.register(TemplateManager, Make.service(TemplateManager))

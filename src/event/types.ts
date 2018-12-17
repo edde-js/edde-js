@@ -19,20 +19,3 @@ export type EventListener<T extends IEvent> = {
 	context: Object | null;
 	cancellable: boolean;
 };
-/**
- * listener property descriptor; used for event registration
- */
-export type ListenerProperty = {
-	event: ToString;
-	handler: string;
-	weight: number;
-	context: Object | null;
-	cancellable: boolean;
-};
-/**
- * just formal type for listener object to keep "magic" property
- * typed
- */
-export type ListenerObject = {
-	'::listeners': ListenerProperty[];
-};

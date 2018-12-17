@@ -6,6 +6,10 @@ import {Collection, HashMap} from "../collection";
 import {Reactor, ReactorManager, Reactors} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
+import {EventBus, EventManager} from "../event";
+import {SCOPED_EVENT_PROPERTY, ScopedEventObject} from "./scoped-event";
+
+export type ParentComponent = Component | null;
 
 export class Component {
 	@Inject(Container)
@@ -14,24 +18,32 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(ReactorManager)
 	protected reactorManager: ReactorManager;
+	protected parentComponent: ParentComponent;
 	protected components: Collection<Component>;
 	protected reactors: HashMap<Reactor>;
-	protected root: Html;
+	protected eventManager: EventManager;
+	protected html: Html;
 
 	public constructor() {
 		this.components = new Collection();
 		this.reactors = new HashMap();
 	}
 
+	public parent(parent: ParentComponent): Component {
+		this.parentComponent = parent;
+		return this;
+	}
+
 	public render(): Html {
 		this.render = () => {
 			throw new Error(`Cannot render component [${GetString(this)}] multiple times; please create a new instance.`);
 		};
-		this.root = this.templateManager.render(GetString(this));
-		this.resolveBinds();
+		this.html = this.templateManager.render(GetString(this));
 		this.resolveComponents();
+		this.resolveScopedEvents();
+		this.resolveBinds();
 		this.resolveNatives();
-		return this.root = this.onRender();
+		return this.html = this.onRender();
 	}
 
 	/**
@@ -72,7 +84,7 @@ export class Component {
 	}
 
 	public isRendered(): boolean {
-		return !!this.root;
+		return !!this.html;
 	}
 
 	public subscribe(): Component {
@@ -103,7 +115,7 @@ export class Component {
 	public wakeup(): Component {
 		this.onWakeup();
 		this.subscribe();
-		this.root.removeClass('is-hidden');
+		this.html.removeClass('is-hidden');
 		return this;
 	}
 
@@ -114,36 +126,69 @@ export class Component {
 	public sleep(): Component {
 		this.onSleep();
 		this.unsubscribe();
-		this.root.addClass('is-hidden');
+		this.html.addClass('is-hidden');
 		return this;
 	}
 
-	/**
-	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
-	 */
-	protected resolveBinds(): void {
-		this.root.selectorCollection('[data-bind]').each(html => {
-			(<any>this)[Strings.toCamelCase(html.rattr('data-bind'))] = html.removeAttr('data-bind');
-		});
+	public root(): Component {
+		let component: Component = this;
+		while (component.parentComponent) {
+			component = component.parentComponent;
+		}
+		return component;
+	}
+
+	public getEventManager(): EventManager {
+		return this.eventManager || (this.eventManager = this.container.autowire(new EventManager()));
+	}
+
+	public scope(scope: string): EventBus {
+		return this.root().getEventManager().scope(scope);
 	}
 
 	/**
 	 * the magic of component tree - this method creates other components (and triggers render method on them)
 	 */
 	protected resolveComponents(): void {
-		this.root.selectorCollection('[data-component]').each(html => {
-			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component'))).render());
+		this.html.selectorCollection('[data-component]').each(html => {
+			const bind = html.attr('data-bind');
+			const component = this.components.addi(this.container.create<Component>(html.rattr('data-component')).parent(this));
+			if (bind) {
+				(<any>this)[Strings.toCamelCase(bind)] = component;
+			}
+			html.replaceBy(component.render());
+		});
+	}
+
+	protected resolveScopedEvents(): void {
+		const eventManager = this.root().getEventManager();
+		new Collection((<ScopedEventObject><unknown>this)[SCOPED_EVENT_PROPERTY]).each(scopedEventProperty => {
+			eventManager.scope(scopedEventProperty.scope).listener(scopedEventProperty.event).add(
+				(<any>this)[scopedEventProperty.handler],
+				scopedEventProperty.weight,
+				this,
+				scopedEventProperty.cancellable
+			);
+		});
+	}
+
+	/**
+	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
+	 */
+	protected resolveBinds(): void {
+		this.html.selectorCollection('[data-bind]').each(html => {
+			(<any>this)[Strings.toCamelCase(html.rattr('data-bind'))] = html.removeAttr('data-bind');
 		});
 	}
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
-			(nativeProperty.callback ? nativeProperty.callback(this) : this.root).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
+			(nativeProperty.callback ? nativeProperty.callback(this) : this.html).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
 		});
 	}
 
 	protected onRender(): Html {
-		return this.root;
+		return this.html;
 	}
 
 	protected onWakeup(): void {

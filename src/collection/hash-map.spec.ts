@@ -93,5 +93,5 @@ test('HashMap: Require', test => {
 	test.deepEqual(new HashMap().set('foo', 'yep').require('foo'), 'yep', 'require did not returned expected value');
 });
 test('HashMap: Require error', test => {
-	test.throws(() => new HashMap().require('nope'), error => error.message === 'Required element [nope] is missing in hash map!');
+	test.throws(() => new HashMap().require('nope'), {message: 'Required element [nope] is missing in hash map!'});
 });
