@@ -7,6 +7,7 @@ import {Reactor, ReactorManager, Reactors} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
 import {EventBus, EventManager} from "../event";
+import {SCOPED_EVENT_PROPERTY, ScopedEventObject} from "./scoped-event";
 
 export type ParentComponent = Component | null;
 
@@ -39,6 +40,7 @@ export class Component {
 		};
 		this.html = this.templateManager.render(GetString(this));
 		this.resolveComponents();
+		this.resolveScopedEvents();
 		this.resolveBinds();
 		this.resolveNatives();
 		return this.html = this.onRender();
@@ -155,6 +157,18 @@ export class Component {
 				(<any>this)[Strings.toCamelCase(bind)] = component;
 			}
 			html.replaceBy(component.render());
+		});
+	}
+
+	protected resolveScopedEvents(): void {
+		const eventManager = this.root().getEventManager();
+		new Collection((<ScopedEventObject><unknown>this)[SCOPED_EVENT_PROPERTY]).each(scopedEventProperty => {
+			eventManager.scope(scopedEventProperty.scope).listener(scopedEventProperty.event).add(
+				(<any>this)[scopedEventProperty.handler],
+				scopedEventProperty.weight,
+				this,
+				scopedEventProperty.cancellable
+			);
 		});
 	}
 

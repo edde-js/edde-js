@@ -127,4 +127,6 @@ test('Component: Scope', test => {
 	test.is('<div class="yapee"><span>foo</span><div class="yahoo"><span>not so much important stuff here!</span></div></div>', component.render().getElement().outerHTML);
 	test.truthy(component.anotherComponent);
 	test.is(component, component.anotherComponent.root());
+	component.anotherComponent.scope('foo').emit(new InitialScopedEvent);
+	test.is(1, component.scopedEvent, 'event has not been run or has been run multiple times');
 });

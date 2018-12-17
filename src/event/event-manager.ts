@@ -13,7 +13,7 @@ export class EventManager {
 		this.eventBus = new HashMap();
 	}
 
-	public scope(scope: string = 'global'): EventBus {
-		return this.eventBus.ensure(scope, () => this.container.autowire(new EventBus()));
+	public scope(scope: ToString = 'global'): EventBus {
+		return this.eventBus.ensure(scope.toString(), () => this.container.autowire(new EventBus()));
 	}
 }
