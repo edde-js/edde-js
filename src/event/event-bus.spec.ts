@@ -123,6 +123,7 @@ test('EventBus: Same instance', test => {
 	const container = ContainerFactory.container();
 	test.is(container.create(EventBus), container.create(EventBus));
 	test.is(container.create(EventBus), container.create<EventManager>(EventManager).scope('global'));
+	test.is(container.create(EventBus), container.create<EventManager>(EventManager).scope());
 });
 test('EventBus: Common', test => {
 	const eventBus = new EventBus();
