@@ -183,7 +183,7 @@ export class Component {
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
-			(nativeProperty.callback ? nativeProperty.callback.call(this) : this.html).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
+			(nativeProperty.callback ? nativeProperty.callback.call(this, this) : this.html).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
 		});
 	}
 
