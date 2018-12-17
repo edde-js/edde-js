@@ -67,11 +67,11 @@ test('ViewManager: Common Events', test => {
 	test.is(view, viewManager.routeTo('/path'));
 	test.is(refresh, view);
 	test.is(GetString(<IView>view), 'boo');
-	test.truthy((<any>view).root);
+	test.truthy((<any>view).html);
 	test.true((<Component><unknown>view).isRendered());
-	test.truthy((<any>view).root.getElement().parentElement);
+	test.truthy((<any>view).html.getElement().parentElement);
 	test.is(runtime.require('main').getElement(), runtime.require('main').getElement());
-	test.is((<Html>(<any>view).root).getElement().outerHTML, '<div class="prdel"></div>');
+	test.is((<Html>(<any>view).html).getElement().outerHTML, '<div class="prdel"></div>');
 	test.is(runtime.require('body').getElement().outerHTML, '<body><main><div class="prdel"></div></main></body>');
 	test.truthy(viewManager.routeTo('/some-some'));
 	test.is(umount, view);

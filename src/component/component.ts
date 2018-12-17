@@ -6,6 +6,7 @@ import {Collection, HashMap} from "../collection";
 import {Reactor, ReactorManager, Reactors} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
+import {EventBus, EventManager} from "../event";
 
 export type ParentComponent = Component | null;
 
@@ -19,7 +20,8 @@ export class Component {
 	protected parentComponent: ParentComponent;
 	protected components: Collection<Component>;
 	protected reactors: HashMap<Reactor>;
-	protected root: Html;
+	protected eventManager: EventManager;
+	protected html: Html;
 
 	public constructor() {
 		this.components = new Collection();
@@ -35,11 +37,11 @@ export class Component {
 		this.render = () => {
 			throw new Error(`Cannot render component [${GetString(this)}] multiple times; please create a new instance.`);
 		};
-		this.root = this.templateManager.render(GetString(this));
+		this.html = this.templateManager.render(GetString(this));
 		this.resolveBinds();
 		this.resolveComponents();
 		this.resolveNatives();
-		return this.root = this.onRender();
+		return this.html = this.onRender();
 	}
 
 	/**
@@ -80,7 +82,7 @@ export class Component {
 	}
 
 	public isRendered(): boolean {
-		return !!this.root;
+		return !!this.html;
 	}
 
 	public subscribe(): Component {
@@ -111,7 +113,7 @@ export class Component {
 	public wakeup(): Component {
 		this.onWakeup();
 		this.subscribe();
-		this.root.removeClass('is-hidden');
+		this.html.removeClass('is-hidden');
 		return this;
 	}
 
@@ -122,15 +124,31 @@ export class Component {
 	public sleep(): Component {
 		this.onSleep();
 		this.unsubscribe();
-		this.root.addClass('is-hidden');
+		this.html.addClass('is-hidden');
 		return this;
+	}
+
+	public root(): Component {
+		let component: Component = this;
+		while (component.parentComponent) {
+			component = component.parentComponent;
+		}
+		return component;
+	}
+
+	public getEventManager(): EventManager {
+		return this.eventManager || (this.eventManager = this.container.autowire(new EventManager()));
+	}
+
+	public scope(scope: string): EventBus {
+		return this.root().getEventManager().scope(scope);
 	}
 
 	/**
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveBinds(): void {
-		this.root.selectorCollection('[data-bind]').each(html => {
+		this.html.selectorCollection('[data-bind]').each(html => {
 			(<any>this)[Strings.toCamelCase(html.rattr('data-bind'))] = html.removeAttr('data-bind');
 		});
 	}
@@ -139,19 +157,19 @@ export class Component {
 	 * the magic of component tree - this method creates other components (and triggers render method on them)
 	 */
 	protected resolveComponents(): void {
-		this.root.selectorCollection('[data-component]').each(html => {
+		this.html.selectorCollection('[data-component]').each(html => {
 			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component')).parent(this)).render());
 		});
 	}
 
 	protected resolveNatives(): void {
 		new Collection((<NativeObject><unknown>this)[NATIVE_PROPERTY]).each(nativeProperty => {
-			(nativeProperty.callback ? nativeProperty.callback(this) : this.root).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
+			(nativeProperty.callback ? nativeProperty.callback(this) : this.html).listenTo(nativeProperty.event, (<any>this)[nativeProperty.handler].bind(this));
 		});
 	}
 
 	protected onRender(): Html {
-		return this.root;
+		return this.html;
 	}
 
 	protected onWakeup(): void {
