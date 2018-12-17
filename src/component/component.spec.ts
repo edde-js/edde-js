@@ -26,6 +26,7 @@ class SomeComponent extends Component {
 	public count: number = 0;
 	public someElement: Html;
 	public scopedEvent: number = 0;
+	public anotherComponent: AnotherComponent;
 
 	@React('foo')
 	public reactFoo(value: string) {
@@ -116,7 +117,7 @@ test('Component: Scope', test => {
 		return this.instance || (this.instance = new Runtime(new JSDOM(`
 			<body>
 				<div class="yahoo" data-template="another-component"><span>not so much important stuff here!</span></div>
-				<div class="yapee" data-template="some-component"><span data-bind="some-element">foo</span><div data-component="another-component"></div></div>
+				<div class="yapee" data-template="some-component"><span data-bind="some-element">foo</span><div data-component="another-component" data-bind="another-component"></div></div>
 			</body>
 		`).window));
 	});
@@ -124,4 +125,5 @@ test('Component: Scope', test => {
 	templateManager.bind(container.create<Runtime>(Runtime).html());
 	const component: SomeComponent = container.autowire(new SomeComponent());
 	test.is('<div class="yapee"><span>foo</span><div class="yahoo"><span>not so much important stuff here!</span></div></div>', component.render().getElement().outerHTML);
+	test.truthy(component.anotherComponent);
 });

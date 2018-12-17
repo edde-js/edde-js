@@ -38,8 +38,8 @@ export class Component {
 			throw new Error(`Cannot render component [${GetString(this)}] multiple times; please create a new instance.`);
 		};
 		this.html = this.templateManager.render(GetString(this));
-		this.resolveBinds();
 		this.resolveComponents();
+		this.resolveBinds();
 		this.resolveNatives();
 		return this.html = this.onRender();
 	}
@@ -145,20 +145,25 @@ export class Component {
 	}
 
 	/**
+	 * the magic of component tree - this method creates other components (and triggers render method on them)
+	 */
+	protected resolveComponents(): void {
+		this.html.selectorCollection('[data-component]').each(html => {
+			const bind = html.attr('data-bind');
+			const component = this.components.addi(this.container.create<Component>(html.rattr('data-component')).parent(this));
+			if (bind) {
+				(<any>this)[Strings.toCamelCase(bind)] = component;
+			}
+			html.replaceBy(component.render());
+		});
+	}
+
+	/**
 	 * links are basically same as mounts, but they're directly put into properties of this component (converting foo-bar to fooBar convention)
 	 */
 	protected resolveBinds(): void {
 		this.html.selectorCollection('[data-bind]').each(html => {
 			(<any>this)[Strings.toCamelCase(html.rattr('data-bind'))] = html.removeAttr('data-bind');
-		});
-	}
-
-	/**
-	 * the magic of component tree - this method creates other components (and triggers render method on them)
-	 */
-	protected resolveComponents(): void {
-		this.html.selectorCollection('[data-component]').each(html => {
-			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component')).parent(this)).render());
 		});
 	}
 
