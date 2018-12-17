@@ -13,7 +13,7 @@ test('Runtime: Require', test => {
 	const element = runtime.require('.prdel');
 	test.truthy(element);
 	test.true(element.hasClass('prdel'));
-	test.throws(() => runtime.require('.nope'), error => error.message === 'Cannot get any element by selector [.nope] in global context.');
+	test.throws(() => runtime.require('.nope'), {message: 'Cannot get any element by selector [.nope] in global context.'});
 });
 test('Runtime: GetSessionStorage/GetLocalStorage', test => {
 	const runtime = new Runtime(new JSDOM().window);

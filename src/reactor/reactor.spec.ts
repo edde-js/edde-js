@@ -1,7 +1,7 @@
 import test from "ava";
 import {Reactor} from "./reactor";
 
-test('Reactor: Subscribe', test => {
+test('Reactor: Subscribe: Set', test => {
 	const reactor = new Reactor('foo');
 	let counter = 0;
 	reactor.subscribe('foo', () => {
@@ -16,7 +16,7 @@ test('Reactor: Subscribe', test => {
 	reactor.set('foo', 3);
 	test.is(counter, 2, 'subscribe has not been called!');
 });
-test('Reactor: Subscribe', test => {
+test('Reactor: Subscribe: Push', test => {
 	const reactor = new Reactor('foo');
 	let counter = 0;
 	reactor.subscribe('foo', () => {
