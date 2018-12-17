@@ -7,6 +7,8 @@ import {Reactor, ReactorManager, Reactors} from "../reactor";
 import {NATIVE_PROPERTY, NativeObject} from "./native";
 import {REACT_PROPERTY, ReactProperty} from "./react";
 
+export type ParentComponent = Component | null;
+
 export class Component {
 	@Inject(Container)
 	protected container: Container;
@@ -14,6 +16,7 @@ export class Component {
 	protected templateManager: TemplateManager;
 	@Inject(ReactorManager)
 	protected reactorManager: ReactorManager;
+	protected parentComponent: ParentComponent;
 	protected components: Collection<Component>;
 	protected reactors: HashMap<Reactor>;
 	protected root: Html;
@@ -21,6 +24,11 @@ export class Component {
 	public constructor() {
 		this.components = new Collection();
 		this.reactors = new HashMap();
+	}
+
+	public parent(parent: ParentComponent): Component {
+		this.parentComponent = parent;
+		return this;
 	}
 
 	public render(): Html {
@@ -132,7 +140,7 @@ export class Component {
 	 */
 	protected resolveComponents(): void {
 		this.root.selectorCollection('[data-component]').each(html => {
-			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component'))).render());
+			html.replaceBy(this.components.addi(this.container.create<Component>(html.rattr('data-component')).parent(this)).render());
 		});
 	}
 
