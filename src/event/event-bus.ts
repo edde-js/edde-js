@@ -1,7 +1,8 @@
 import {ListenerCollection} from "./listener-collection";
-import {IEvent, ListenerObject} from "./types";
+import {IEvent} from "./types";
 import {Collection, HashMap} from "../collection";
 import {GetString, ToString} from "../utils";
+import {ListenerObject} from "./listen-to";
 
 @ToString('edde-js/event/event-bus')
 export class EventBus<T extends IEvent = IEvent> {

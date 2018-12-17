@@ -1,5 +1,5 @@
 import test from "ava";
-import {ContainerFactory} from "../container";
+import {ContainerFactory, Make} from "../container";
 import {ReactorManager} from "../reactor";
 import {Component} from "./component";
 import {ToString} from "../utils";
@@ -8,6 +8,16 @@ import {TemplateManager} from "../template";
 import {Runtime} from "../runtime";
 import {JSDOM} from "jsdom";
 import {Html} from "../dom";
+import {ScopedEvent} from "./scoped-event";
+import {AbstractEvent} from "../event";
+
+@ToString('initial-event')
+class InitialScopedEvent extends AbstractEvent {
+}
+
+@ToString('another-scoped-event')
+class AnotherScopedEvent extends AbstractEvent {
+}
 
 @ToString('some-component')
 class SomeComponent extends Component {
@@ -15,6 +25,7 @@ class SomeComponent extends Component {
 	public bar: string;
 	public count: number = 0;
 	public someElement: Html;
+	public scopedEvent: number = 0;
 
 	@React('foo')
 	public reactFoo(value: string) {
@@ -29,6 +40,19 @@ class SomeComponent extends Component {
 	@React('bar', 'bar')
 	public reactBar(value: string) {
 		this.bar = value;
+	}
+
+	@ScopedEvent('skoup-nejm', AnotherScopedEvent)
+	public someScopedEvent() {
+		this.scopedEvent++;
+	}
+}
+
+@ToString('another-component')
+class AnotherComponent extends Component {
+	@ScopedEvent('foo', InitialScopedEvent)
+	public someInitialEvent() {
+		this.scope('skoup-nejm').emit(new AnotherScopedEvent());
 	}
 }
 
@@ -80,8 +104,24 @@ test('Component: Render', test => {
 	});
 	const templateManager = container.create<TemplateManager>(TemplateManager);
 	templateManager.bind(container.create<Runtime>(Runtime).html());
-	const component = container.autowire(new SomeComponent());
+	const component: SomeComponent = container.autowire(new SomeComponent());
 	test.is('<div class="yapee"><span>foo</span></div>', component.render().getElement().outerHTML);
 	test.truthy(component.someElement, 'element is not bound!');
 	test.is('<span>foo</span>', component.someElement.getElement().outerHTML);
+});
+test('Component: Scope', test => {
+	const container = ContainerFactory.container();
+	container.register(AnotherComponent, Make.classOf(AnotherComponent));
+	container.register(Runtime, function () {
+		return this.instance || (this.instance = new Runtime(new JSDOM(`
+			<body>
+				<div class="yahoo" data-template="another-component"><span>not so much important stuff here!</span></div>
+				<div class="yapee" data-template="some-component"><span data-bind="some-element">foo</span><div data-component="another-component"></div></div>
+			</body>
+		`).window));
+	});
+	const templateManager = container.create<TemplateManager>(TemplateManager);
+	templateManager.bind(container.create<Runtime>(Runtime).html());
+	const component: SomeComponent = container.autowire(new SomeComponent());
+	test.is('<div class="yapee"><span>foo</span><div class="yahoo"><span>not so much important stuff here!</span></div></div>', component.render().getElement().outerHTML);
 });
