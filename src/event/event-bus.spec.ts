@@ -3,6 +3,8 @@ import {EventBus} from "./event-bus";
 import {AbstractEvent} from "./event";
 import {ListenTo} from "./listen-to";
 import {GetString} from "../utils";
+import {ContainerFactory} from "../container";
+import {EventManager} from "./event-manager";
 
 class FooEvent extends AbstractEvent {
 	public value: any;
@@ -117,6 +119,11 @@ class Class_D extends Class_C {
 class NoListener {
 }
 
+test('EventBus: Same instance', test => {
+	const container = ContainerFactory.container();
+	test.is(container.create(EventBus), container.create(EventBus));
+	test.is(container.create(EventBus), container.create<EventManager>(EventManager).scope('global'));
+});
 test('EventBus: Common', test => {
 	const eventBus = new EventBus();
 	const array: any[] = [];

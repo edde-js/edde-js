@@ -1,7 +1,9 @@
 import {HashMap} from "../collection";
 import {EventBus} from "./event-bus";
 import {Container, Inject} from "../container";
+import {ToString} from "../utils";
 
+@ToString('edde/event/event-manager')
 export class EventManager {
 	@Inject(Container)
 	protected container: Container;
