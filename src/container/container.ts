@@ -31,10 +31,7 @@ export class Container {
 	 */
 	public create<T>(name: ToString): T {
 		const factory = this.factories.require(name.toString(), `Requested unknown factory [${name.toString()}].`);
-		const instance: any = factory.call(factory, this);
-		(instance.init || (() => instance)).call(instance);
-		instance.init = (() => instance);
-		return instance;
+		return factory.call(factory, this);
 	}
 
 	/**
@@ -62,6 +59,8 @@ export class Container {
 				}
 			});
 		});
+		((<any>instance).init || (() => instance)).call(instance);
+		((<any>instance).init = (() => instance));
 		return instance;
 	}
 }
