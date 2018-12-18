@@ -2,6 +2,7 @@ import {ToString} from "../utils";
 import {AbstractMessageService, Message, MessagePortal} from "../message";
 import {Inject} from "../container";
 import {ReactorManager} from "./reactor-manager";
+import {Collection} from "../collection";
 
 @ToString('edde/reactor/sync-message-service-config')
 export class SyncMessageServiceConfig {
@@ -22,7 +23,7 @@ export class SyncMessageService extends AbstractMessageService {
 	protected config: SyncMessageServiceConfig;
 
 	public onPongMessage(message: Message) {
-		this.reactorManager.patch(message.getAttrs().require('sync'));
+		new Collection(message.getAttrs().require('sync')).each(item => this.reactorManager.patch(item));
 		setTimeout(this.onSync.bind(this), this.config.timeout = message.getAttrs().get('timeout', () => this.config.timeout));
 	}
 
