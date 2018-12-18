@@ -1,5 +1,5 @@
 import {ToString} from "../utils";
-import {Message, MessagePortal} from "../message";
+import {AbstractMessageService, Message, MessagePortal} from "../message";
 import {Inject} from "../container";
 import {ReactorManager} from "./reactor-manager";
 
@@ -12,8 +12,8 @@ export class SyncMessageServiceConfig {
 	public target: string | null;
 }
 
-@ToString('message-bus.sync-message-service')
-export class SyncMessageService {
+@ToString('engine.sync.sync-message-service')
+export class SyncMessageService extends AbstractMessageService {
 	@Inject(MessagePortal)
 	protected messagePortal: MessagePortal;
 	@Inject(ReactorManager)
