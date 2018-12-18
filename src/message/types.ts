@@ -6,8 +6,8 @@ export interface IMessageService {
 	message(message: Message, packet: Packet): IMessageService;
 }
 
-@ToString('edde/message/message-service-config')
-export class MessageServiceConfig {
+@ToString('edde/message/message-portal-config')
+export class MessagePortalConfig {
 	public url: string;
 	public deffer: number = 15;
 	public timeout: number = 30;

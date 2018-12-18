@@ -4,7 +4,7 @@ import {ViewManager} from "../view";
 import {TemplateManager} from "../template";
 import {Collection} from "../collection";
 import {ToString} from "../utils";
-import {ReactorManager} from "../reactor";
+import {ReactorManager, SyncMessageService} from "../reactor";
 
 /**
  * Covers basic stuff related to an application.
@@ -17,6 +17,8 @@ export class Application {
 	protected container: Container;
 	@Inject(ReactorManager)
 	protected reactorManager: ReactorManager;
+	@Inject(SyncMessageService)
+	protected syncService: SyncMessageService;
 	@Inject(TemplateManager)
 	protected templateManager: TemplateManager;
 	@Inject(ViewManager)
@@ -47,6 +49,7 @@ export class Application {
 		this.templateManager.bind(this.runtime.html());
 		this.viewManager.routeTo(this.runtime.getPath());
 		this.reactorManager.patch(states);
+		this.syncService.start();
 		this.startup = () => {
 			throw new Error('Do not call application startup multiple times')
 		};

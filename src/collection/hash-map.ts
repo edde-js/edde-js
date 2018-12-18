@@ -1,4 +1,5 @@
 import {HashMapKey, HasMapCallback, LoopContext} from "./types";
+import {Collection} from "./collection";
 
 /**
  * Class for simple hash map - basically it's string index/typed value; this
@@ -185,5 +186,11 @@ export class HashMap<T> {
 	 */
 	public toObject(): { [index: string]: T } {
 		return this.hashMap;
+	}
+
+	public keys(): Collection<HashMapKey> {
+		const keys: HashMapKey[] = [];
+		this.each(key => keys.push(key));
+		return new Collection(keys);
 	}
 }

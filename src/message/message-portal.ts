@@ -1,7 +1,7 @@
 import {Inject} from "../container";
 import {MessageBus} from "./message-bus";
 import {Message} from "./message";
-import {MessageServiceConfig} from "./types";
+import {MessagePortalConfig} from "./types";
 import {Packet} from "./packet";
 import {ToString} from "../utils";
 
@@ -9,8 +9,8 @@ import {ToString} from "../utils";
 export class MessagePortal {
 	@Inject(MessageBus)
 	protected messageBus: MessageBus;
-	@Inject(MessageServiceConfig)
-	protected config: MessageServiceConfig;
+	@Inject(MessagePortalConfig)
+	protected config: MessagePortalConfig;
 	protected packet: Packet;
 	protected timeoutId: any;
 

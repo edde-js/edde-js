@@ -4,14 +4,14 @@ import {ToString} from "../utils";
 
 @ToString('edde-js/reactor/reactor-manager')
 export class ReactorManager {
-	protected reactors: HashMap<Reactor>;
+	protected reactorsMap: HashMap<Reactor>;
 
 	public constructor() {
-		this.reactors = new HashMap();
+		this.reactorsMap = new HashMap();
 	}
 
 	public has(name: ToString): boolean {
-		return this.reactors.has(name.toString());
+		return this.reactorsMap.has(name.toString());
 	}
 
 	/**
@@ -21,7 +21,11 @@ export class ReactorManager {
 	 * @param name
 	 */
 	public reactor(name: ToString): Reactor {
-		return this.reactors.ensure(name.toString(), () => new Reactor(name.toString()));
+		return this.reactorsMap.ensure(name.toString(), () => new Reactor(name.toString()));
+	}
+
+	public reactors(): HashMap<Reactor> {
+		return this.reactorsMap;
 	}
 
 	public patch(states: Object): ReactorManager {
@@ -30,7 +34,7 @@ export class ReactorManager {
 	}
 
 	public update(): ReactorManager {
-		this.reactors.each((_, state) => state.update());
+		this.reactorsMap.each((_, state) => state.update());
 		return this;
 	}
 
@@ -39,7 +43,7 @@ export class ReactorManager {
 	 */
 	public export(): { [index: string]: {} } {
 		const object: { [index: string]: {} } = {};
-		this.reactors.each((name, reactor) => object[name] = reactor.toObject());
+		this.reactorsMap.each((name, reactor) => object[name] = reactor.toObject());
 		return object;
 	}
 }

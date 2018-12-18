@@ -6,7 +6,7 @@ import {HistoryService} from "../history";
 import {ViewManager} from "../view";
 import {Application} from "../application";
 import {TemplateManager} from "../template";
-import {ReactorManager} from "../reactor";
+import {ReactorManager, SyncMessageService, SyncMessageServiceConfig} from "../reactor";
 import {UuidGenerator} from "../crypto";
 import {CollectionMessageService, MessageBus, MessagePortal, StateMessageService} from "../message";
 import {StatesMessageService} from "../message/states-message-service";
@@ -50,6 +50,8 @@ export class ContainerFactory {
 			.register(ViewManager, Make.subscriber(ViewManager))
 			.register(TemplateManager, Make.service(TemplateManager))
 			.register(ReactorManager, Make.service(ReactorManager))
+			.register(SyncMessageService, Make.service(SyncMessageService))
+			.register(SyncMessageServiceConfig, Make.instance({timeout: 0}))
 			.register(UuidGenerator, Make.service(UuidGenerator))
 			.register(MessageBus, Make.service(MessageBus))
 			.register(MessagePortal, Make.service(MessagePortal))
