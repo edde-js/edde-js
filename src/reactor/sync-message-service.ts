@@ -22,7 +22,7 @@ export class SyncMessageService extends AbstractMessageService {
 	protected config: SyncMessageServiceConfig;
 
 	public onPongMessage(message: Message) {
-		setTimeout(() => this.onSync.bind(this), this.config.timeout = message.getAttrs().get('timeout', () => this.config.timeout));
+		setTimeout(this.onSync.bind(this), this.config.timeout = message.getAttrs().get('timeout', () => this.config.timeout));
 	}
 
 	protected onSync() {
