@@ -22,6 +22,7 @@ export class SyncMessageService extends AbstractMessageService {
 	protected config: SyncMessageServiceConfig;
 
 	public onPongMessage(message: Message) {
+		this.reactorManager.patch(message.getAttrs().require('sync'));
 		setTimeout(this.onSync.bind(this), this.config.timeout = message.getAttrs().get('timeout', () => this.config.timeout));
 	}
 
