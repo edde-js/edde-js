@@ -39,10 +39,8 @@ export class SyncMessageService extends AbstractMessageService {
 	 */
 	public start(): SyncMessageService {
 		if (this.config.timeout <= 0) {
-			console.warn('disabling sync service');
 			return this;
 		}
-		console.warn('sync service on ' + this.config.timeout);
 		this.onSync();
 		return this;
 	}
